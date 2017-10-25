@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=PPA Uploader
+Comment=Upload packages to PPA
+#Icon=
+Exec=ppa-uploader.sh
+Categories=Network;
+Terminal=false
+
+Name[cs]=PPA Uploader
+Comment[cs]=Posílá balíčky do PPA
