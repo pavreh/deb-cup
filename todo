@@ -1,7 +1,3 @@
-# By priority
-Change description: GUI tool for uploading packages to PPA.
-Delete ...ppa1 sufix (this is upstream)
-Add link to upstream (visible in Synaptic)
 icon
 gettext
 Help
