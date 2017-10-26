@@ -1,0 +1,57 @@
+# Translation of ppa-uploader to LANGUAGE.
+# Copyright (C) 2017 Pavel Řehák
+# This file is distributed under the same license as the ppa-uploader package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-26 22:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../ppa-uploader:37
+msgid "PPA Uploader"
+msgstr ""
+
+#: ../ppa-uploader:46
+msgid "Settings..."
+msgstr ""
+
+#: ../ppa-uploader:47
+msgid "Upload..."
+msgstr ""
+
+#: ../ppa-uploader:48
+msgid "Exit"
+msgstr ""
+
+#: ../ppa-uploader:53
+msgid "Choose action"
+msgstr ""
+
+#: ../ppa-uploader:54
+msgid "Action"
+msgstr ""
+
+#: ../ppa-uploader:62
+msgid ""
+"Set user name and name of your PPA in format: \n"
+" user/ppa"
+msgstr ""
+
+#: ../ppa-uploader:92
+#, sh-format
+msgid "Do you want to upload $file_name to $user_ppa?"
+msgstr ""
+
+#: ../ppa-uploader:112
+msgid "Set user name and name of your PPA in Settings first."
+msgstr ""

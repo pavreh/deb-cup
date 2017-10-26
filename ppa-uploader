@@ -16,12 +16,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# version 0.1.0
+# version 0.2.0
 # depend on zenity
 
-title="PPA Uploader"
-
 config_file=$HOME/.config/ppa-uploader/config
+
+
+##############################################################################
+# Gettext
+##############################################################################
+
+. gettext.sh
+
+TEXTDOMAIN=ppa-uploader
+export TEXTDOMAIN
+
+TEXTDOMAINDIR=/usr/share/locale
+export TEXTDOMAINDIR
+
+title=$(gettext 'PPA Uploader')
 
 
 ##############################################################################
@@ -30,20 +43,24 @@ config_file=$HOME/.config/ppa-uploader/config
 
 main_window()
 {
+settings_str=$(gettext 'Settings...')
+upload_str=$(gettext 'Upload...')
+exit_str=$(gettext 'Exit')
+
 action=$(zenity --list \
 				--height=205 \
 				--title="$title" \
-				--text "Choose action" \
-				--column "Action" \
-				Settings... Upload... Exit)
+				--text "$(gettext 'Choose action')" \
+				--column "$(gettext 'Action')" \
+				$settings_str $upload_str $exit_str)
 }
 
 settings_window()
 {
 if user_ppa=$(zenity --entry \
 		--title="$title" \
-		--text="Set user name and name of your PPA in format: 
- USER/ppa" \
+		--text="$(gettext 'Set user name and name of your PPA in format: 
+ user/ppa')" \
 		--entry-text="$(cat $config_file)")
 then
 	echo $user_ppa > $config_file || create_config
@@ -72,7 +89,7 @@ else
 		file_name=$(echo "${path_file##*/}")
 		if zenity --question \
 					--title="$title" \
-					--text="Do you want to upload $file_name to $user_ppa?" \
+					--text="$(eval_gettext "Do you want to upload \$file_name to \$user_ppa?")" \
 					--default-cancel
 		then
 			command_upload="dput ppa:$user_ppa $path_file"
@@ -92,7 +109,7 @@ fi
 error_window()
 {
 zenity --warning \
-		--text="Set user name and name of PPA in Settings first." \
+		--text="$(gettext 'Set user name and name of your PPA in Settings first.')" \
 		--title="$title"
 }
 
@@ -106,10 +123,10 @@ do
 
 main_window
 
-if [ $action = "Upload..." ]
+if [ $action = $upload_str ]
 then
 	upload_file
-elif [ $action = "Settings..." ]
+elif [ $action = $settings_str ]
 then
 	settings_window
 else

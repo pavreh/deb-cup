@@ -1,0 +1,8 @@
+# List of source files containing translatable strings.
+# Copyright (C) 1995 Free Software Foundation, Inc.
+
+# Common library files
+ppa-uploader
+
+# Package source files
+
