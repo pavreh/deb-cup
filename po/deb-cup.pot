@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-28 01:28+0200\n"
+"POT-Creation-Date: 2017-10-28 11:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,56 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../deb-cup:55
+#: ../deb-cup:56
 msgid "Settings..."
 msgstr ""
 
-#: ../deb-cup:56
+#: ../deb-cup:57
 msgid "Create orig tarball..."
 msgstr ""
 
-#: ../deb-cup:57
+#: ../deb-cup:58
+msgid "Create deb binary..."
+msgstr ""
+
+#: ../deb-cup:59
 msgid "Upload..."
 msgstr ""
 
-#: ../deb-cup:58
+#: ../deb-cup:60
 msgid "Exit"
 msgstr ""
 
-#: ../deb-cup:66
+#: ../deb-cup:68
 msgid ""
 "Set user name and name of your PPA in format: \n"
 " user/ppa"
 msgstr ""
 
-#: ../deb-cup:87
+#: ../deb-cup:89
 msgid "Set user name and name of your PPA in Settings first."
 msgstr ""
 
-#: ../deb-cup:101
+#: ../deb-cup:103
 #, sh-format
 msgid "Do you want to upload $file_name to $user_ppa?"
 msgstr ""
 
-#: ../deb-cup:137
+#: ../deb-cup:139
 #, sh-format
 msgid "Do you want to create $project_name\\_$version_number.orig.tar.xz?"
 msgstr ""
 
-#: ../deb-cup:153
+#: ../deb-cup:155 ../deb-cup:227
 msgid ""
 "Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
+msgstr ""
+
+#: ../deb-cup:201
+#, sh-format
+msgid "Do you want to create $project_name\\_$version_number.deb?"
+msgstr ""
+
+#: ../deb-cup:220
+msgid "Create orig tarball first."
 msgstr ""

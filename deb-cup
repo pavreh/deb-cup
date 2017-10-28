@@ -16,10 +16,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# version 0.2.0
 # depend on zenity
 
 config_file=$HOME/.config/deb-cup/config
+log_file=$HOME/.config/deb-cup/log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 
 
@@ -55,6 +55,7 @@ action=$(zenity --list \
 				--hide-column=1 \
 				  settings "$(gettext 'Settings...')" \
 				  tarball "$(gettext 'Create orig tarball...')" \
+				  binary "$(gettext 'Create deb binary...')" \
 				  upload "$(gettext 'Upload...')" \
 				  end "$(gettext 'Exit')")
 }
@@ -88,21 +89,21 @@ then
 		--text="$(gettext 'Set user name and name of your PPA in Settings first.')" \
 		--title="$title"
 else
-	if path_file=$(zenity --file-selection \
+	if path_changes_file=$(zenity --file-selection \
 					--window-icon=$icon \
 					--filename="$HOME/" \
 					--title="$title" \
 					--file-filter="source.changes | *source.changes")
 	then
 		# Print the part of string after last "/"
-		file_name=$(echo "${path_file##*/}")
+		file_name=$(echo "${path_changes_file##*/}")
 		if zenity --question \
 					--title="$title" \
 					--window-icon=$icon \
 					--text="$(eval_gettext "Do you want to upload \$file_name to \$user_ppa?")" \
 					--default-cancel
 		then
-			command_upload="dput ppa:$user_ppa $path_file"
+			command_upload="dput ppa:$user_ppa $path_changes_file"
 			log="$(eval $command_upload)"
 			zenity --info \
 					--window-icon=$icon \
@@ -158,6 +159,78 @@ else
 fi
 }
 
+
+update_changelog()
+{
+if path_changelog_file=$(zenity --file-selection \
+							--window-icon=$icon \
+							--filename="$HOME/" \
+							--title="$title" \
+							--file-filter="changelog | changelog")
+	then
+		path_parent_changelog=$(echo "${path_changelog_file%/*}")
+		cd $path_parent_changelog
+		dch -i # resolve this
+	else
+		:
+	fi
+
+}
+
+
+create_deb_binary()
+{
+if path_project_folder=$(zenity --file-selection \
+								--window-icon=$icon \
+								--filename="$HOME/" \
+								--title="$title" \
+								--directory)
+then
+	path_parent_folder=$(echo "${path_project_folder%/*}")
+	project_version=$(echo "${path_project_folder##*/}")
+	project_name=$(echo "${project_version%-*}")
+	version_number=$(echo "${path_project_folder##*-}")
+	if [[ $project_version = *"-"[0-9]* ]]
+	then
+		if ls $project_name\_$version_number.orig.tar.xz
+		then
+			# set correct name of deb from changelog
+			if zenity --question \
+					--title="$title" \
+					--window-icon=$icon \
+					--text="$(eval_gettext "Do you want to create \$project_name\_\$version_number.deb?")" \
+					--default-cancel
+			then
+				cd $path_project_folder
+				log="$(eval debuild -us -uc)"
+				touch $log_file
+				echo "$log" > $log_file
+				zenity --text-info \
+						--window-icon=$icon \
+						--title="$title" \
+						--width=500 \
+						--height=300 \
+						--filename=$log_file
+			else
+				:
+			fi
+		else
+			zenity --warning \
+					--window-icon=$icon \
+					--text="$(gettext 'Create orig tarball first.')" \
+					--title="$title"
+		fi
+	else
+		zenity --warning \
+				--title="$title" \
+				--window-icon=$icon \
+				--text="$(gettext 'Set name and version of the folder in format name-version, e.g. myapp-0.1.0.')"
+	fi
+else
+	:
+fi
+}
+
 ##############################################################################
 #	PROGRAM
 ##############################################################################
@@ -171,12 +244,23 @@ main_window
 if [ $action = tarball ]
 then
 	create_orig_tarball
+
+elif [ $action = changelog ]
+then
+	update_changelog
+
+elif [ $action = binary ]
+then
+	create_deb_binary
+
 elif [ $action = upload ]
 then
 	upload_file
+
 elif [ $action = settings ]
 then
 	settings_window
+
 else
 	run=0
 fi
