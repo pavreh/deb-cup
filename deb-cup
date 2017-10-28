@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#    PPA Uploader: GUI tool for uploading packages to a PPA on launchpad.net.
+#    Deb Cup: GUI tool for uploading packages to a PPA on launchpad.net.
 #    Copyright (C) 2017  Pavel Řehák
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,8 @@
 # version 0.2.0
 # depend on zenity
 
-config_file=$HOME/.config/ppa-uploader/config
+config_file=$HOME/.config/deb-cup/config
+icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 
 
 ##############################################################################
@@ -28,13 +29,13 @@ config_file=$HOME/.config/ppa-uploader/config
 
 . gettext.sh
 
-TEXTDOMAIN=ppa-uploader
+TEXTDOMAIN=deb-cup
 export TEXTDOMAIN
 
 TEXTDOMAINDIR=/usr/share/locale
 export TEXTDOMAINDIR
 
-title=$(gettext 'PPA Uploader')
+title='Deb Cup'
 
 
 ##############################################################################
@@ -43,22 +44,26 @@ title=$(gettext 'PPA Uploader')
 
 main_window()
 {
-settings_str=$(gettext 'Settings...')
-upload_str=$(gettext 'Upload...')
-exit_str=$(gettext 'Exit')
-
 action=$(zenity --list \
-				--height=205 \
 				--title="$title" \
-				--text "$(gettext 'Choose action')" \
-				--column "$(gettext 'Action')" \
-				$settings_str $upload_str $exit_str)
+				--window-icon=$icon \
+				--height=250 \
+				--hide-header \
+				--text "" \
+				--column "" \
+				--column "" \
+				--hide-column=1 \
+				  settings "$(gettext 'Settings...')" \
+				  tarball "$(gettext 'Create orig tarball...')" \
+				  upload "$(gettext 'Upload...')" \
+				  end "$(gettext 'Exit')")
 }
 
 settings_window()
 {
 if user_ppa=$(zenity --entry \
 		--title="$title" \
+		--window-icon=$icon \
 		--text="$(gettext 'Set user name and name of your PPA in format: 
  user/ppa')" \
 		--entry-text="$(cat $config_file)")
@@ -69,7 +74,7 @@ fi
 
 create_config()
 {
-mkdir  $HOME/.config/ppa-uploader
+mkdir  $HOME/.config/deb-cup
 echo $user_ppa > $config_file
 }
 
@@ -78,9 +83,13 @@ upload_file()
 user_ppa="$(cat $config_file)"
 if [ "$user_ppa" = "" ]
 then
-	error_window
+	zenity --warning \
+		--window-icon=$icon \
+		--text="$(gettext 'Set user name and name of your PPA in Settings first.')" \
+		--title="$title"
 else
 	if path_file=$(zenity --file-selection \
+					--window-icon=$icon \
 					--filename="$HOME/" \
 					--title="$title" \
 					--file-filter="source.changes | *source.changes")
@@ -89,12 +98,14 @@ else
 		file_name=$(echo "${path_file##*/}")
 		if zenity --question \
 					--title="$title" \
+					--window-icon=$icon \
 					--text="$(eval_gettext "Do you want to upload \$file_name to \$user_ppa?")" \
 					--default-cancel
 		then
 			command_upload="dput ppa:$user_ppa $path_file"
 			log="$(eval $command_upload)"
 			zenity --info \
+					--window-icon=$icon \
 					--text="$log" \
 					--title="$title" \
 		else
@@ -106,11 +117,45 @@ else
 fi
 }
 
-error_window()
+
+create_orig_tarball()
 {
-zenity --warning \
-		--text="$(gettext 'Set user name and name of your PPA in Settings first.')" \
-		--title="$title"
+if path_project_folder=$(zenity --file-selection \
+								--window-icon=$icon \
+								--filename="$HOME/" \
+								--title="$title" \
+								--directory)
+then
+	path_parent_folder=$(echo "${path_project_folder%/*}")
+	project_version=$(echo "${path_project_folder##*/}")
+	project_name=$(echo "${project_version%-*}")
+	version_number=$(echo "${path_project_folder##*-}")
+	if [[ $project_version = *"-"[0-9]* ]]
+	then
+		if zenity --question \
+					--title="$title" \
+					--window-icon=$icon \
+					--text="$(eval_gettext "Do you want to create \$project_name\_\$version_number.orig.tar.xz?")" \
+					--default-cancel
+		then
+			cd $path_parent_folder
+			tar -cf debian.tar $project_version/debian/
+			rm -fr $project_version/debian
+			tar -caf $project_name\_$version_number.orig.tar.xz $project_version
+			tar -xf debian.tar
+			rm debian.tar
+		else
+			:
+		fi
+	else
+		zenity --warning \
+				--title="$title" \
+				--window-icon=$icon \
+				--text="$(gettext 'Set name and version of the folder in format name-version, e.g. myapp-0.1.0.')"
+	fi
+else
+	:
+fi
 }
 
 ##############################################################################
@@ -123,10 +168,13 @@ do
 
 main_window
 
-if [ $action = $upload_str ]
+if [ $action = tarball ]
+then
+	create_orig_tarball
+elif [ $action = upload ]
 then
 	upload_file
-elif [ $action = $settings_str ]
+elif [ $action = settings ]
 then
 	settings_window
 else

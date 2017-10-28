@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Deb Cup
+Comment=Creation and upload of deb packages
+Icon=deb-cup
+Exec=deb-cup
+Categories=Development;
+Terminal=false
+
+Comment[cs]=Vytváření deb balíčku a jejich posílání do PPA
