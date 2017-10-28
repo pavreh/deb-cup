@@ -1,13 +1,18 @@
 New icon in higher resolution
 Function: create debian folder
-Function: update changelog
-Function: create signed source packages
 
 Notify: tabrall was created
-After an error open the file search again. File search will be editable.
+After an error open the file search. File search will be editable.
 Progressbar: Creating deb
-Folder selector: remember project folder
 Question when creating deb binary: Set name of deb from changelog
+Upload: set default folder as parent folder
+
+error: debian folder missing
+error: user skip order
+
+increment changelog sometimes set wrong name and email.
+
+Remove code duplicities (warning window...)
 
 Help
 About
