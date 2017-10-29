@@ -1,0 +1,12 @@
+##############################################################################
+#    Help
+##############################################################################
+
+ - Torso -
+
+#    Changelog
+##############
+
+Increment changelog
+ - Maintainer name and email is taken from the debian/control Maintainer field.
+

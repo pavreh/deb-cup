@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-29 02:57+0100\n"
-"PO-Revision-Date: 2017-10-29 02:48+0100\n"
+"POT-Creation-Date: 2017-10-29 10:52+0100\n"
+"PO-Revision-Date: 2017-10-29 10:52+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -50,7 +50,11 @@ msgstr "Vytvořit podepsané dsc a changes"
 msgid "Upload to a PPA..."
 msgstr "Odeslat do PPA..."
 
-#: ../deb-cup:81
+#: ../deb-cup:70
+msgid "Help"
+msgstr "Nápověda"
+
+#: ../deb-cup:82
 msgid ""
 "Set user name and name of your PPA in format: \n"
 " user/ppa"
@@ -58,50 +62,48 @@ msgstr ""
 "Nastavte uživatelské jméno a název vašeho PPA ve formátu:\n"
 "uživatel/ppa"
 
-#: ../deb-cup:101
+#: ../deb-cup:102
 msgid "Choose a folder with the source code"
 msgstr "Vyberte složku se zdrojovým kódem"
 
-#: ../deb-cup:112
-msgid ""
-"Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
-msgstr ""
-"Nastavte název a verzi složky ve formátu název-verze, např. aplikace-0.1.0."
+#: ../deb-cup:113
+msgid "Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
+msgstr "Nastavte název a verzi složky ve formátu název-verze, např. aplikace-0.1.0."
 
-#: ../deb-cup:167
+#: ../deb-cup:168
 msgid "Orig tarball created"
 msgstr "Orig tarball vytvořen"
 
-#: ../deb-cup:218
+#: ../deb-cup:219
 msgid "Creating deb binary package..."
 msgstr "Vytváří se deb balíček..."
 
-#: ../deb-cup:254
+#: ../deb-cup:255
 msgid "Do you want to include orig tarball?"
 msgstr "Chcete zahrnout orig tarball?"
 
-#: ../deb-cup:300
+#: ../deb-cup:301
 msgid "Set user name and name of your PPA in Settings first."
 msgstr "Nejdříve v nastavení zadejte uživatelské jméno a název vašeho PPA."
 
-#: ../deb-cup:306
+#: ../deb-cup:307
 msgid "Choose source.changes file"
 msgstr "Vyberte soubor source.changes"
 
-#: ../deb-cup:314
+#: ../deb-cup:315
 #, sh-format
 msgid "Do you want to upload $file_name to $user_ppa?"
 msgstr "Chcete odeslat $file_name do $user_ppa?"
 
-#: ../deb-cup:353
+#: ../deb-cup:365
 msgid "Choose project folder first."
 msgstr "Nejdříve vyberte složku projektu."
 
-#: ../deb-cup:363
+#: ../deb-cup:375
 msgid "Create debian folder first."
 msgstr "Nejdříve vytvořte složku debian."
 
-#: ../deb-cup:371
+#: ../deb-cup:383
 msgid "Create orig tarball first."
 msgstr "Nejdříve vytvořte orig tarball."
 

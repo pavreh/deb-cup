@@ -53,7 +53,7 @@ action=$(zenity --list \
 				--title="$title" \
 				--window-icon=$icon \
 				--width=250 \
-				--height=300 \
+				--height=330 \
 				--hide-header \
 				--text "" \
 				--column "" \
@@ -61,12 +61,13 @@ action=$(zenity --list \
 				--hide-column=1 \
 				  settings "$(gettext 'Set user and ppa...')" \
 				  path "$(gettext 'Set project folder...')" \
-				  tarball "$(gettext 'Create orig tarball')" \
 				  debian "$(gettext 'Create/Open debian folder')" \
+				  tarball "$(gettext 'Create orig tarball')" \
 				  changelog "$(gettext 'Increment changelog...')" \
 				  binary "$(gettext 'Create deb binary')" \
 				  sign "$(gettext 'Create signed dsc and changes')" \
-				  upload "$(gettext 'Upload to a PPA...')")
+				  upload "$(gettext 'Upload to a PPA...')" \
+				  doc-help "$(gettext 'Help')")
 }
 
 
@@ -180,7 +181,7 @@ then
 	if ls $path_project_folder/debian/changelog
 	then
 		cd $path_project_folder/debian
-		dch -i
+		dch --fromdirname --controlmaint
 	else
 		warning_create_debian_folder
 	fi
@@ -203,7 +204,7 @@ then
 		then
 			# set correct name of deb from changelog
 			cd $path_project_folder/debian
-			dch --release
+			dch --release --controlmaint
 			cd $path_project_folder
 			touch $log_file
 			(
@@ -244,7 +245,7 @@ then
 		if ls  $path_parent_folder/$project_name\_$version_number.orig.tar.xz
 		then
 			cd $path_project_folder/debian
-			dch --release
+			dch --release --controlmaint
 			sec_key="$(eval gpg --list-secret-keys)"
 			sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
 			cd $path_project_folder
@@ -330,6 +331,17 @@ fi
 }
 
 
+open_help()
+{
+zenity --text-info \
+		--window-icon=$icon \
+		--title="$title" \
+		--width=665 \
+		--height=500 \
+		--filename=/usr/share/doc/deb-cup/help
+
+}
+
 #	CHECK
 ##############################################################################
 
@@ -413,6 +425,10 @@ then
 elif [ $action = path ]
 then
 	set_project_folder
+
+elif [ $action = doc-help ]
+then
+	open_help
 
 else
 	echo "" > $path_config_file
