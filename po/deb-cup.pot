@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-28 18:04+0200\n"
+"POT-Creation-Date: 2017-10-29 02:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,84 +17,86 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../deb-cup:60
-msgid "Set user/ppa..."
-msgstr ""
-
-#: ../deb-cup:61
-msgid "Set project folder..."
-msgstr ""
-
 #: ../deb-cup:62
-msgid "Create orig tarball"
+msgid "Set user and ppa..."
 msgstr ""
 
 #: ../deb-cup:63
-msgid "Increment changelog"
+msgid "Set project folder..."
 msgstr ""
 
 #: ../deb-cup:64
-msgid "Create deb binary"
+msgid "Create orig tarball"
 msgstr ""
 
 #: ../deb-cup:65
-msgid "Sign packages"
+msgid "Create/Open debian folder"
 msgstr ""
 
 #: ../deb-cup:66
-msgid "Upload..."
+msgid "Increment changelog..."
 msgstr ""
 
 #: ../deb-cup:67
-msgid "Exit"
+msgid "Create deb binary"
 msgstr ""
 
-#: ../deb-cup:76
+#: ../deb-cup:68
+msgid "Create signed dsc and changes"
+msgstr ""
+
+#: ../deb-cup:69
+msgid "Upload to a PPA..."
+msgstr ""
+
+#: ../deb-cup:81
 msgid ""
 "Set user name and name of your PPA in format: \n"
 " user/ppa"
 msgstr ""
 
-#: ../deb-cup:96
+#: ../deb-cup:101
 msgid "Choose a folder with the source code"
 msgstr ""
 
-#: ../deb-cup:107
+#: ../deb-cup:112
 msgid ""
 "Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
 msgstr ""
 
-#: ../deb-cup:139
-#, sh-format
-msgid "Do you want to create $project_name\\_$version_number.orig.tar.xz?"
+#: ../deb-cup:167
+msgid "Orig tarball created"
 msgstr ""
 
-#: ../deb-cup:155 ../deb-cup:172 ../deb-cup:218 ../deb-cup:265
-msgid "Set project folder first."
+#: ../deb-cup:218
+msgid "Creating deb binary package..."
 msgstr ""
 
-#: ../deb-cup:190
-#, sh-format
-msgid "Do you want to create $project_name\\_$version_number.deb?"
+#: ../deb-cup:254
+msgid "Do you want to include orig tarball?"
 msgstr ""
 
-#: ../deb-cup:211
-msgid "Create orig tarball first."
-msgstr ""
-
-#: ../deb-cup:234
-msgid "Do you want to sign packages with orig tarball?"
-msgstr ""
-
-#: ../deb-cup:277
+#: ../deb-cup:300
 msgid "Set user name and name of your PPA in Settings first."
 msgstr ""
 
-#: ../deb-cup:283
+#: ../deb-cup:306
 msgid "Choose source.changes file"
 msgstr ""
 
-#: ../deb-cup:291
+#: ../deb-cup:314
 #, sh-format
 msgid "Do you want to upload $file_name to $user_ppa?"
+msgstr ""
+
+#: ../deb-cup:353
+msgid "Choose project folder first."
+msgstr ""
+
+#: ../deb-cup:363
+msgid "Create debian folder first."
+msgstr ""
+
+#: ../deb-cup:371
+msgid "Create orig tarball first."
 msgstr ""

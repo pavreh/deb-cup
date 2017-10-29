@@ -1,20 +1,7 @@
 New icon in higher resolution
-Function: create debian folder
-
-Notify: tabrall was created
-After an error open the file search. File search will be editable.
-Progressbar: Creating deb
-Question when creating deb binary: Set name of deb from changelog
-Upload: set default folder as parent folder
-
-error: debian folder missing
-error: user skip order
-
-increment changelog sometimes set wrong name and email.
-
-Remove code duplicities (warning window...)
 
 Help
 About
-Support for more ppas
 
+Support for more ppas
+Support for more GPG keys

@@ -17,6 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#. $HOME/.config/deb-cup/deb-cup.cfg
 config_file=$HOME/.config/deb-cup/config
 path_config_file=$HOME/.config/deb-cup/path
 log_file=$HOME/.config/deb-cup/log
@@ -51,22 +52,26 @@ main_window()
 action=$(zenity --list \
 				--title="$title" \
 				--window-icon=$icon \
+				--width=250 \
 				--height=300 \
 				--hide-header \
 				--text "" \
 				--column "" \
 				--column "" \
 				--hide-column=1 \
-				  settings "$(gettext 'Set user/ppa...')" \
+				  settings "$(gettext 'Set user and ppa...')" \
 				  path "$(gettext 'Set project folder...')" \
 				  tarball "$(gettext 'Create orig tarball')" \
-				  changelog "$(gettext 'Increment changelog')" \
+				  debian "$(gettext 'Create/Open debian folder')" \
+				  changelog "$(gettext 'Increment changelog...')" \
 				  binary "$(gettext 'Create deb binary')" \
-				  sign "$(gettext 'Sign packages')" \
-				  upload "$(gettext 'Upload...')" \
-				  end "$(gettext 'Exit')")
+				  sign "$(gettext 'Create signed dsc and changes')" \
+				  upload "$(gettext 'Upload to a PPA...')")
 }
 
+
+#	SETTING
+##############################################################################
 
 settings_window()
 {
@@ -118,12 +123,32 @@ echo $path_project_folder > $path_config_file
 }
 
 
-check_project_name()
+create_cfg()
 {
-path_parent_folder=$(echo "${path_project_folder%/*}")
-project_version=$(echo "${path_project_folder##*/}")
-project_name=$(echo "${project_version%-*}")
-version_number=$(echo "${path_project_folder##*-}")
+mkdir  $HOME/.config/deb-cup
+echo "" > $config_file
+}
+
+
+#	ACTIONS
+##############################################################################
+
+create_debian_folder()
+{
+path_project_folder=$(cat $path_config_file)
+check_project_name
+if [[ $project_version = *"-"[0-9]* ]]
+then
+	cd $path_project_folder
+	dh_make --yes --indep --createorig --native
+	zenity --info \
+			--window-icon=$icon \
+			--title="$title" \
+			--text="Edit debian folder manually."
+	xdg-open $path_project_folder/debian/
+else
+	warning_set_project_folder
+fi
 }
 
 
@@ -133,26 +158,15 @@ path_project_folder=$(cat $path_config_file)
 check_project_name
 if [[ $project_version = *"-"[0-9]* ]]
 then
-	if zenity --question \
-				--title="$title" \
-				--window-icon=$icon \
-				--text="$(eval_gettext "Do you want to create \$project_name\_\$version_number.orig.tar.xz?")" \
-				--default-cancel
-	then
-		cd $path_parent_folder
-		tar -cf debian.tar $project_version/debian/
-		rm -fr $project_version/debian
-		tar -caf $project_name\_$version_number.orig.tar.xz $project_version
-		tar -xf debian.tar
-		rm debian.tar
-	else
-		:
-	fi
+	cd $path_parent_folder
+	tar -cf debian.tar $project_version/debian/
+	rm -fr $project_version/debian
+	tar -caf $project_name\_$version_number.orig.tar.xz $project_version
+	tar -xf debian.tar
+	rm debian.tar
+	notify-send "$(gettext 'Orig tarball created')" --icon=$icon --expire-time=3000
 else
-	zenity --warning \
-			--title="$title" \
-			--window-icon=$icon \
-			--text="$(gettext 'Set project folder first.')"
+	warning_set_project_folder
 fi
 }
 
@@ -163,13 +177,15 @@ path_project_folder=$(cat $path_config_file)
 check_project_name
 if [[ $project_version = *"-"[0-9]* ]]
 then
-	cd $path_project_folder/debian
-	dch -i
+	if ls $path_project_folder/debian/changelog
+	then
+		cd $path_project_folder/debian
+		dch -i
+	else
+		warning_create_debian_folder
+	fi
 else
-	zenity --warning \
-			--title="$title" \
-			--window-icon=$icon \
-			--text="$(gettext 'Set project folder first.')"
+	warning_set_project_folder
 fi
 }
 
@@ -180,22 +196,26 @@ path_project_folder=$(cat $path_config_file)
 check_project_name
 if [[ $project_version = *"-"[0-9]* ]]
 then
-	cd $path_parent_folder
-	if ls $project_name\_$version_number.orig.tar.xz
+	if ls $path_project_folder/debian/changelog
 	then
-		# set correct name of deb from changelog
-		if zenity --question \
-				--title="$title" \
-				--window-icon=$icon \
-				--text="$(eval_gettext "Do you want to create \$project_name\_\$version_number.deb?")" \
-				--default-cancel
+		cd $path_parent_folder
+		if ls $project_name\_$version_number.orig.tar.xz
 		then
+			# set correct name of deb from changelog
 			cd $path_project_folder/debian
 			dch --release
 			cd $path_project_folder
-			log="$(eval debuild -us -uc)"
 			touch $log_file
-			echo "$log" > $log_file
+			(
+			echo "0"
+			debuild -us -uc > $log_file
+			echo "100"
+			) |	zenity --progress \
+					--title="$title" \
+					--window-icon=$icon \
+					--pulsate \
+					--auto-close \
+					--text="$(gettext 'Creating deb binary package...')"
 			zenity --text-info \
 					--window-icon=$icon \
 					--title="$title" \
@@ -203,19 +223,13 @@ then
 					--height=300 \
 					--filename=$log_file
 		else
-			:
+			warning_create_orig_tarball
 		fi
 	else
-		zenity --warning \
-				--window-icon=$icon \
-				--text="$(gettext 'Create orig tarball first.')" \
-				--title="$title"
+		warning_create_debian_folder
 	fi
 else
-	zenity --warning \
-			--title="$title" \
-			--window-icon=$icon \
-			--text="$(gettext 'Set project folder first.')"
+	warning_set_project_folder
 fi
 }
 
@@ -225,44 +239,53 @@ path_project_folder=$(cat $path_config_file)
 check_project_name
 if [[ $project_version = *"-"[0-9]* ]]
 then
-	sec_key="$(eval gpg --list-secret-keys)"
-	sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
-	cd $path_project_folder
-	if zenity --question \
-			--title="$title" \
-			--window-icon=$icon \
-	--text="$(gettext "Do you want to sign packages with orig tarball?")" \
-			--default-cancel
+	if ls $path_project_folder/debian/changelog
 	then
-		command="debuild -S -sa -k$sec_key"
-		gnome-terminal -e "bash -c \"$command; exec bash\""
-		#log="$(eval $command)"
-		#touch $log_file
-		#echo "$log" > $log_file
-		#zenity --text-info \
-		#		--window-icon=$icon \
-		#		--title="$title" \
-		#		--width=500 \
-		#		--height=300 \
-		#		--filename=$log_file
+		if ls  $path_parent_folder/$project_name\_$version_number.orig.tar.xz
+		then
+			cd $path_project_folder/debian
+			dch --release
+			sec_key="$(eval gpg --list-secret-keys)"
+			sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+			cd $path_project_folder
+			if zenity --question \
+					--title="$title" \
+					--window-icon=$icon \
+				--text="$(gettext 'Do you want to include orig tarball?')" \
+					--default-cancel
+			then
+				command="debuild -S -sa -k$sec_key"
+				gnome-terminal -e "bash -c \"$command; exec bash\""
+				#log="$(eval $command)"
+				#touch $log_file
+				#echo "$log" > $log_file
+				#zenity --text-info \
+				#		--window-icon=$icon \
+				#		--title="$title" \
+				#		--width=500 \
+				#		--height=300 \
+				#		--filename=$log_file
+			else
+				command="debuild -S -sd -k$sec_key"
+				gnome-terminal -e "bash -c \"$command; exec bash\""
+				#log="$(eval $command)"
+				#touch $log_file
+				#echo "$log" > $log_file
+				#zenity --text-info \
+				#		--window-icon=$icon \
+				#		--title="$title" \
+				#		--width=500 \
+				#		--height=300 \
+				#		--filename=$log_file
+			fi
+		else
+			warning_create_orig_tarball
+		fi
 	else
-		command="debuild -S -sd -k$sec_key"
-		gnome-terminal -e "bash -c \"$command; exec bash\""
-		#log="$(eval $command)"
-		#touch $log_file
-		#echo "$log" > $log_file
-		#zenity --text-info \
-		#		--window-icon=$icon \
-		#		--title="$title" \
-		#		--width=500 \
-		#		--height=300 \
-		#		--filename=$log_file
+		warning_create_debian_folder
 	fi
 else
-	zenity --warning \
-			--title="$title" \
-			--window-icon=$icon \
-			--text="$(gettext 'Set project folder first.')"
+	warning_set_project_folder
 fi
 }
 
@@ -279,7 +302,7 @@ then
 else
 	if path_changes_file=$(zenity --file-selection \
 					--window-icon=$icon \
-					--filename="$HOME/" \
+					--filename="$path_parent_folder/" \
 					--title="$(gettext 'Choose source.changes file')" \
 					--file-filter="source.changes | *source.changes")
 	then
@@ -296,7 +319,7 @@ else
 			zenity --info \
 					--window-icon=$icon \
 					--text="$log" \
-					--title="$title" \
+					--title="$title"
 		else
 			:
 		fi
@@ -304,6 +327,49 @@ else
 		:
 	fi
 fi
+}
+
+
+#	CHECK
+##############################################################################
+
+check_project_name()
+{
+path_parent_folder=$(echo "${path_project_folder%/*}")
+project_version=$(echo "${path_project_folder##*/}")
+project_name=$(echo "${project_version%-*}")
+version_number=$(echo "${path_project_folder##*-}")
+}
+
+
+#	WARNINGS
+##############################################################################
+
+warning_set_project_folder()
+{
+zenity --warning \
+		--title="$title" \
+		--window-icon=$icon \
+		--text="$(gettext 'Choose project folder first.')"
+set_project_folder
+}
+
+
+warning_create_debian_folder()
+{
+zenity --warning \
+		--title="$title" \
+		--window-icon=$icon \
+		--text="$(gettext 'Create debian folder first.')"
+}
+
+
+warning_create_orig_tarball()
+{
+zenity --warning \
+		--window-icon=$icon \
+		--text="$(gettext 'Create orig tarball first.')" \
+		--title="$title"
 }
 
 ##############################################################################
@@ -336,6 +402,10 @@ elif [ $action = upload ]
 then
 	upload_file
 
+elif [ $action = debian ]
+then
+	create_debian_folder
+
 elif [ $action = settings ]
 then
 	settings_window
@@ -345,6 +415,7 @@ then
 	set_project_folder
 
 else
+	echo "" > $path_config_file
 	run=0
 fi
 
