@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-29 10:52+0100\n"
-"PO-Revision-Date: 2017-10-29 10:52+0100\n"
+"POT-Creation-Date: 2017-10-29 18:12+0100\n"
+"PO-Revision-Date: 2017-10-29 18:15+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -27,12 +27,12 @@ msgid "Set project folder..."
 msgstr "Nastavit složku projektu..."
 
 #: ../deb-cup:64
-msgid "Create orig tarball"
-msgstr "Vytvořit orig tarball"
-
-#: ../deb-cup:65
 msgid "Create/Open debian folder"
 msgstr "Vytvořit/Otevřít složku debian"
+
+#: ../deb-cup:65
+msgid "Create orig tarball"
+msgstr "Vytvořit orig tarball"
 
 #: ../deb-cup:66
 msgid "Increment changelog..."
@@ -70,40 +70,54 @@ msgstr "Vyberte složku se zdrojovým kódem"
 msgid "Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
 msgstr "Nastavte název a verzi složky ve formátu název-verze, např. aplikace-0.1.0."
 
-#: ../deb-cup:168
+#: ../deb-cup:180
+msgid "Creating orig tarball..."
+msgstr "Vytváří se tarball..."
+
+#: ../deb-cup:181
 msgid "Orig tarball created"
 msgstr "Orig tarball vytvořen"
 
-#: ../deb-cup:219
+#: ../deb-cup:204
+msgid ""
+"Changelog cannot be opened.\n"
+"Probably the name of the project folder and the name of the project\n"
+"in the changelog file are not the same. Debian folder will be opened..."
+msgstr ""
+"Changelog nemohl být otevřen.\n"
+"Pravděpodobně název složky projektu a název projektu\n"
+"v souboru changelog nejsou stejné. Otevře se složka debian..."
+
+#: ../deb-cup:252
 msgid "Creating deb binary package..."
 msgstr "Vytváří se deb balíček..."
 
-#: ../deb-cup:255
+#: ../deb-cup:288
 msgid "Do you want to include orig tarball?"
 msgstr "Chcete zahrnout orig tarball?"
 
-#: ../deb-cup:301
+#: ../deb-cup:334
 msgid "Set user name and name of your PPA in Settings first."
 msgstr "Nejdříve v nastavení zadejte uživatelské jméno a název vašeho PPA."
 
-#: ../deb-cup:307
+#: ../deb-cup:340
 msgid "Choose source.changes file"
 msgstr "Vyberte soubor source.changes"
 
-#: ../deb-cup:315
+#: ../deb-cup:348
 #, sh-format
 msgid "Do you want to upload $file_name to $user_ppa?"
 msgstr "Chcete odeslat $file_name do $user_ppa?"
 
-#: ../deb-cup:365
+#: ../deb-cup:398
 msgid "Choose project folder first."
 msgstr "Nejdříve vyberte složku projektu."
 
-#: ../deb-cup:375
+#: ../deb-cup:408
 msgid "Create debian folder first."
 msgstr "Nejdříve vytvořte složku debian."
 
-#: ../deb-cup:383
+#: ../deb-cup:416
 msgid "Create orig tarball first."
 msgstr "Nejdříve vytvořte orig tarball."
 

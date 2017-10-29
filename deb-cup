@@ -159,12 +159,25 @@ path_project_folder=$(cat $path_config_file)
 check_project_name
 if [[ $project_version = *"-"[0-9]* ]]
 then
+	(
+	echo "0"
 	cd $path_parent_folder
+	echo "5"
 	tar -cf debian.tar $project_version/debian/
+	echo "25"
 	rm -fr $project_version/debian
+	echo "45"
 	tar -caf $project_name\_$version_number.orig.tar.xz $project_version
+	echo "75"
 	tar -xf debian.tar
+	echo "90"
 	rm debian.tar
+	echo "100"
+	) |	zenity --progress \
+				--title="$title" \
+				--window-icon=$icon \
+				--auto-close \
+				--text="$(gettext 'Creating orig tarball...')"
 	notify-send "$(gettext 'Orig tarball created')" --icon=$icon --expire-time=3000
 else
 	warning_set_project_folder
@@ -181,7 +194,27 @@ then
 	if ls $path_project_folder/debian/changelog
 	then
 		cd $path_project_folder/debian
-		dch --fromdirname --controlmaint
+		if dch --fromdirname --controlmaint
+		then
+			:
+		else
+			zenity --warning \
+					--title="$title" \
+					--window-icon=$icon \
+					--text="$(gettext 'Changelog cannot be opened.
+Probably the name of the project folder and the name of the project
+in the changelog file are not the same. Debian folder will be opened...')"
+			if path_changelog_file=$(zenity --file-selection \
+					--window-icon=$icon \
+					--filename="$path_project_folder/debian/" \
+					--title="$title" \
+					--file-filter="changelog | changelog")
+			then
+				gedit $path_changelog_file
+			else
+				:
+			fi
+		fi
 	else
 		warning_create_debian_folder
 	fi
