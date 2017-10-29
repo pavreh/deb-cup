@@ -136,9 +136,8 @@ echo "" > $config_file
 
 create_debian_folder()
 {
-path_project_folder=$(cat $path_config_file)
-check_project_name
-if [[ $project_version = *"-"[0-9]* ]]
+testing
+if [[ $result_test = "OK" ]]
 then
 	cd $path_project_folder
 	dh_make --yes --indep --createorig --native
@@ -147,17 +146,14 @@ then
 			--title="$title" \
 			--text="Edit debian folder manually."
 	xdg-open $path_project_folder/debian/
-else
-	warning_set_project_folder
 fi
 }
 
 
 create_orig_tarball()
 {
-path_project_folder=$(cat $path_config_file)
-check_project_name
-if [[ $project_version = *"-"[0-9]* ]]
+testing
+if [[ $result_test = "OK" ]]
 then
 	(
 	echo "0"
@@ -179,17 +175,14 @@ then
 				--auto-close \
 				--text="$(gettext 'Creating orig tarball...')"
 	notify-send "$(gettext 'Orig tarball created')" --icon=$icon --expire-time=3000
-else
-	warning_set_project_folder
 fi
 }
 
 
 update_changelog()
 {
-path_project_folder=$(cat $path_config_file)
-check_project_name
-if [[ $project_version = *"-"[0-9]* ]]
+testing
+if [[ $result_test = "OK" ]]
 then
 	if ls $path_project_folder/debian/changelog
 	then
@@ -201,116 +194,59 @@ then
 			zenity --warning \
 					--title="$title" \
 					--window-icon=$icon \
-					--text="$(gettext 'Changelog cannot be opened.
-Probably the name of the project folder and the name of the project
-in the changelog file are not the same. Debian folder will be opened...')"
-			if path_changelog_file=$(zenity --file-selection \
-					--window-icon=$icon \
-					--filename="$path_project_folder/debian/" \
-					--title="$title" \
-					--file-filter="changelog | changelog")
-			then
-				gedit $path_changelog_file
-			else
-				:
-			fi
+					--text="$(gettext 'The version and/or name of the project folder and the version 
+and/or name in the changelog file are not the same.
+Please rename the project folder or increase changelog.')"
+			dch --controlmaint
 		fi
 	else
 		warning_create_debian_folder
 	fi
 else
-	warning_set_project_folder
+	:
 fi
 }
 
 
 create_deb_binary()
 {
-path_project_folder=$(cat $path_config_file)
-check_project_name
-if [[ $project_version = *"-"[0-9]* ]]
+testing
+if [[ $result_test = "OK" ]]
 then
+	# Check whether changelog file exist
 	if ls $path_project_folder/debian/changelog
 	then
 		cd $path_parent_folder
+		# Check whether orig tarball exist
 		if ls $project_name\_$version_number.orig.tar.xz
 		then
-			# set correct name of deb from changelog
-			cd $path_project_folder/debian
-			dch --release --controlmaint
-			cd $path_project_folder
-			touch $log_file
-			(
-			echo "0"
-			debuild -us -uc > $log_file
-			echo "100"
-			) |	zenity --progress \
-					--title="$title" \
-					--window-icon=$icon \
-					--pulsate \
-					--auto-close \
-					--text="$(gettext 'Creating deb binary package...')"
-			zenity --text-info \
-					--window-icon=$icon \
-					--title="$title" \
-					--width=500 \
-					--height=300 \
-					--filename=$log_file
-		else
-			warning_create_orig_tarball
-		fi
-	else
-		warning_create_debian_folder
-	fi
-else
-	warning_set_project_folder
-fi
-}
-
-sign_packages()
-{
-path_project_folder=$(cat $path_config_file)
-check_project_name
-if [[ $project_version = *"-"[0-9]* ]]
-then
-	if ls $path_project_folder/debian/changelog
-	then
-		if ls  $path_parent_folder/$project_name\_$version_number.orig.tar.xz
-		then
-			cd $path_project_folder/debian
-			dch --release --controlmaint
-			sec_key="$(eval gpg --list-secret-keys)"
-			sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
-			cd $path_project_folder
-			if zenity --question \
-					--title="$title" \
-					--window-icon=$icon \
-				--text="$(gettext 'Do you want to include orig tarball?')" \
-					--default-cancel
+			# Check wheter the version of the project folder and the version
+			# in the changelog file are the same
+			check_version
+			if [ $folder_changelog_version = same ]
 			then
-				command="debuild -S -sa -k$sec_key"
-				gnome-terminal -e "bash -c \"$command; exec bash\""
-				#log="$(eval $command)"
-				#touch $log_file
-				#echo "$log" > $log_file
-				#zenity --text-info \
-				#		--window-icon=$icon \
-				#		--title="$title" \
-				#		--width=500 \
-				#		--height=300 \
-				#		--filename=$log_file
+				cd $path_project_folder/debian
+				dch --release --controlmaint
+				cd $path_project_folder
+				touch $log_file
+				(
+				echo "0"
+				debuild -us -uc > $log_file
+				echo "100"
+				) |	zenity --progress \
+						--title="$title" \
+						--window-icon=$icon \
+						--pulsate \
+						--auto-close \
+						--text="$(gettext 'Creating deb binary package...')"
+				zenity --text-info \
+						--window-icon=$icon \
+						--title="$title" \
+						--width=500 \
+						--height=300 \
+						--filename=$log_file
 			else
-				command="debuild -S -sd -k$sec_key"
-				gnome-terminal -e "bash -c \"$command; exec bash\""
-				#log="$(eval $command)"
-				#touch $log_file
-				#echo "$log" > $log_file
-				#zenity --text-info \
-				#		--window-icon=$icon \
-				#		--title="$title" \
-				#		--width=500 \
-				#		--height=300 \
-				#		--filename=$log_file
+				warning_version_mishmash
 			fi
 		else
 			warning_create_orig_tarball
@@ -319,7 +255,71 @@ then
 		warning_create_debian_folder
 	fi
 else
-	warning_set_project_folder
+	:
+fi
+}
+
+sign_packages()
+{
+testing
+if [[ $result_test = "OK" ]]
+then
+	# Check wheter the version of the project folder and the version
+	# in the changelog file are the same
+	check_version
+	if [ $folder_changelog_version = same ]
+	then
+		if ls $path_project_folder/debian/changelog
+		then
+			if ls  $path_parent_folder/$project_name\_$version_number.orig.tar.xz
+			then
+				cd $path_project_folder/debian
+				dch --release --controlmaint
+				sec_key="$(eval gpg --list-secret-keys)"
+				# sed -n = print a line which contains "sec ".
+				sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+				cd $path_project_folder
+				if zenity --question \
+						--title="$title" \
+						--window-icon=$icon \
+				--text="$(gettext 'Do you want to include orig tarball?')" \
+						--default-cancel
+				then
+					command="debuild -S -sa -k$sec_key"
+					gnome-terminal -e "bash -c \"$command; exec bash\""
+					#log="$(eval $command)"
+					#touch $log_file
+					#echo "$log" > $log_file
+					#zenity --text-info \
+					#		--window-icon=$icon \
+					#		--title="$title" \
+					#		--width=500 \
+					#		--height=300 \
+					#		--filename=$log_file
+				else
+					command="debuild -S -sd -k$sec_key"
+					gnome-terminal -e "bash -c \"$command; exec bash\""
+					#log="$(eval $command)"
+					#touch $log_file
+					#echo "$log" > $log_file
+					#zenity --text-info \
+					#		--window-icon=$icon \
+					#		--title="$title" \
+					#		--width=500 \
+					#		--height=300 \
+					#		--filename=$log_file
+				fi
+			else
+				warning_create_orig_tarball
+			fi
+		else
+			warning_create_debian_folder
+		fi
+	else
+		warning_version_mishmash
+	fi
+else
+	:
 fi
 }
 
@@ -387,6 +387,37 @@ version_number=$(echo "${path_project_folder##*-}")
 }
 
 
+check_version()
+{
+changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\(.*\)-.*/\1/')
+if [ $changelog_version = $version_number ]
+then
+	folder_changelog_version="same"
+else
+	folder_changelog_version="different"
+fi
+}
+
+testing()
+{
+result_test="OK"
+path_project_folder=$(cat $path_config_file)
+check_project_name
+
+if ! ls $(cat $HOME/.config/deb-cup/path)
+then
+	result_test="FALSE"
+	warning_set_project_folder
+
+fi
+if ! [[ $project_version = *"-"[0-9]* ]]
+then
+	result_test="FALSE"
+	warning_set_project_folder
+fi
+}
+
+
 #	WARNINGS
 ##############################################################################
 
@@ -395,7 +426,7 @@ warning_set_project_folder()
 zenity --warning \
 		--title="$title" \
 		--window-icon=$icon \
-		--text="$(gettext 'Choose project folder first.')"
+		--text="$(gettext 'Choose a folder with the source code first.')"
 set_project_folder
 }
 
@@ -416,6 +447,18 @@ zenity --warning \
 		--text="$(gettext 'Create orig tarball first.')" \
 		--title="$title"
 }
+
+
+warning_version_mishmash()
+{
+zenity --warning \
+		--title="$title" \
+		--window-icon=$icon \
+		--text="$(gettext 'The version of the project folder and the version
+in the changelog file are not the same.
+Please rename the project folder or increase changelog.')"
+}
+
 
 ##############################################################################
 #	PROGRAM

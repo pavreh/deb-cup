@@ -9,4 +9,7 @@ Support for more GPG keys
 Changelog - do not open when it is released. Check, whether changelog was 
 	increased.
 
-Bug: When Deb Cup is running and name of the project folder is changed Deb Cup do nothing.
+Code duplicities: path_project_folder
+Code duplicities: check_project_name
+
+Add progressbar when uploading.

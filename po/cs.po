@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-29 18:12+0100\n"
+"POT-Creation-Date: 2017-10-30 00:04+0100\n"
 "PO-Revision-Date: 2017-10-29 18:15+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
@@ -67,32 +67,31 @@ msgid "Choose a folder with the source code"
 msgstr "Vyberte složku se zdrojovým kódem"
 
 #: ../deb-cup:113
-msgid "Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
-msgstr "Nastavte název a verzi složky ve formátu název-verze, např. aplikace-0.1.0."
+msgid ""
+"Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
+msgstr ""
+"Nastavte název a verzi složky ve formátu název-verze, např. aplikace-0.1.0."
 
-#: ../deb-cup:180
+#: ../deb-cup:176
 msgid "Creating orig tarball..."
 msgstr "Vytváří se tarball..."
 
-#: ../deb-cup:181
+#: ../deb-cup:177
 msgid "Orig tarball created"
 msgstr "Orig tarball vytvořen"
 
-#: ../deb-cup:204
+#: ../deb-cup:197
 msgid ""
-"Changelog cannot be opened.\n"
-"Probably the name of the project folder and the name of the project\n"
-"in the changelog file are not the same. Debian folder will be opened..."
+"The version and/or name of the project folder and the version \n"
+"and/or name in the changelog file are not the same. \n"
+"Please rename the project folder or increase changelog."
 msgstr ""
-"Changelog nemohl být otevřen.\n"
-"Pravděpodobně název složky projektu a název projektu\n"
-"v souboru changelog nejsou stejné. Otevře se složka debian..."
 
-#: ../deb-cup:252
+#: ../deb-cup:241
 msgid "Creating deb binary package..."
 msgstr "Vytváří se deb balíček..."
 
-#: ../deb-cup:288
+#: ../deb-cup:285
 msgid "Do you want to include orig tarball?"
 msgstr "Chcete zahrnout orig tarball?"
 
@@ -109,17 +108,36 @@ msgstr "Vyberte soubor source.changes"
 msgid "Do you want to upload $file_name to $user_ppa?"
 msgstr "Chcete odeslat $file_name do $user_ppa?"
 
-#: ../deb-cup:398
-msgid "Choose project folder first."
-msgstr "Nejdříve vyberte složku projektu."
+#: ../deb-cup:429
+msgid "Choose a folder with the source code first."
+msgstr ""
 
-#: ../deb-cup:408
+#: ../deb-cup:439
 msgid "Create debian folder first."
 msgstr "Nejdříve vytvořte složku debian."
 
-#: ../deb-cup:416
+#: ../deb-cup:447
 msgid "Create orig tarball first."
 msgstr "Nejdříve vytvořte orig tarball."
+
+#: ../deb-cup:457
+msgid ""
+"The version of the project folder and the version\n"
+"in the changelog file are not the same. \n"
+"Please rename the project folder or increase changelog."
+msgstr ""
+
+#~ msgid ""
+#~ "Changelog cannot be opened.\n"
+#~ "Probably the name of the project folder and the name of the project\n"
+#~ "in the changelog file are not the same. Debian folder will be opened..."
+#~ msgstr ""
+#~ "Changelog nemohl být otevřen.\n"
+#~ "Pravděpodobně název složky projektu a název projektu\n"
+#~ "v souboru changelog nejsou stejné. Otevře se složka debian..."
+
+#~ msgid "Choose project folder first."
+#~ msgstr "Nejdříve vyberte složku projektu."
 
 #~ msgid "With"
 #~ msgstr "S"
