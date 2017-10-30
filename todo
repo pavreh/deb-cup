@@ -6,10 +6,8 @@ About
 Support for more ppas
 Support for more GPG keys
 
-Changelog - do not open when it is released. Check, whether changelog was 
-	increased.
-
 Code duplicities: path_project_folder
 Code duplicities: check_project_name
 
-Add progressbar when uploading.
+Ubuntu 17.10
+  - Bug: No icon

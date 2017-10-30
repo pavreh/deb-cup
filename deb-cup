@@ -52,7 +52,7 @@ main_window()
 action=$(zenity --list \
 				--title="$title" \
 				--window-icon=$icon \
-				--width=250 \
+				--width=260 \
 				--height=330 \
 				--hide-header \
 				--text "" \
@@ -196,7 +196,7 @@ then
 					--window-icon=$icon \
 					--text="$(gettext 'The version and/or name of the project folder and the version 
 and/or name in the changelog file are not the same.
-Please rename the project folder or increase changelog.')"
+Please rename the project folder or update changelog.')"
 			dch --controlmaint
 		fi
 	else
@@ -326,6 +326,7 @@ fi
 
 upload_file()
 {
+# Check whether an user and a ppa is set
 user_ppa="$(cat $config_file)"
 if [ "$user_ppa" = "" ]
 then
@@ -334,6 +335,7 @@ then
 		--text="$(gettext 'Set user name and name of your PPA in Settings first.')" \
 		--title="$title"
 else
+	# Choose source.changes file
 	if path_changes_file=$(zenity --file-selection \
 					--window-icon=$icon \
 					--filename="$path_parent_folder/" \
@@ -348,8 +350,19 @@ else
 					--text="$(eval_gettext "Do you want to upload \$file_name to \$user_ppa?")" \
 					--default-cancel
 		then
-			command_upload="dput ppa:$user_ppa $path_changes_file"
-			log="$(eval $command_upload)"
+			# Upload changes and the source code to the PPA
+			touch $log_file
+			(
+			echo "0"
+			dput ppa:$user_ppa $path_changes_file > $log_file
+			echo "100"
+			) |	zenity --progress \
+						--title="$title" \
+						--window-icon=$icon \
+						--pulsate \
+						--auto-close \
+						--text="$(gettext 'Uploading files to the PPA...')"
+			log=$(cat $log_file)
 			zenity --info \
 					--window-icon=$icon \
 					--text="$log" \
@@ -374,6 +387,7 @@ zenity --text-info \
 		--filename=/usr/share/doc/deb-cup/help
 
 }
+
 
 #	CHECK
 ##############################################################################
@@ -404,12 +418,15 @@ result_test="OK"
 path_project_folder=$(cat $path_config_file)
 check_project_name
 
+# Check whether the set project folder exist
 if ! ls $(cat $HOME/.config/deb-cup/path)
 then
 	result_test="FALSE"
 	warning_set_project_folder
 
 fi
+
+# Check whether a project folder is set
 if ! [[ $project_version = *"-"[0-9]* ]]
 then
 	result_test="FALSE"
