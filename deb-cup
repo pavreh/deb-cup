@@ -173,6 +173,7 @@ then
 				--title="$title" \
 				--window-icon=$icon \
 				--auto-close \
+				--no-cancel \
 				--text="$(gettext 'Creating orig tarball...')"
 	notify-send "$(gettext 'Orig tarball created')" --icon=$icon --expire-time=3000
 fi
@@ -238,6 +239,7 @@ then
 						--window-icon=$icon \
 						--pulsate \
 						--auto-close \
+						--no-cancel \
 						--text="$(gettext 'Creating deb binary package...')"
 				zenity --text-info \
 						--window-icon=$icon \
@@ -276,39 +278,33 @@ then
 				cd $path_project_folder/debian
 				dch --release --controlmaint
 				sec_key="$(eval gpg --list-secret-keys)"
-				# sed -n = print a line which contains "sec ".
-				sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+				sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
 				cd $path_project_folder
+				touch $log_file
 				if zenity --question \
 						--title="$title" \
 						--window-icon=$icon \
 				--text="$(gettext 'Do you want to include orig tarball?')" \
 						--default-cancel
 				then
-					command="debuild -S -sa -k$sec_key"
-					gnome-terminal -e "bash -c \"$command; exec bash\""
-					#log="$(eval $command)"
-					#touch $log_file
-					#echo "$log" > $log_file
-					#zenity --text-info \
-					#		--window-icon=$icon \
-					#		--title="$title" \
-					#		--width=500 \
-					#		--height=300 \
-					#		--filename=$log_file
+					(
+					echo "0"
+					debuild -S -sa -k$sec_key >  $log_file
+					echo "100"
+					) |	progressbar_dsc_changes
 				else
-					command="debuild -S -sd -k$sec_key"
-					gnome-terminal -e "bash -c \"$command; exec bash\""
-					#log="$(eval $command)"
-					#touch $log_file
-					#echo "$log" > $log_file
-					#zenity --text-info \
-					#		--window-icon=$icon \
-					#		--title="$title" \
-					#		--width=500 \
-					#		--height=300 \
-					#		--filename=$log_file
+					(
+					echo "0"
+					debuild -S -sd -k$sec_key >  $log_file
+					echo "100"
+					) |	progressbar_dsc_changes
 				fi
+				zenity --text-info \
+						--window-icon=$icon \
+						--title="$title" \
+						--width=500 \
+						--height=300 \
+						--filename=$log_file
 			else
 				warning_create_orig_tarball
 			fi
@@ -361,10 +357,13 @@ else
 						--window-icon=$icon \
 						--pulsate \
 						--auto-close \
+						--no-cancel \
 						--text="$(gettext 'Uploading files to the PPA...')"
 			log=$(cat $log_file)
 			zenity --info \
 					--window-icon=$icon \
+					--width=520 \
+					--height=330 \
 					--text="$log" \
 					--title="$title"
 		else
@@ -386,6 +385,21 @@ zenity --text-info \
 		--height=500 \
 		--filename=/usr/share/doc/deb-cup/help
 
+}
+
+
+#	SUPPORT
+##############################################################################
+
+progressbar_dsc_changes()
+{
+zenity --progress \
+	--title="$title" \
+	--window-icon=$icon \
+	--pulsate \
+	--auto-close \
+	--no-cancel \
+	--text="$(gettext 'Creating signed dsc and changes...')"
 }
 
 

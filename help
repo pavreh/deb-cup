@@ -1,12 +1,17 @@
 ##############################################################################
-#    Help
+# Deb Cup - Help
 ##############################################################################
 
  - Torso -
 
-#    Changelog
-##############
+# Increment changelog
+#####################
 
-Increment changelog
- - Maintainer name and email is taken from the debian/control Maintainer field.
+Maintainer name and email is taken from the debian/control Maintainer field.
 
+
+# Creating deb binary or signed dsc and changes
+###############################################
+
+When creation of deb or signed dsc and changes is aborted because of
+  unexpected source changes, create new orig tarball.

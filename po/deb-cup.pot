@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 17:22+0100\n"
+"POT-Creation-Date: 2017-10-31 20:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,59 +68,63 @@ msgid ""
 "Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
 msgstr ""
 
-#: ../deb-cup:176
+#: ../deb-cup:177
 msgid "Creating orig tarball..."
 msgstr ""
 
-#: ../deb-cup:177
+#: ../deb-cup:178
 msgid "Orig tarball created"
 msgstr ""
 
-#: ../deb-cup:197
+#: ../deb-cup:198
 msgid ""
 "The version and/or name of the project folder and the version \n"
 "and/or name in the changelog file are not the same.\n"
 "Please rename the project folder or update changelog."
 msgstr ""
 
-#: ../deb-cup:241
+#: ../deb-cup:243
 msgid "Creating deb binary package..."
 msgstr ""
 
-#: ../deb-cup:285
+#: ../deb-cup:287
 msgid "Do you want to include orig tarball?"
 msgstr ""
 
-#: ../deb-cup:335
+#: ../deb-cup:331
 msgid "Set user name and name of your PPA in Settings first."
 msgstr ""
 
-#: ../deb-cup:342
+#: ../deb-cup:338
 msgid "Choose source.changes file"
 msgstr ""
 
-#: ../deb-cup:350
+#: ../deb-cup:346
 #, sh-format
 msgid "Do you want to upload $file_name to $user_ppa?"
 msgstr ""
 
-#: ../deb-cup:364
+#: ../deb-cup:361
 msgid "Uploading files to the PPA..."
 msgstr ""
 
-#: ../deb-cup:445
+#: ../deb-cup:402
+msgid "Creating signed dsc and changes..."
+msgstr ""
+
+#: ../deb-cup:460
 msgid "Choose a folder with the source code first."
 msgstr ""
 
-#: ../deb-cup:455
+#: ../deb-cup:470
 msgid "Create debian folder first."
 msgstr ""
 
-#: ../deb-cup:463
+#: ../deb-cup:478
 msgid "Create orig tarball first."
 msgstr ""
 
-#: ../deb-cup:473
+#: ../deb-cup:488
 msgid ""
 "The version of the project folder and the version\n"
 "in the changelog file are not the same.\n"
