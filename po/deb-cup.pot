@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-31 20:09+0100\n"
+"POT-Creation-Date: 2017-11-02 20:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,68 +63,69 @@ msgstr ""
 msgid "Choose a folder with the source code"
 msgstr ""
 
-#: ../deb-cup:113
+#: ../deb-cup:115
 msgid ""
-"Set name and version of the folder in format name-version, e.g. myapp-0.1.0."
+"Set name and version of the folder in format \n"
+"name-version, e.g. myapp-0.1.0."
 msgstr ""
 
-#: ../deb-cup:177
+#: ../deb-cup:184
 msgid "Creating orig tarball..."
 msgstr ""
 
-#: ../deb-cup:178
+#: ../deb-cup:185
 msgid "Orig tarball created"
 msgstr ""
 
-#: ../deb-cup:198
+#: ../deb-cup:207
 msgid ""
 "The version and/or name of the project folder and the version \n"
 "and/or name in the changelog file are not the same.\n"
 "Please rename the project folder or update changelog."
 msgstr ""
 
-#: ../deb-cup:243
+#: ../deb-cup:254
 msgid "Creating deb binary package..."
 msgstr ""
 
-#: ../deb-cup:287
+#: ../deb-cup:298
 msgid "Do you want to include orig tarball?"
 msgstr ""
 
-#: ../deb-cup:331
+#: ../deb-cup:313 ../deb-cup:327
+msgid "Creating signed dsc and changes..."
+msgstr ""
+
+#: ../deb-cup:361
 msgid "Set user name and name of your PPA in Settings first."
 msgstr ""
 
-#: ../deb-cup:338
+#: ../deb-cup:367
 msgid "Choose source.changes file"
 msgstr ""
 
-#: ../deb-cup:346
+#: ../deb-cup:375
 #, sh-format
 msgid "Do you want to upload $file_name to $user_ppa?"
 msgstr ""
 
-#: ../deb-cup:361
+#: ../deb-cup:392
 msgid "Uploading files to the PPA..."
 msgstr ""
 
-#: ../deb-cup:402
-msgid "Creating signed dsc and changes..."
-msgstr ""
-
-#: ../deb-cup:460
+#: ../deb-cup:482
 msgid "Choose a folder with the source code first."
 msgstr ""
 
-#: ../deb-cup:470
+#: ../deb-cup:494
 msgid "Create debian folder first."
 msgstr ""
 
-#: ../deb-cup:478
+#: ../deb-cup:502
 msgid "Create orig tarball first."
 msgstr ""
 
-#: ../deb-cup:488
+#: ../deb-cup:516
 msgid ""
 "The version of the project folder and the version\n"
 "in the changelog file are not the same.\n"

@@ -11,3 +11,5 @@ Code duplicities: check_project_name
 
 Ubuntu 17.10
   - Bug: No icon
+
+When press esc, do nothing - info windows (add cancel)
