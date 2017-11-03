@@ -341,7 +341,7 @@ then
                            --window-icon=$icon \
                            --width=330 \
                            --height=200 \
-                           --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save and close the changelog file which was automatically opened.')"
+                           --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
                 else
                     :
                 fi
@@ -466,7 +466,7 @@ fi
 
 check_release()
 {
-changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(.UNRELEASED\).*/\1/')
+changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(UNRELEASED\).*/\1/')
 }
 
 
@@ -502,8 +502,7 @@ zenity --warning \
        --window-icon=$icon \
        --width=330 \
        --height=200 \
-       --text="$(gettext 'Choose a folder with the source code first.')"
-set_project_folder
+       --text="$(gettext 'Set a project folder first.')"
 }
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 20:25+0100\n"
+"POT-Creation-Date: 2017-11-03 22:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,115 +17,125 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../deb-cup:62
+#: ../deb-cup:61
 msgid "Set user and ppa..."
 msgstr ""
 
-#: ../deb-cup:63
+#: ../deb-cup:62
 msgid "Set project folder..."
 msgstr ""
 
-#: ../deb-cup:64
+#: ../deb-cup:63
 msgid "Create/Open debian folder"
 msgstr ""
 
-#: ../deb-cup:65
+#: ../deb-cup:64
 msgid "Create orig tarball"
 msgstr ""
 
-#: ../deb-cup:66
+#: ../deb-cup:65
 msgid "Increment changelog..."
 msgstr ""
 
-#: ../deb-cup:67
+#: ../deb-cup:66
 msgid "Create deb binary"
 msgstr ""
 
-#: ../deb-cup:68
+#: ../deb-cup:67
 msgid "Create signed dsc and changes"
 msgstr ""
 
-#: ../deb-cup:69
+#: ../deb-cup:68
 msgid "Upload to a PPA..."
 msgstr ""
 
-#: ../deb-cup:70
+#: ../deb-cup:69
 msgid "Help"
 msgstr ""
 
-#: ../deb-cup:82
+#: ../deb-cup:83
 msgid ""
-"Set user name and name of your PPA in format: \n"
+"Set user name and name of your PPA in format:\n"
 " user/ppa"
 msgstr ""
 
-#: ../deb-cup:102
+#: ../deb-cup:103
 msgid "Choose a folder with the source code"
 msgstr ""
 
-#: ../deb-cup:115
+#: ../deb-cup:116
 msgid ""
-"Set name and version of the folder in format \n"
+"Set name and version of the folder in format\n"
 "name-version, e.g. myapp-0.1.0."
 msgstr ""
 
-#: ../deb-cup:184
+#: ../deb-cup:185
 msgid "Creating orig tarball..."
 msgstr ""
 
-#: ../deb-cup:185
+#: ../deb-cup:186
 msgid "Orig tarball created"
 msgstr ""
 
-#: ../deb-cup:207
+#: ../deb-cup:208
 msgid ""
-"The version and/or name of the project folder and the version \n"
-"and/or name in the changelog file are not the same.\n"
-"Please rename the project folder or update changelog."
+"The version and/or name of the project folder and the version and/or name in "
+"the changelog file are not the same. Please rename the project folder or "
+"update changelog."
 msgstr ""
 
-#: ../deb-cup:254
+#: ../deb-cup:253
 msgid "Creating deb binary package..."
 msgstr ""
 
-#: ../deb-cup:298
+#: ../deb-cup:299
 msgid "Do you want to include orig tarball?"
 msgstr ""
 
-#: ../deb-cup:313 ../deb-cup:327
+#: ../deb-cup:314 ../deb-cup:328
 msgid "Creating signed dsc and changes..."
 msgstr ""
 
-#: ../deb-cup:361
+#: ../deb-cup:344
+msgid ""
+"The dsc and changes files was not signed because a release in the changelog "
+"file is UNRELEASED. If you want signed dsc and changes please save the "
+"changelog file, which was automatically opened, before closing."
+msgstr ""
+
+#: ../deb-cup:374
 msgid "Set user name and name of your PPA in Settings first."
 msgstr ""
 
-#: ../deb-cup:367
+#: ../deb-cup:380
 msgid "Choose source.changes file"
 msgstr ""
 
-#: ../deb-cup:375
+#: ../deb-cup:390
 #, sh-format
-msgid "Do you want to upload $file_name to $user_ppa?"
+msgid ""
+"Do you want to upload\n"
+"$file_name\n"
+"to $user_ppa?"
 msgstr ""
 
-#: ../deb-cup:392
+#: ../deb-cup:409
 msgid "Uploading files to the PPA..."
 msgstr ""
 
-#: ../deb-cup:482
-msgid "Choose a folder with the source code first."
-msgstr ""
-
-#: ../deb-cup:494
-msgid "Create debian folder first."
-msgstr ""
-
-#: ../deb-cup:502
-msgid "Create orig tarball first."
+#: ../deb-cup:505
+msgid "Set a project folder first."
 msgstr ""
 
 #: ../deb-cup:516
+msgid "Create debian folder first."
+msgstr ""
+
+#: ../deb-cup:524
+msgid "Create orig tarball first."
+msgstr ""
+
+#: ../deb-cup:538
 msgid ""
 "The version of the project folder and the version\n"
 "in the changelog file are not the same.\n"
