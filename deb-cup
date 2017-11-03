@@ -24,7 +24,7 @@ log_file=$HOME/.config/deb-cup/log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 
 # Needed for dch
-VISUAL=gedit
+VISUAL="gedit --wait"
 export VISUAL
 
 
