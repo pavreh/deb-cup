@@ -22,6 +22,7 @@ config_file=$HOME/.config/deb-cup/config
 path_config_file=$HOME/.config/deb-cup/path
 log_file=$HOME/.config/deb-cup/log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
+title='Deb Cup'
 
 # Needed for dch
 VISUAL="gedit --wait"
@@ -39,8 +40,6 @@ export TEXTDOMAIN
 
 TEXTDOMAINDIR=/usr/share/locale
 export TEXTDOMAINDIR
-
-title='Deb Cup'
 
 
 ##############################################################################
@@ -79,6 +78,8 @@ settings_window()
 if user_ppa=$(zenity --entry \
                      --title="$title" \
                      --window-icon=$icon \
+                     --width=330 \
+                     --height=200 \
                      --text="$(gettext 'Set user name and name of your PPA in format:
  user/ppa')" \
                      --entry-text="$(cat $config_file)")
@@ -204,9 +205,7 @@ then
                    --window-icon=$icon \
                    --width=330 \
                    --height=200 \
-                   --text="$(gettext 'The version and/or name of the project folder and the version
-and/or name in the changelog file are not the same.
-Please rename the project folder or update changelog.')"
+                   --text="$(gettext 'The version and/or name of the project folder and the version and/or name in the changelog file are not the same. Please rename the project folder or update changelog.')"
             dch --controlmaint
         fi
     else
@@ -334,6 +333,18 @@ then
                        --width=520 \
                        --height=330 \
                        --filename=$log_file
+                check_release
+                if [ $changelog_release = UNRELEASED ]
+                then
+                    zenity --warning \
+                           --title="$title" \
+                           --window-icon=$icon \
+                           --width=330 \
+                           --height=200 \
+                           --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save and close the changelog file which was automatically opened.')"
+                else
+                    :
+                fi
             else
                 warning_create_orig_tarball
             fi
@@ -450,6 +461,12 @@ then
 else
     folder_changelog_version="different"
 fi
+}
+
+
+check_release()
+{
+changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(.UNRELEASED\).*/\1/')
 }
 
 
