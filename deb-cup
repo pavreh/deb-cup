@@ -300,7 +300,6 @@ then
                           --text="$(gettext 'Do you want to include orig tarball?')" \
                           --default-cancel
                 then
-                    # Artful version
                     (
                     echo "0"
                     debuild -S -sa -k$sec_key >  $log_file
@@ -315,7 +314,6 @@ then
                                --no-cancel \
                               --text="$(gettext 'Creating signed dsc and changes...')"
                 else
-                    # Artful version
                     (
                     echo "0"
                     debuild -S -sd -k$sec_key >  $log_file
@@ -330,7 +328,6 @@ then
                                --no-cancel \
                                --text="$(gettext 'Creating signed dsc and changes...')"
                 fi
-                # Artful version
                 zenity --text-info \
                        --window-icon=$icon \
                        --title="$title" \
