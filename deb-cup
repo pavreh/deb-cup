@@ -288,8 +288,8 @@ then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
                 sec_key="$(eval gpg --list-secret-keys)"
-                # Xenial version
-                sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+                # Artful version
+                sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
                 cd $path_project_folder
                 touch $log_file
                 if zenity --question \
@@ -300,14 +300,43 @@ then
                           --text="$(gettext 'Do you want to include orig tarball?')" \
                           --default-cancel
                 then
-                    # Xenial version
-					command="debuild -S -sa -k$sec_key"
-					gnome-terminal -e "bash -c \"$command; exec bash\""
+                    # Artful version
+                    (
+                    echo "0"
+                    debuild -S -sa -k$sec_key >  $log_file
+                    echo "100"
+                    ) | zenity --progress \
+                               --window-icon=$icon \
+                               --title="$title" \
+                               --width=330 \
+                               --height=200 \
+                               --pulsate \
+                               --auto-close \
+                               --no-cancel \
+                              --text="$(gettext 'Creating signed dsc and changes...')"
                 else
-                    # Xenial version
-					command="debuild -S -sd -k$sec_key"
-					gnome-terminal -e "bash -c \"$command; exec bash\""
+                    # Artful version
+                    (
+                    echo "0"
+                    debuild -S -sd -k$sec_key >  $log_file
+                    echo "100"
+                    ) | zenity --progress \
+                               --window-icon=$icon \
+                               --title="$title" \
+                               --width=330 \
+                               --height=200 \
+                               --pulsate \
+                               --auto-close \
+                               --no-cancel \
+                               --text="$(gettext 'Creating signed dsc and changes...')"
                 fi
+                # Artful version
+                zenity --text-info \
+                       --window-icon=$icon \
+                       --title="$title" \
+                       --width=520 \
+                       --height=330 \
+                       --filename=$log_file
                 check_release
                 if [ $changelog_release = UNRELEASED ]
                 then
