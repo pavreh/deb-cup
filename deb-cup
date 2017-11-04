@@ -454,7 +454,7 @@ version_number=$(echo "${path_project_folder##*-}")
 
 check_version()
 {
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\(.*\)-.*/\1/')
+changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
 if [ $changelog_version = $version_number ]
 then
     folder_changelog_version="same"
