@@ -288,7 +288,6 @@ then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
                 sec_key="$(eval gpg --list-secret-keys)"
-                # Artful version
                 sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
                 cd $path_project_folder
                 touch $log_file
