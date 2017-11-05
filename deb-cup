@@ -145,13 +145,18 @@ if [[ $result_test = "OK" ]]
 then
     cd $path_project_folder
     dh_make --yes --indep --createorig --native
-    zenity --info \
-           --window-icon=$icon \
-           --title="$title" \
-           --width=330 \
-           --height=200 \
-           --text="Edit debian folder manually."
-    xdg-open $path_project_folder/debian/
+    if zenity --info \
+              --window-icon=$icon \
+              --title="$title" \
+              --width=330 \
+              --height=200 \
+              --ok-label="$(gettext 'Open debian folder')" \
+              --text="Edit debian folder manually."
+    then
+        xdg-open $path_project_folder/debian/
+    else
+        :
+    fi
 fi
 }
 
@@ -200,13 +205,18 @@ then
         then
             :
         else
-            zenity --warning \
-                   --title="$title" \
-                   --window-icon=$icon \
-                   --width=330 \
-                   --height=200 \
-                   --text="$(gettext 'The version and/or name of the project folder and the version and/or name in the changelog file are not the same. Please rename the project folder or update changelog.')"
-            dch --controlmaint
+            if zenity --warning \
+                      --title="$title" \
+                      --window-icon=$icon \
+                      --width=330 \
+                      --height=200 \
+                      --ok-label="$(gettext 'Open changelog')" \
+                      --text="$(gettext 'The version and/or name of the project folder and the version and/or name in the changelog file are not the same. Please rename the project folder or update changelog.')"
+            then
+                dch --controlmaint
+            else
+                :
+            fi
         fi
     else
         warning_create_debian_folder
@@ -291,13 +301,15 @@ then
                 sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
                 cd $path_project_folder
                 touch $log_file
-                if zenity --question \
+                text_no="$(gettext 'No')"
+                if answer=$(zenity --question \
                           --title="$title" \
                           --window-icon=$icon \
                           --width=330 \
                           --height=200 \
-                          --text="$(gettext 'Do you want to include orig tarball?')" \
-                          --default-cancel
+                          --extra-button=$text_no \
+                          --cancel-label="$(gettext 'Cancel')" \
+                          --text="$(gettext 'Do you want to include orig tarball?')")
                 then
                     (
                     echo "0"
@@ -312,7 +324,12 @@ then
                                --auto-close \
                                --no-cancel \
                               --text="$(gettext 'Creating signed dsc and changes...')"
+                sign_packages_info
                 else
+                    :
+                fi
+                if [ $answer = $text_no ]
+                then
                     (
                     echo "0"
                     debuild -S -sd -k$sec_key >  $log_file
@@ -326,22 +343,7 @@ then
                                --auto-close \
                                --no-cancel \
                                --text="$(gettext 'Creating signed dsc and changes...')"
-                fi
-                zenity --text-info \
-                       --window-icon=$icon \
-                       --title="$title" \
-                       --width=520 \
-                       --height=330 \
-                       --filename=$log_file
-                check_release
-                if [ $changelog_release = UNRELEASED ]
-                then
-                    zenity --warning \
-                           --title="$title" \
-                           --window-icon=$icon \
-                           --width=330 \
-                           --height=200 \
-                           --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
+                sign_packages_info
                 else
                     :
                 fi
@@ -435,9 +437,30 @@ zenity --text-info \
 }
 
 
-#	SUPPORT
+#	INFO
 ##############################################################################
 
+sign_packages_info()
+{
+zenity --text-info \
+       --window-icon=$icon \
+       --title="$title" \
+       --width=520 \
+       --height=330 \
+       --filename=$log_file
+check_release
+if [ $changelog_release = UNRELEASED ]
+then
+    zenity --warning \
+           --title="$title" \
+           --window-icon=$icon \
+           --width=330 \
+           --height=200 \
+           --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
+else
+    :
+fi
+}
 
 
 #	CHECK
