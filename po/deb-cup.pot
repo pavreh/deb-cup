@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 18:49+0100\n"
+"POT-Creation-Date: 2017-11-05 23:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,14 +46,14 @@ msgid "Create signed dsc and changes"
 msgstr ""
 
 #: ../deb-cup:80
-msgid "Upload to a PPA..."
+msgid "Upload to the PPA..."
 msgstr ""
 
 #: ../deb-cup:81 ../deb-cup:461
 msgid "Help"
 msgstr ""
 
-#: ../deb-cup:82 ../deb-cup:472
+#: ../deb-cup:82 ../deb-cup:473
 msgid "About"
 msgstr ""
 
@@ -136,34 +136,34 @@ msgstr ""
 msgid "Uploading files to the PPA..."
 msgstr ""
 
-#: ../deb-cup:479
+#: ../deb-cup:480
 msgid "GUI tool for creating deb packages and uploading them to a PPA."
 msgstr ""
 
-#: ../deb-cup:481
+#: ../deb-cup:482
 msgid "Homepage"
 msgstr ""
 
-#: ../deb-cup:504
+#: ../deb-cup:505
 msgid ""
 "The dsc and changes files was not signed because a release in the changelog "
 "file is UNRELEASED. If you want signed dsc and changes please save the "
 "changelog file, which was automatically opened, before closing."
 msgstr ""
 
-#: ../deb-cup:573
+#: ../deb-cup:574
 msgid "Choose a project folder first."
 msgstr ""
 
-#: ../deb-cup:584
+#: ../deb-cup:585
 msgid "Create debian folder first."
 msgstr ""
 
-#: ../deb-cup:592
+#: ../deb-cup:593
 msgid "Create orig tarball first."
 msgstr ""
 
-#: ../deb-cup:606
+#: ../deb-cup:607
 msgid ""
 "The version of the project folder and the version\n"
 "in the changelog file are not the same.\n"

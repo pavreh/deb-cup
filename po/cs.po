@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 18:49+0100\n"
-"PO-Revision-Date: 2017-11-05 18:50+0100\n"
+"POT-Creation-Date: 2017-11-05 23:06+0100\n"
+"PO-Revision-Date: 2017-11-05 23:06+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -47,14 +47,14 @@ msgid "Create signed dsc and changes"
 msgstr "Vytvořit podepsané dsc a changes"
 
 #: ../deb-cup:80
-msgid "Upload to a PPA..."
+msgid "Upload to the PPA..."
 msgstr "Odeslat do PPA..."
 
 #: ../deb-cup:81 ../deb-cup:461
 msgid "Help"
 msgstr "Nápověda"
 
-#: ../deb-cup:82 ../deb-cup:472
+#: ../deb-cup:82 ../deb-cup:473
 msgid "About"
 msgstr "O aplikaci"
 
@@ -147,15 +147,15 @@ msgstr ""
 msgid "Uploading files to the PPA..."
 msgstr "Odesílají se soubory do PPA..."
 
-#: ../deb-cup:479
+#: ../deb-cup:480
 msgid "GUI tool for creating deb packages and uploading them to a PPA."
 msgstr "GUI nástroj na vytváření deb balíků a jejich nahrávání do PPA."
 
-#: ../deb-cup:481
+#: ../deb-cup:482
 msgid "Homepage"
 msgstr "Domovská stránka"
 
-#: ../deb-cup:504
+#: ../deb-cup:505
 msgid ""
 "The dsc and changes files was not signed because a release in the changelog "
 "file is UNRELEASED. If you want signed dsc and changes please save the "
@@ -165,19 +165,19 @@ msgstr ""
 "je UNRELEASED. Chcete-li podepsané dsc a changes, prosím uložte soubor "
 "changelog, který se automaticky otevřel, před tím, než ho zavřete."
 
-#: ../deb-cup:573
+#: ../deb-cup:574
 msgid "Choose a project folder first."
 msgstr "Nejdříve vyberte složku projektu."
 
-#: ../deb-cup:584
+#: ../deb-cup:585
 msgid "Create debian folder first."
 msgstr "Nejdříve vytvořte složku debian."
 
-#: ../deb-cup:592
+#: ../deb-cup:593
 msgid "Create orig tarball first."
 msgstr "Nejdříve vytvořte orig tarball."
 
-#: ../deb-cup:606
+#: ../deb-cup:607
 msgid ""
 "The version of the project folder and the version\n"
 "in the changelog file are not the same.\n"
@@ -186,6 +186,9 @@ msgstr ""
 "Verze složky projektu a verze\n"
 "v souboru changelog nejsou stejné.\n"
 "Prosím přejmenujte složku projektu nebo aktualizujte changelog."
+
+#~ msgid "Upload to a PPA..."
+#~ msgstr "Odeslat do PPA..."
 
 #~ msgid "Set project folder..."
 #~ msgstr "Nastavit složku projektu..."

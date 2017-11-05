@@ -1,65 +1,53 @@
-
-    Deb Cup - Help
-_____________________________________________________
-
- - Torso -
-
-    Supported operating systems
-------------------------------------------------------------
-
-Ubuntu 17.10 Artful,
-Ubuntu 16.04 Xenial and
-Linux Mint 18.X.
-
-For other operating systems based on Ubuntu 17.10 please install Gedit.
-
-
-    Set user and ppa
-------------------------------------------------------------
-
-You must have a functional ppa. See
-
-https://help.launchpad.net/Packaging/PPA
-
-If you have more ppas change this setting before uploading.
-
-
-    Create/Open the debian folder
-------------------------------------------------------------
-
-If a debian folder do not exist Deb Cup create one. You must edit this folder manually according to your source code. A default file browser will be opened. See
-
-https://www.debian.org/doc/manuals/maint-guide/dreq.en.html
-
-If a debian folder exist, Deb Cup open this debian folder only.
-
-
-    Create orig tarball
-------------------------------------------------------------
-
-Deb Cup packs your source code to archive project_version.orig.tar.xz. this is needed for creating deb packages and creating signed dsc and changes.
-
-
-    Increment changelog
-------------------------------------------------------------
-
-When you want to create the deb package or signed dsc and changes changelog in the debian folder have to be actualised. The name and version of your project have to be the same as the name of the folder with the source code.
-
-Maintainer name and email is taken from the debian/control Maintainer field.
-
-
-    Creating deb binary or signed dsc and changes
-------------------------------------------------------------
-
-The changelog will be opend. Check it and save.
-
-When creation of deb or signed dsc and changes is aborted because of unexpected source changes, create new orig tarball.
-
-When you want to create signed dsc and changes you must have a GPG key. Nowadays just one GPG key is supported.
-
-
-    Upload to the PPA
-------------------------------------------------------------
-
-
-
+<h1><center><b>Deb Cup - Help</b></center></h1>
+<hr>
+<br>
+<h2>Supported operating systems</h2>
+<hr>
+<p>Ubuntu 17.10 Artful,<br>
+Ubuntu 16.04 Xenial and<br>
+Linux Mint 18.X.</p>
+<p>For other operating systems based on Ubuntu 17.10 please install <a href="apt://gedit">Gedit</a>.</p>
+<p>Operating systems which are not mentioned here are not tested. Deb Cup need not to work properly with them.</p>
+<h2>Set user and ppa</h2>
+<hr>
+<p>You need a functional ppa. See <a href="https://help.launchpad.net/Packaging/PPA">https://help.launchpad.net/Packaging/PPA</a>.<br>
+If you have more ppas, change this setting before uploading.</p>
+<h2>Choose a project folder</h2>
+<hr>
+<p>Choose a folder with the source code. The name of the folder have to be in format name-version, e.g. myapp-0.1.0.<p>
+<h2>Create/Open the debian folder</h2>
+<hr>
+<p>If a debian folder do not exist, Deb Cup create one. Then a default file browser will be opened. Edit this folder manually according to your source code. See<br>
+<a href="https://www.debian.org/doc/manuals/maint-guide/dreq.en.html">https://www.debian.org/doc/manuals/maint-guide/dreq.en.html</a><br>
+If a debian folder exist, Deb Cup opens this debian folder only.</p>
+<h2>Create orig tarball</h2>
+<hr>
+<p>Deb Cup packs your source code to the archive project_version.orig.tar.xz. This is needed for creating deb packages and creating signed dsc and changes.</p>
+<h2>Increment changelog</h2>
+<hr>
+<p>When you want to create the deb package or signed dsc and changes, changelog file in the debian folder have to be actualized. The name and version of your project have to be the same as the name of the folder with the source code.</p>
+<p>Maintainer name and email is taken from the debian/control Maintainer field.</p>
+<h2>Create deb binary</h2>
+<hr>
+<p>The changelog file will be opened. Check it and save.</p>
+<br>
+<h4>Troubleshooting</h4>
+<p>When creation of the deb package is aborted because of unexpected source changes, create new orig tarball.</p>
+<h2>Create signed dsc and changes</h2>
+<hr>
+<p>The changelog file will be opened. Check it and save.</p>
+<p>When you want to create signed dsc and changes, you must have a GPG key. You can create one when you are activating your PPA. See<br>
+<a href="https://help.launchpad.net/Packaging/PPA#Activating_a_PPA">https://help.launchpad.net/Packaging/PPA#Activating_a_PPA</a><br>
+Nowadays Deb Cup supports just one GPG key. Support of more GPG keys is on the Deb Cup's todo list.</p>
+<br>
+<h4>Troubleshooting</h4>
+<p>When creation of signed dsc and changes is aborted because of unexpected source changes, create new orig tarball.</p>
+<h2>Upload to the PPA</h2>
+<hr>
+<p>Select a changes file you want to upload to your PPA.</p>
+<br>
+<br>
+<hr>
+<p>Copyright (c) 2017, Pavel Řehák <a href="mailto:pavel-rehak@email.cz?subject=Deb Cup - Help">Send mail</a>.</p>
+<p>Homepage: <a href="https://github.com/pavreh/deb-cup">https://github.com/pavreh/deb-cup</a></p>
+<p>Deb Cup PPA: <a href="https://launchpad.net/~pavreh/+archive/ubuntu/ppa">https://launchpad.net/~pavreh/+archive/ubuntu/ppa</a></p>

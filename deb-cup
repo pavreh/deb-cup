@@ -77,7 +77,7 @@ action=$(zenity --list \
                 changelog "$(gettext 'Increment changelog...')" \
                 binary "$(gettext 'Create deb binary')" \
                 sign "$(gettext 'Create signed dsc and changes')" \
-                upload "$(gettext 'Upload to a PPA...')" \
+                upload "$(gettext 'Upload to the PPA...')" \
                 doc-help "$(gettext 'Help')" \
                 about "$(gettext 'About')")
 }
@@ -461,6 +461,7 @@ zenity --text-info \
        --title="$title - $(gettext Help)" \
        --width=665 \
        --height=500 \
+       --html \
        --filename=/usr/share/doc/deb-cup/help
 }
 
