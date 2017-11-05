@@ -1,5 +1,6 @@
+
     Deb Cup - Help
-____________________________________________________________
+_____________________________________________________
 
  - Torso -
 
@@ -26,9 +27,7 @@ If you have more ppas change this setting before uploading.
     Create/Open the debian folder
 ------------------------------------------------------------
 
-If a debian folder do not exist Deb Cup create one. You must edit this folder
-manually according to your source code. A default file browser will be opened.
-See
+If a debian folder do not exist Deb Cup create one. You must edit this folder manually according to your source code. A default file browser will be opened. See
 
 https://www.debian.org/doc/manuals/maint-guide/dreq.en.html
 
@@ -38,17 +37,13 @@ If a debian folder exist, Deb Cup open this debian folder only.
     Create orig tarball
 ------------------------------------------------------------
 
-Deb Cup packs your source code to archive project_version.orig.tar.xz. this is
-needed for creating deb packages and creating signed dsc and changes.
+Deb Cup packs your source code to archive project_version.orig.tar.xz. this is needed for creating deb packages and creating signed dsc and changes.
 
 
     Increment changelog
 ------------------------------------------------------------
 
-When you want to create the deb package or signed dsc and changes
-changelog in the debian folder have to be actualised. The name and version of
-your project have to be the same as the name of the folder with the source
-code.
+When you want to create the deb package or signed dsc and changes changelog in the debian folder have to be actualised. The name and version of your project have to be the same as the name of the folder with the source code.
 
 Maintainer name and email is taken from the debian/control Maintainer field.
 
@@ -58,11 +53,9 @@ Maintainer name and email is taken from the debian/control Maintainer field.
 
 The changelog will be opend. Check it and save.
 
-When creation of deb or signed dsc and changes is aborted because of unexpected
-source changes, create new orig tarball.
+When creation of deb or signed dsc and changes is aborted because of unexpected source changes, create new orig tarball.
 
-When you want to create signed dsc and changes you must have a GPG key.
-Nowadays just one GPG key is supported.
+When you want to create signed dsc and changes you must have a GPG key. Nowadays just one GPG key is supported.
 
 
     Upload to the PPA

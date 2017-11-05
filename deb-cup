@@ -17,6 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+version=0.3.15
+
 #. $HOME/.config/deb-cup/deb-cup.cfg
 config_file=$HOME/.config/deb-cup/config
 path_config_file=$HOME/.config/deb-cup/path
@@ -61,8 +63,8 @@ main_window()
 action=$(zenity --list \
                 --title="$title" \
                 --window-icon=$icon \
-                --width=260 \
-                --height=330 \
+                --width=265 \
+                --height=350 \
                 --hide-header \
                 --text "" \
                 --column "" \
@@ -76,7 +78,8 @@ action=$(zenity --list \
                 binary "$(gettext 'Create deb binary')" \
                 sign "$(gettext 'Create signed dsc and changes')" \
                 upload "$(gettext 'Upload to a PPA...')" \
-                doc-help "$(gettext 'Help')")
+                doc-help "$(gettext 'Help')" \
+                about "$(gettext 'About')")
 }
 
 
@@ -113,7 +116,7 @@ if path_project_folder=$(zenity --file-selection \
                                 --title="$(gettext 'Choose a folder with the source code')" \
                                 --directory)
 then
-    check_project_name
+    get_project_name
     if [[ $project_version = *"-"[0-9]* ]]
     then
         echo $path_project_folder > $path_config_file || create_config_path
@@ -455,10 +458,27 @@ open_help()
 {
 zenity --text-info \
        --window-icon=$icon \
-       --title="$title" \
+       --title="$title - $(gettext Help)" \
        --width=665 \
        --height=500 \
        --filename=/usr/share/doc/deb-cup/help
+}
+
+
+open_about()
+{
+zenity --info \
+       --window-icon=$icon \
+       --title="$(gettext 'About') $title" \
+       --width=330 \
+       --height=200 \
+       --text="<b>$title</b>
+
+$version
+
+$(gettext 'GUI tool for creating deb packages and uploading them to a PPA.')
+
+$(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
 }
 
 
@@ -491,7 +511,7 @@ fi
 #	CHECK
 ##############################################################################
 
-check_project_name()
+get_project_name()
 {
 path_parent_folder=$(echo "${path_project_folder%/*}")
 project_version=$(echo "${path_project_folder##*/}")
@@ -522,7 +542,7 @@ testing()
 {
 result_test="OK"
 path_project_folder=$(cat $path_config_file)
-check_project_name
+get_project_name
 
 # Check whether the set project folder exist
 if ! ls $(cat $HOME/.config/deb-cup/path)
@@ -634,6 +654,10 @@ then
 elif [ $action = doc-help ]
 then
     open_help
+
+elif [ $action = about ]
+then
+    open_about
 
 else
     echo "" > $path_config_file
