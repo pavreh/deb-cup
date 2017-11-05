@@ -24,8 +24,18 @@ log_file=$HOME/.config/deb-cup/log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
 
+release=$(eval lsb_release -cs)
+if  [[ $release = sylvia ||
+       $release = sonya  ||
+       $release = serena ||
+       $release = sarah ]]
+then
+    release=xenial
+    VISUAL="xed --wait"
+else
+    VISUAL="gedit --wait"
+fi
 # Needed for dch
-VISUAL="gedit --wait"
 export VISUAL
 
 
@@ -59,7 +69,7 @@ action=$(zenity --list \
                 --column "" \
                 --hide-column=1 \
                 settings "$(gettext 'Set user and ppa...')" \
-                path "$(gettext 'Set project folder...')" \
+                path "$(gettext 'Choose project folder...')" \
                 debian "$(gettext 'Create/Open debian folder')" \
                 tarball "$(gettext 'Create orig tarball')" \
                 changelog "$(gettext 'Increment changelog...')" \
@@ -286,19 +296,22 @@ sign_packages()
 testing
 if [[ $result_test = "OK" ]]
 then
-    # Check wheter the version of the project folder and the version
-    # in the changelog file are the same
-    check_version
-    if [ $folder_changelog_version = same ]
+    if ls $path_project_folder/debian/changelog
     then
-        if ls $path_project_folder/debian/changelog
+        check_version
+        if [ $folder_changelog_version = same ]
         then
             if ls $path_parent_folder/$project_name\_$version_number.orig.tar.xz
             then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
                 sec_key="$(eval gpg --list-secret-keys)"
-                sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
+                if [ $release = xenial ]
+                then
+                    sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+                else
+                    sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
+                fi
                 cd $path_project_folder
                 touch $log_file
                 text_no="$(gettext 'No')"
@@ -311,39 +324,51 @@ then
                           --cancel-label="$(gettext 'Cancel')" \
                           --text="$(gettext 'Do you want to include orig tarball?')")
                 then
-                    (
-                    echo "0"
-                    debuild -S -sa -k$sec_key >  $log_file
-                    echo "100"
-                    ) | zenity --progress \
-                               --window-icon=$icon \
-                               --title="$title" \
-                               --width=330 \
-                               --height=200 \
-                               --pulsate \
-                               --auto-close \
-                               --no-cancel \
-                              --text="$(gettext 'Creating signed dsc and changes...')"
-                sign_packages_info
+                    if [ $release = xenial ]
+                    then
+                        command="debuild -S -sa -k$sec_key"
+                        gnome-terminal -e "bash -c \"$command; exec bash\""
+                    else
+                        (
+                        echo "0"
+                        debuild -S -sa -k$sec_key >  $log_file
+                        echo "100"
+                        ) | zenity --progress \
+                                   --window-icon=$icon \
+                                   --title="$title" \
+                                   --width=330 \
+                                   --height=200 \
+                                   --pulsate \
+                                   --auto-close \
+                                   --no-cancel \
+                                   --text="$(gettext 'Creating signed dsc and changes...')"
+                        sign_packages_info
+                    fi
                 else
                     :
                 fi
                 if [ $answer = $text_no ]
                 then
-                    (
-                    echo "0"
-                    debuild -S -sd -k$sec_key >  $log_file
-                    echo "100"
-                    ) | zenity --progress \
-                               --window-icon=$icon \
-                               --title="$title" \
-                               --width=330 \
-                               --height=200 \
-                               --pulsate \
-                               --auto-close \
-                               --no-cancel \
-                               --text="$(gettext 'Creating signed dsc and changes...')"
-                sign_packages_info
+                    if [ $release = xenial ]
+                    then
+                        command="debuild -S -sd -k$sec_key"
+                        gnome-terminal -e "bash -c \"$command; exec bash\""
+                    else
+                        (
+                        echo "0"
+                        debuild -S -sd -k$sec_key >  $log_file
+                        echo "100"
+                        ) | zenity --progress \
+                                   --window-icon=$icon \
+                                   --title="$title" \
+                                   --width=330 \
+                                   --height=200 \
+                                   --pulsate \
+                                   --auto-close \
+                                   --no-cancel \
+                                   --text="$(gettext 'Creating signed dsc and changes...')"
+                        sign_packages_info
+                    fi
                 else
                     :
                 fi
@@ -351,10 +376,10 @@ then
                 warning_create_orig_tarball
             fi
         else
-            warning_create_debian_folder
+            warning_version_mishmash
         fi
     else
-        warning_version_mishmash
+        warning_create_debian_folder
     fi
 else
     :
@@ -525,7 +550,7 @@ zenity --warning \
        --window-icon=$icon \
        --width=330 \
        --height=200 \
-       --text="$(gettext 'Set a project folder first.')"
+       --text="$(gettext 'Choose a project folder first.')"
 }
 
 

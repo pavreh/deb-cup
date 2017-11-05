@@ -1,11 +1,20 @@
-############################################################
-# Deb Cup - Help
-############################################################
+    Deb Cup - Help
+____________________________________________________________
 
  - Torso -
 
-# Set user and ppa
-############################################################
+    Supported operating systems
+------------------------------------------------------------
+
+Ubuntu 17.10 Artful,
+Ubuntu 16.04 Xenial and
+Linux Mint 18.X.
+
+For other operating systems based on Ubuntu 17.10 please install Gedit.
+
+
+    Set user and ppa
+------------------------------------------------------------
 
 You must have a functional ppa. See
 
@@ -14,8 +23,8 @@ https://help.launchpad.net/Packaging/PPA
 If you have more ppas change this setting before uploading.
 
 
-# Create/Open the debian folder
-############################################################
+    Create/Open the debian folder
+------------------------------------------------------------
 
 If a debian folder do not exist Deb Cup create one. You must edit this folder
 manually according to your source code. A default file browser will be opened.
@@ -26,15 +35,15 @@ https://www.debian.org/doc/manuals/maint-guide/dreq.en.html
 If a debian folder exist, Deb Cup open this debian folder only.
 
 
-# Create orig tarball
-############################################################
+    Create orig tarball
+------------------------------------------------------------
 
 Deb Cup packs your source code to archive project_version.orig.tar.xz. this is
 needed for creating deb packages and creating signed dsc and changes.
 
 
-# Increment changelog
-############################################################
+    Increment changelog
+------------------------------------------------------------
 
 When you want to create the deb package or signed dsc and changes
 changelog in the debian folder have to be actualised. The name and version of
@@ -44,17 +53,20 @@ code.
 Maintainer name and email is taken from the debian/control Maintainer field.
 
 
-# Creating deb binary or signed dsc and changes
-############################################################
+    Creating deb binary or signed dsc and changes
+------------------------------------------------------------
 
 The changelog will be opend. Check it and save.
 
 When creation of deb or signed dsc and changes is aborted because of unexpected
 source changes, create new orig tarball.
 
-
-# Upload to the PPA
-############################################################
-
+When you want to create signed dsc and changes you must have a GPG key.
 Nowadays just one GPG key is supported.
+
+
+    Upload to the PPA
+------------------------------------------------------------
+
+
 
