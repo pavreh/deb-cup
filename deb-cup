@@ -17,11 +17,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.3.15
+version=0.4.O
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
-config_file=$HOME/.config/deb-cup/config
+usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
 path_config_file=$HOME/.config/deb-cup/path
+fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 log_file=$HOME/.config/deb-cup/log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
@@ -64,13 +65,14 @@ action=$(zenity --list \
                 --title="$title" \
                 --window-icon=$icon \
                 --width=265 \
-                --height=350 \
+                --height=380 \
                 --hide-header \
                 --text "" \
                 --column "" \
                 --column "" \
                 --hide-column=1 \
-                settings "$(gettext 'Set user and ppa...')" \
+                fingerprint "$(gettext 'Set fingerprint...')" \
+                usr_ppa "$(gettext 'Set user and ppa...')" \
                 path "$(gettext 'Choose project folder...')" \
                 debian "$(gettext 'Create/Open debian folder')" \
                 tarball "$(gettext 'Create orig tarball')" \
@@ -86,7 +88,30 @@ action=$(zenity --list \
 #	SETTING
 ##############################################################################
 
-settings_window()
+set_fingerprint()
+{
+if fingerprint=$(zenity --entry \
+                        --title="$title" \
+                        --window-icon=$icon \
+                        --width=330 \
+                        --height=200 \
+                        --text="$(gettext 'Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.
+Copy the fingerprint key which you want to use
+and paste it here without spaces.')" \
+                        --entry-text="$(cat $fingerprint_config_file)")
+then
+    echo $fingerprint > $fingerprint_config_file || create_fingerprint_config_file
+fi
+}
+
+create_fingerprint_config_file()
+{
+mkdir $HOME/.config/deb-cup
+echo $fingerprint > $fingerprint_config_file
+}
+
+
+set_usr_ppa()
 {
 if user_ppa=$(zenity --entry \
                      --title="$title" \
@@ -95,16 +120,16 @@ if user_ppa=$(zenity --entry \
                      --height=200 \
                      --text="$(gettext 'Set user name and name of your PPA in format:
  user/ppa')" \
-                     --entry-text="$(cat $config_file)")
+                     --entry-text="$(cat $usr_ppa_config_file)")
 then
-    echo $user_ppa > $config_file || create_config
+    echo $user_ppa > $usr_ppa_config_file || create_usr_ppa_config_file
 fi
 }
 
-create_config()
+create_usr_ppa_config_file()
 {
 mkdir $HOME/.config/deb-cup
-echo $user_ppa > $config_file
+echo $user_ppa > $usr_ppa_config_file
 }
 
 
@@ -119,7 +144,7 @@ then
     get_project_name
     if [[ $project_version = *"-"[0-9]* ]]
     then
-        echo $path_project_folder > $path_config_file || create_config_path
+        echo $path_project_folder > $path_config_file || create_path_config_file
     else
         zenity --warning \
                --title="$title" \
@@ -134,7 +159,7 @@ else
 fi
 }
 
-create_config_path()
+create_path_config_file()
 {
 mkdir $HOME/.config/deb-cup
 echo $path_project_folder > $path_config_file
@@ -308,12 +333,18 @@ then
             then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
-                sec_key="$(eval gpg --list-secret-keys)"
-                if [ $release = xenial ]
+                fingerprint=$(cat $fingerprint_config_file)
+                if [ $fingerprint =  ]
                 then
-                    sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+                    sec_key="$(eval gpg --list-secret-keys)"
+                    if [ $release = xenial ]
+                    then
+                        sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+                    else
+                        sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
+                    fi
                 else
-                    sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
+                    sec_key=$fingerprint
                 fi
                 cd $path_project_folder
                 touch $log_file
@@ -393,7 +424,7 @@ fi
 upload_file()
 {
 # Check whether an user and a ppa is set
-user_ppa="$(cat $config_file)"
+user_ppa="$(cat $usr_ppa_config_file)"
 if [ "$user_ppa" = "" ]
 then
     zenity --warning \
@@ -401,7 +432,7 @@ then
            --window-icon=$icon \
            --width=330 \
            --height=200 \
-           --text="$(gettext 'Set user name and name of your PPA in Settings first.')"
+           --text="$(gettext 'Set user and ppa first.')"
 else
     # Choose source.changes file
     if path_changes_file=$(zenity --file-selection \
@@ -644,9 +675,9 @@ elif [ $action = debian ]
 then
     create_debian_folder
 
-elif [ $action = settings ]
+elif [ $action = usr_ppa ]
 then
-    settings_window
+    set_usr_ppa
 
 elif [ $action = path ]
 then
@@ -659,6 +690,10 @@ then
 elif [ $action = about ]
 then
     open_about
+
+elif [ $action = fingerprint ]
+then
+    set_fingerprint
 
 else
     echo "" > $path_config_file

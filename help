@@ -7,7 +7,13 @@
 Ubuntu 16.04 Xenial and<br>
 Linux Mint 18.X.</p>
 <p>For other operating systems based on Ubuntu 17.10 please install <a href="apt://gedit">Gedit</a>.</p>
-<p>Operating systems which are not mentioned here are not tested. Deb Cup need not to work properly with them.</p>
+<p>Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.</p>
+<h2>Set fingerprint</h2>
+<hr>
+<p>A GPG key is needed when you want to sign a dsc and changes and upload them to a PPA.</p>
+<p>If you have just one GPG key, you need not set a fingerprint. Deb Cup will find your GPG key automatically.</p>
+<p>If you have more GPG keys, maybe you want to choose one of them. You can do that in this setting. Otherwise Deb Cup will use one of your GPG keys.</p>  
+<p>If you have not a GPG key, see the chapter Create signed dsc and changes.</p>
 <h2>Set user and ppa</h2>
 <hr>
 <p>You need a functional ppa. See <a href="https://help.launchpad.net/Packaging/PPA">https://help.launchpad.net/Packaging/PPA</a>.<br>
@@ -32,19 +38,18 @@ If a debian folder exist, Deb Cup opens this debian folder only.</p>
 <p>The changelog file will be opened. Check it and save.</p>
 <br>
 <h4>Troubleshooting</h4>
-<p>When creation of the deb package is aborted because of unexpected source changes, create new orig tarball.</p>
+<p>When creation of a deb package is aborted because of unexpected source changes, create new orig tarball.</p>
 <h2>Create signed dsc and changes</h2>
 <hr>
 <p>The changelog file will be opened. Check it and save.</p>
 <p>When you want to create signed dsc and changes, you must have a GPG key. You can create one when you are activating your PPA. See<br>
-<a href="https://help.launchpad.net/Packaging/PPA#Activating_a_PPA">https://help.launchpad.net/Packaging/PPA#Activating_a_PPA</a><br>
-Nowadays Deb Cup supports just one GPG key. Support of more GPG keys is on the Deb Cup's todo list.</p>
+<a href="https://help.launchpad.net/Packaging/PPA#Activating_a_PPA">https://help.launchpad.net/Packaging/PPA#Activating_a_PPA</a></p>
 <br>
 <h4>Troubleshooting</h4>
 <p>When creation of signed dsc and changes is aborted because of unexpected source changes, create new orig tarball.</p>
 <h2>Upload to the PPA</h2>
 <hr>
-<p>Select a changes file you want to upload to your PPA.</p>
+<p>Select a signed changes file you want to upload to your PPA.</p>
 <br>
 <br>
 <hr>

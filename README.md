@@ -1,7 +1,7 @@
 # Deb Cup
 GUI tool for creating deb packages and uploading them to a PPA.
 
-Alpha version
+Beta version
 
 ## What Deb Cup can do
 Create debian folder, Update changelog,

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 23:06+0100\n"
-"PO-Revision-Date: 2017-11-05 23:06+0100\n"
+"POT-Creation-Date: 2017-11-06 18:13+0100\n"
+"PO-Revision-Date: 2017-11-06 18:16+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -18,47 +18,61 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../deb-cup:73
+#: ../deb-cup:74
+msgid "Set fingerprint..."
+msgstr "Nastavit otisk prstu..."
+
+#: ../deb-cup:75
 msgid "Set user and ppa..."
 msgstr "Nastavit uživatele a ppa..."
 
-#: ../deb-cup:74
+#: ../deb-cup:76
 msgid "Choose project folder..."
 msgstr "Vybrat složku projektu..."
 
-#: ../deb-cup:75
+#: ../deb-cup:77
 msgid "Create/Open debian folder"
 msgstr "Vytvořit/Otevřít složku debian"
 
-#: ../deb-cup:76
+#: ../deb-cup:78
 msgid "Create orig tarball"
 msgstr "Vytvořit orig tarball"
 
-#: ../deb-cup:77
+#: ../deb-cup:79
 msgid "Increment changelog..."
 msgstr "Aktualizovat changelog..."
 
-#: ../deb-cup:78
+#: ../deb-cup:80
 msgid "Create deb binary"
 msgstr "Vytvořit deb balík"
 
-#: ../deb-cup:79
+#: ../deb-cup:81
 msgid "Create signed dsc and changes"
 msgstr "Vytvořit podepsané dsc a changes"
 
-#: ../deb-cup:80
+#: ../deb-cup:82
 msgid "Upload to the PPA..."
 msgstr "Odeslat do PPA..."
 
-#: ../deb-cup:81 ../deb-cup:461
+#: ../deb-cup:83 ../deb-cup:492
 msgid "Help"
 msgstr "Nápověda"
 
-#: ../deb-cup:82 ../deb-cup:473
+#: ../deb-cup:84 ../deb-cup:504
 msgid "About"
 msgstr "O aplikaci"
 
-#: ../deb-cup:96
+#: ../deb-cup:98
+msgid ""
+"Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
+"Copy the fingerprint key which you want to use\n"
+"and paste it here without spaces."
+msgstr ""
+"Otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
+"Zkopírujte otisk prstu klíče, který chcete použít\n"
+"a vložte jej zde bez mezer."
+
+#: ../deb-cup:121
 msgid ""
 "Set user name and name of your PPA in format:\n"
 " user/ppa"
@@ -66,11 +80,11 @@ msgstr ""
 "Nastavte uživatelské jméno a název vašeho PPA ve formátu:\n"
 " uživatel/ppa"
 
-#: ../deb-cup:116
+#: ../deb-cup:141
 msgid "Choose a folder with the source code"
 msgstr "Vyberte složku se zdrojovým kódem"
 
-#: ../deb-cup:129
+#: ../deb-cup:154
 msgid ""
 "Set name and version of the folder in format\n"
 "name-version, e.g. myapp-0.1.0."
@@ -78,23 +92,23 @@ msgstr ""
 "Nastavte název a verzi složky ve formátu\n"
 "název-verze, např. aplikace-0.1.0."
 
-#: ../deb-cup:166
+#: ../deb-cup:191
 msgid "Open debian folder"
 msgstr "Otevřít složku debian"
 
-#: ../deb-cup:203
+#: ../deb-cup:228
 msgid "Creating orig tarball..."
 msgstr "Vytváří se tarball..."
 
-#: ../deb-cup:204
+#: ../deb-cup:229
 msgid "Orig tarball created"
 msgstr "Orig tarball vytvořen"
 
-#: ../deb-cup:226
+#: ../deb-cup:251
 msgid "Open changelog"
 msgstr "Otevřít changelog"
 
-#: ../deb-cup:227
+#: ../deb-cup:252
 msgid ""
 "The version and/or name of the project folder and the version and/or name in "
 "the changelog file are not the same. Please rename the project folder or "
@@ -104,35 +118,35 @@ msgstr ""
 "nejsou stejné. Prosím přejmenujte složku projektu nebo aktualizujte "
 "changelog."
 
-#: ../deb-cup:276
+#: ../deb-cup:301
 msgid "Creating deb binary package..."
 msgstr "Vytváří se deb balík..."
 
-#: ../deb-cup:320
+#: ../deb-cup:351
 msgid "No"
 msgstr "Ne"
 
-#: ../deb-cup:327
+#: ../deb-cup:358
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: ../deb-cup:328
+#: ../deb-cup:359
 msgid "Do you want to include orig tarball?"
 msgstr "Chcete zahrnout orig tarball?"
 
-#: ../deb-cup:347 ../deb-cup:372
+#: ../deb-cup:378 ../deb-cup:403
 msgid "Creating signed dsc and changes..."
 msgstr "Vytváří se podepsané dsc a changes..."
 
-#: ../deb-cup:404
-msgid "Set user name and name of your PPA in Settings first."
-msgstr "Nejdříve v nastavení zadejte uživatelské jméno a název vašeho PPA."
+#: ../deb-cup:435
+msgid "Set user and ppa first."
+msgstr "Nejdříve nastavte uživatele a ppa."
 
-#: ../deb-cup:410
+#: ../deb-cup:441
 msgid "Choose source.changes file"
 msgstr "Vyberte soubor source.changes"
 
-#: ../deb-cup:420
+#: ../deb-cup:451
 #, sh-format
 msgid ""
 "Do you want to upload\n"
@@ -143,19 +157,19 @@ msgstr ""
 "$file_name\n"
 "do $user_ppa?"
 
-#: ../deb-cup:439
+#: ../deb-cup:470
 msgid "Uploading files to the PPA..."
 msgstr "Odesílají se soubory do PPA..."
 
-#: ../deb-cup:480
+#: ../deb-cup:511
 msgid "GUI tool for creating deb packages and uploading them to a PPA."
 msgstr "GUI nástroj na vytváření deb balíků a jejich nahrávání do PPA."
 
-#: ../deb-cup:482
+#: ../deb-cup:513
 msgid "Homepage"
 msgstr "Domovská stránka"
 
-#: ../deb-cup:505
+#: ../deb-cup:536
 msgid ""
 "The dsc and changes files was not signed because a release in the changelog "
 "file is UNRELEASED. If you want signed dsc and changes please save the "
@@ -165,19 +179,19 @@ msgstr ""
 "je UNRELEASED. Chcete-li podepsané dsc a changes, prosím uložte soubor "
 "changelog, který se automaticky otevřel, před tím, než ho zavřete."
 
-#: ../deb-cup:574
+#: ../deb-cup:605
 msgid "Choose a project folder first."
 msgstr "Nejdříve vyberte složku projektu."
 
-#: ../deb-cup:585
+#: ../deb-cup:616
 msgid "Create debian folder first."
 msgstr "Nejdříve vytvořte složku debian."
 
-#: ../deb-cup:593
+#: ../deb-cup:624
 msgid "Create orig tarball first."
 msgstr "Nejdříve vytvořte orig tarball."
 
-#: ../deb-cup:607
+#: ../deb-cup:638
 msgid ""
 "The version of the project folder and the version\n"
 "in the changelog file are not the same.\n"
@@ -186,6 +200,9 @@ msgstr ""
 "Verze složky projektu a verze\n"
 "v souboru changelog nejsou stejné.\n"
 "Prosím přejmenujte složku projektu nebo aktualizujte changelog."
+
+#~ msgid "Set user name and name of your PPA in Settings first."
+#~ msgstr "Nejdříve v nastavení zadejte uživatelské jméno a název vašeho PPA."
 
 #~ msgid "Upload to a PPA..."
 #~ msgstr "Odeslat do PPA..."
