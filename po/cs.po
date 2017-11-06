@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-06 18:13+0100\n"
-"PO-Revision-Date: 2017-11-06 18:16+0100\n"
+"POT-Creation-Date: 2017-11-06 22:14+0100\n"
+"PO-Revision-Date: 2017-11-06 22:15+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -65,12 +65,12 @@ msgstr "O aplikaci"
 #: ../deb-cup:98
 msgid ""
 "Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
-"Copy the fingerprint key which you want to use\n"
-"and paste it here without spaces."
+"Copy the key fingerprint (long alphanumeric code)\n"
+"which you want to use and paste it here without spaces."
 msgstr ""
 "Otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
-"Zkopírujte otisk prstu klíče, který chcete použít\n"
-"a vložte jej zde bez mezer."
+"Zkopírujte otisk prstu klíče (dlouhý alfanumerický kód)\n"
+"který chcete použít a vložte ho zde bez mezer."
 
 #: ../deb-cup:121
 msgid ""
@@ -82,7 +82,7 @@ msgstr ""
 
 #: ../deb-cup:141
 msgid "Choose a folder with the source code"
-msgstr "Vyberte složku se zdrojovým kódem"
+msgstr "Vybrat složku se zdrojovým kódem"
 
 #: ../deb-cup:154
 msgid ""
@@ -95,6 +95,10 @@ msgstr ""
 #: ../deb-cup:191
 msgid "Open debian folder"
 msgstr "Otevřít složku debian"
+
+#: ../deb-cup:192
+msgid "Edit the debian folder manually."
+msgstr "Editujte složku debian ručně."
 
 #: ../deb-cup:228
 msgid "Creating orig tarball..."
@@ -144,7 +148,7 @@ msgstr "Nejdříve nastavte uživatele a ppa."
 
 #: ../deb-cup:441
 msgid "Choose source.changes file"
-msgstr "Vyberte soubor source.changes"
+msgstr "Vybrat soubor source.changes"
 
 #: ../deb-cup:451
 #, sh-format
@@ -200,6 +204,24 @@ msgstr ""
 "Verze složky projektu a verze\n"
 "v souboru changelog nejsou stejné.\n"
 "Prosím přejmenujte složku projektu nebo aktualizujte changelog."
+
+#~ msgid ""
+#~ "Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
+#~ "Copy the fingerprint key (long alphanumeric code)\n"
+#~ "which you want to use and paste it here without spaces."
+#~ msgstr ""
+#~ "Otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
+#~ "Zkopírujte otisk prstu klíče (dlouhý alfanumerický kód)\n"
+#~ "který chcete použít a vložte ho zde bez mezer."
+
+#~ msgid ""
+#~ "Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
+#~ "Copy the fingerprint key which you want to use\n"
+#~ "and paste it here without spaces."
+#~ msgstr ""
+#~ "Otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
+#~ "Zkopírujte otisk prstu klíče, který chcete použít\n"
+#~ "a vložte jej zde bez mezer."
 
 #~ msgid "Set user name and name of your PPA in Settings first."
 #~ msgstr "Nejdříve v nastavení zadejte uživatelské jméno a název vašeho PPA."

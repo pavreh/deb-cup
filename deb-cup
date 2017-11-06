@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.4.O
+version=0.4.0
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -96,8 +96,8 @@ if fingerprint=$(zenity --entry \
                         --width=330 \
                         --height=200 \
                         --text="$(gettext 'Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.
-Copy the fingerprint key which you want to use
-and paste it here without spaces.')" \
+Copy the key fingerprint (long alphanumeric code)
+which you want to use and paste it here without spaces.')" \
                         --entry-text="$(cat $fingerprint_config_file)")
 then
     echo $fingerprint > $fingerprint_config_file || create_fingerprint_config_file
@@ -189,7 +189,7 @@ then
               --width=330 \
               --height=200 \
               --ok-label="$(gettext 'Open debian folder')" \
-              --text="Edit debian folder manually."
+              --text="$(gettext 'Edit the debian folder manually.')"
     then
         xdg-open $path_project_folder/debian/
     else
