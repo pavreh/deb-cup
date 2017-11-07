@@ -3,6 +3,9 @@ GUI tool for creating deb packages and uploading them to a PPA.
 
 Beta version
 
+## Screenshot
+![deb-cup main window](/deb-cup-screenshot.png?raw=true)
+
 ## What Deb Cup can do
 Create debian folder, Update changelog,
 Create original tarball, Create deb binary,
