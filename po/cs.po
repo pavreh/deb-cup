@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-06 22:14+0100\n"
-"PO-Revision-Date: 2017-11-06 22:15+0100\n"
+"POT-Creation-Date: 2017-11-07 18:38+0100\n"
+"PO-Revision-Date: 2017-11-07 18:39+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -54,103 +54,119 @@ msgstr "Vytvořit podepsané dsc a changes"
 msgid "Upload to the PPA..."
 msgstr "Odeslat do PPA..."
 
-#: ../deb-cup:83 ../deb-cup:492
+#: ../deb-cup:83 ../deb-cup:521
 msgid "Help"
 msgstr "Nápověda"
 
-#: ../deb-cup:84 ../deb-cup:504
+#: ../deb-cup:84 ../deb-cup:533
 msgid "About"
 msgstr "O aplikaci"
 
 #: ../deb-cup:98
 msgid ""
-"Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
+"Please open terminal (Ctrl+Alt+T) and type:\n"
+"gpg --fingerprint\n"
 "Copy the key fingerprint (long alphanumeric code)\n"
 "which you want to use and paste it here without spaces."
 msgstr ""
-"Otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
-"Zkopírujte otisk prstu klíče (dlouhý alfanumerický kód)\n"
-"který chcete použít a vložte ho zde bez mezer."
+"Prosím otevřete terminál (Ctrl+Alt+T) a zadejte:\n"
+"gpg --fingerprint\n"
+"Zkopírujte otisk prstu klíče (dlouhý alfanumerický kód),\n"
+"který chcete použít, a vložte ho zde bez mezer."
 
-#: ../deb-cup:121
+#: ../deb-cup:122
 msgid ""
-"Set user name and name of your PPA in format:\n"
+"Please set user name and name of your PPA in format:\n"
 " user/ppa"
 msgstr ""
-"Nastavte uživatelské jméno a název vašeho PPA ve formátu:\n"
-" uživatel/ppa"
+"Prosím nastavte uživatelské jméno a název vašeho PPA ve formátu:\n"
+"uživatel/ppa"
 
-#: ../deb-cup:141
+#: ../deb-cup:142
 msgid "Choose a folder with the source code"
 msgstr "Vybrat složku se zdrojovým kódem"
 
-#: ../deb-cup:154
+#: ../deb-cup:155
 msgid ""
-"Set name and version of the folder in format\n"
+"Please set name and version of the folder in format\n"
 "name-version, e.g. myapp-0.1.0."
 msgstr ""
-"Nastavte název a verzi složky ve formátu\n"
+"Prosím nastavte název a verzi složky ve formátu\n"
 "název-verze, např. aplikace-0.1.0."
 
-#: ../deb-cup:191
+#: ../deb-cup:197
 msgid "Open debian folder"
 msgstr "Otevřít složku debian"
 
-#: ../deb-cup:192
-msgid "Edit the debian folder manually."
-msgstr "Editujte složku debian ručně."
+#: ../deb-cup:198
+msgid "Please edit the files in the debian folder now."
+msgstr "Prosím nyní editujte soubory ve složce debian."
 
-#: ../deb-cup:228
+#: ../deb-cup:237
 msgid "Creating orig tarball..."
 msgstr "Vytváří se tarball..."
 
-#: ../deb-cup:229
-msgid "Orig tarball created"
-msgstr "Orig tarball vytvořen"
+#: ../deb-cup:238
+msgid "Orig tarball created."
+msgstr "Orig tarball vytvořen."
 
-#: ../deb-cup:251
+#: ../deb-cup:255
+msgid "Renumber"
+msgstr "Přečíslovat"
+
+#: ../deb-cup:264
 msgid "Open changelog"
 msgstr "Otevřít changelog"
 
-#: ../deb-cup:252
-msgid ""
-"The version and/or name of the project folder and the version and/or name in "
-"the changelog file are not the same. Please rename the project folder or "
-"update changelog."
-msgstr ""
-"Verze a/nebo název složky projektu a verze a/nebo název v souboru changelog "
-"nejsou stejné. Prosím přejmenujte složku projektu nebo aktualizujte "
-"changelog."
-
-#: ../deb-cup:301
-msgid "Creating deb binary package..."
-msgstr "Vytváří se deb balík..."
-
-#: ../deb-cup:351
-msgid "No"
-msgstr "Ne"
-
-#: ../deb-cup:358
+#: ../deb-cup:265 ../deb-cup:387
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: ../deb-cup:359
+#: ../deb-cup:267
+msgid ""
+"The version of the project folder and the version in the changelog file are "
+"not the same. Please renumber the project folder or update the changelog."
+msgstr ""
+"Verze složky projektu a verze v souboru changelog nejsou stejné. Prosím "
+"přečíslujte složku projektu nebo aktualizujte changelog."
+
+#: ../deb-cup:269
+msgid "Folder version"
+msgstr "Verze složky"
+
+#: ../deb-cup:270
+msgid "Changelog version"
+msgstr "Changelog verze"
+
+#: ../deb-cup:283
+msgid "The project folder was renumbered to"
+msgstr "Složka projektu byla přečíslována na"
+
+#: ../deb-cup:330
+msgid "Creating deb binary package..."
+msgstr "Vytváří se deb balík..."
+
+#: ../deb-cup:380
+msgid "No"
+msgstr "Ne"
+
+#: ../deb-cup:388
 msgid "Do you want to include orig tarball?"
 msgstr "Chcete zahrnout orig tarball?"
 
-#: ../deb-cup:378 ../deb-cup:403
+#: ../deb-cup:407 ../deb-cup:432
 msgid "Creating signed dsc and changes..."
 msgstr "Vytváří se podepsané dsc a changes..."
 
-#: ../deb-cup:435
-msgid "Set user and ppa first."
-msgstr "Nejdříve nastavte uživatele a ppa."
+#: ../deb-cup:464
+msgid "Please set the user and the ppa first."
+msgstr "Prosím nejdříve nastavte uživatele a ppa."
 
-#: ../deb-cup:441
+#: ../deb-cup:470
 msgid "Choose source.changes file"
 msgstr "Vybrat soubor source.changes"
 
-#: ../deb-cup:451
+#: ../deb-cup:480
 #, sh-format
 msgid ""
 "Do you want to upload\n"
@@ -161,19 +177,19 @@ msgstr ""
 "$file_name\n"
 "do $user_ppa?"
 
-#: ../deb-cup:470
+#: ../deb-cup:499
 msgid "Uploading files to the PPA..."
 msgstr "Odesílají se soubory do PPA..."
 
-#: ../deb-cup:511
+#: ../deb-cup:540
 msgid "GUI tool for creating deb packages and uploading them to a PPA."
 msgstr "GUI nástroj na vytváření deb balíků a jejich nahrávání do PPA."
 
-#: ../deb-cup:513
+#: ../deb-cup:542
 msgid "Homepage"
 msgstr "Domovská stránka"
 
-#: ../deb-cup:536
+#: ../deb-cup:565
 msgid ""
 "The dsc and changes files was not signed because a release in the changelog "
 "file is UNRELEASED. If you want signed dsc and changes please save the "
@@ -183,27 +199,89 @@ msgstr ""
 "je UNRELEASED. Chcete-li podepsané dsc a changes, prosím uložte soubor "
 "changelog, který se automaticky otevřel, před tím, než ho zavřete."
 
-#: ../deb-cup:605
-msgid "Choose a project folder first."
-msgstr "Nejdříve vyberte složku projektu."
+#: ../deb-cup:634
+msgid "Please choose a project folder first."
+msgstr "Prosím nejdříve vyberte složku projektu."
 
-#: ../deb-cup:616
-msgid "Create debian folder first."
-msgstr "Nejdříve vytvořte složku debian."
+#: ../deb-cup:645
+msgid "Please create a debian folder first."
+msgstr "Prosím nejdříve vytvořte složku debian."
 
-#: ../deb-cup:624
-msgid "Create orig tarball first."
-msgstr "Nejdříve vytvořte orig tarball."
+#: ../deb-cup:653
+msgid "Please create the orig tarball first."
+msgstr "Prosím nejdříve vytvořte orig tarball."
 
-#: ../deb-cup:638
-msgid ""
-"The version of the project folder and the version\n"
-"in the changelog file are not the same.\n"
-"Please rename the project folder or increase changelog."
-msgstr ""
-"Verze složky projektu a verze\n"
-"v souboru changelog nejsou stejné.\n"
-"Prosím přejmenujte složku projektu nebo aktualizujte changelog."
+#: ../deb-cup:667
+msgid "Please increase changelog first."
+msgstr "Prosím nejdříve aktualizujte changelog."
+
+#~ msgid "Orig tarball created"
+#~ msgstr "Orig tarball vytvořen"
+
+#~ msgid ""
+#~ "The version and/or name of the project folder and the version and/or name "
+#~ "in the changelog file are not the same. Please rename the project folder "
+#~ "or update changelog."
+#~ msgstr ""
+#~ "Verze a/nebo název složky projektu a verze a/nebo název v souboru "
+#~ "changelog nejsou stejné. Prosím přejmenujte složku projektu nebo "
+#~ "aktualizujte changelog."
+
+#~ msgid ""
+#~ "The version of the project folder and the version\n"
+#~ "in the changelog file are not the same.\n"
+#~ "Please rename the project folder or increase changelog."
+#~ msgstr ""
+#~ "Verze složky projektu a verze\n"
+#~ "v souboru changelog nejsou stejné.\n"
+#~ "Prosím přejmenujte složku projektu nebo aktualizujte changelog."
+
+#~ msgid ""
+#~ "Please open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
+#~ "Copy the key fingerprint (long alphanumeric code)\n"
+#~ "which you want to use and paste it here without spaces."
+#~ msgstr ""
+#~ "Prosím otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
+#~ "Zkopírujte otisk prstu klíče (dlouhý alfanumerický kód)\n"
+#~ "který chcete použít a vložte ho zde bez mezer."
+
+#~ msgid ""
+#~ "Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"
+#~ "Copy the key fingerprint (long alphanumeric code)\n"
+#~ "which you want to use and paste it here without spaces."
+#~ msgstr ""
+#~ "Otevřete terminál (Ctrl+Alt+T) a zadejte gpg --fingerprint.\n"
+#~ "Zkopírujte otisk prstu klíče (dlouhý alfanumerický kód)\n"
+#~ "který chcete použít a vložte ho zde bez mezer."
+
+#~ msgid ""
+#~ "Set user name and name of your PPA in format:\n"
+#~ " user/ppa"
+#~ msgstr ""
+#~ "Nastavte uživatelské jméno a název vašeho PPA ve formátu:\n"
+#~ " uživatel/ppa"
+
+#~ msgid ""
+#~ "Set name and version of the folder in format\n"
+#~ "name-version, e.g. myapp-0.1.0."
+#~ msgstr ""
+#~ "Nastavte název a verzi složky ve formátu\n"
+#~ "název-verze, např. aplikace-0.1.0."
+
+#~ msgid "Edit the debian folder manually."
+#~ msgstr "Editujte složku debian ručně."
+
+#~ msgid "Set user and ppa first."
+#~ msgstr "Nejdříve nastavte uživatele a ppa."
+
+#~ msgid "Choose a project folder first."
+#~ msgstr "Nejdříve vyberte složku projektu."
+
+#~ msgid "Create debian folder first."
+#~ msgstr "Nejdříve vytvořte složku debian."
+
+#~ msgid "Create orig tarball first."
+#~ msgstr "Nejdříve vytvořte orig tarball."
 
 #~ msgid ""
 #~ "Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.\n"

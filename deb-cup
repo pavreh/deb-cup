@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.4.0
+version=0.5.0
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -64,7 +64,7 @@ main_window()
 action=$(zenity --list \
                 --title="$title" \
                 --window-icon=$icon \
-                --width=265 \
+                --width=270 \
                 --height=380 \
                 --hide-header \
                 --text "" \
@@ -95,7 +95,8 @@ if fingerprint=$(zenity --entry \
                         --window-icon=$icon \
                         --width=330 \
                         --height=200 \
-                        --text="$(gettext 'Open terminal (Ctrl+Alt+T) and type gpg --fingerprint.
+                        --text="$(gettext 'Please open terminal (Ctrl+Alt+T) and type:
+gpg --fingerprint
 Copy the key fingerprint (long alphanumeric code)
 which you want to use and paste it here without spaces.')" \
                         --entry-text="$(cat $fingerprint_config_file)")
@@ -118,7 +119,7 @@ if user_ppa=$(zenity --entry \
                      --window-icon=$icon \
                      --width=330 \
                      --height=200 \
-                     --text="$(gettext 'Set user name and name of your PPA in format:
+                     --text="$(gettext 'Please set user name and name of your PPA in format:
  user/ppa')" \
                      --entry-text="$(cat $usr_ppa_config_file)")
 then
@@ -151,7 +152,7 @@ then
                --window-icon=$icon \
                --width=330 \
                --height=200 \
-               --text="$(gettext 'Set name and version of the folder in format
+               --text="$(gettext 'Please set name and version of the folder in format
 name-version, e.g. myapp-0.1.0.')"
     fi
 else
@@ -181,20 +182,28 @@ create_debian_folder()
 testing
 if [[ $result_test = "OK" ]]
 then
-    cd $path_project_folder
-    dh_make --yes --indep --createorig --native
-    if zenity --info \
-              --window-icon=$icon \
-              --title="$title" \
-              --width=330 \
-              --height=200 \
-              --ok-label="$(gettext 'Open debian folder')" \
-              --text="$(gettext 'Edit the debian folder manually.')"
+    if ls $path_project_folder/debian/
     then
         xdg-open $path_project_folder/debian/
     else
-        :
+        cd $path_project_folder
+        dh_make --yes --indep --createorig
+        touch debian/install
+        if zenity --info \
+                  --window-icon=$icon \
+                  --title="$title" \
+                  --width=330 \
+                  --height=200 \
+                  --ok-label="$(gettext 'Open debian folder')" \
+                  --text="$(gettext 'Please edit the files in the debian folder now.')"
+        then
+            xdg-open $path_project_folder/debian/
+        else
+            :
+        fi
     fi
+else
+    :
 fi
 }
 
@@ -226,7 +235,7 @@ then
                --auto-close \
                --no-cancel \
                --text="$(gettext 'Creating orig tarball...')"
-    notify-send "$(gettext 'Orig tarball created')" --icon=$icon --expire-time=3000
+    notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
 }
 
@@ -243,15 +252,35 @@ then
         then
             :
         else
-            if zenity --warning \
+            text_renumber=$(gettext 'Renumber')
+            path_project_folder=$(cat $path_config_file)
+            get_project_name
+            changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
+            if answer=$(zenity --question \
                       --title="$title" \
                       --window-icon=$icon \
                       --width=330 \
                       --height=200 \
                       --ok-label="$(gettext 'Open changelog')" \
-                      --text="$(gettext 'The version and/or name of the project folder and the version and/or name in the changelog file are not the same. Please rename the project folder or update changelog.')"
+                      --cancel-label="$(gettext 'Cancel')" \
+                      --extra-button="$text_renumber" \
+                      --text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
+
+$(gettext 'Folder version'): $version_number
+$(gettext 'Changelog version'): $changelog_version
+
+")
             then
                 dch --controlmaint
+            else
+                :
+            fi
+            if [ $answer = $text_renumber ]
+            then
+                new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
+                mv $path_project_folder $new_path_project_folder
+                echo $new_path_project_folder > $path_config_file
+                notify-send "$(gettext 'The project folder was renumbered to') $project_name-$changelog_version." --icon=$icon --expire-time=3000
             else
                 :
             fi
@@ -288,7 +317,7 @@ then
                 touch $log_file
                 (
                 echo "0"
-                debuild -us -uc > $log_file
+                debuild -us -uc -tc > $log_file
                 echo "100"
                 ) | zenity --progress \
                            --title="$title" \
@@ -432,7 +461,7 @@ then
            --window-icon=$icon \
            --width=330 \
            --height=200 \
-           --text="$(gettext 'Set user and ppa first.')"
+           --text="$(gettext 'Please set the user and the ppa first.')"
 else
     # Choose source.changes file
     if path_changes_file=$(zenity --file-selection \
@@ -602,7 +631,7 @@ zenity --warning \
        --window-icon=$icon \
        --width=330 \
        --height=200 \
-       --text="$(gettext 'Choose a project folder first.')"
+       --text="$(gettext 'Please choose a project folder first.')"
 }
 
 
@@ -613,7 +642,7 @@ zenity --warning \
        --window-icon=$icon \
        --width=330 \
        --height=200 \
-       --text="$(gettext 'Create debian folder first.')"
+       --text="$(gettext 'Please create a debian folder first.')"
 }
 
 
@@ -621,7 +650,7 @@ warning_create_orig_tarball()
 {
 zenity --warning \
        --window-icon=$icon \
-       --text="$(gettext 'Create orig tarball first.')" \
+       --text="$(gettext 'Please create the orig tarball first.')" \
        --width=330 \
        --height=200 \
        --title="$title"
@@ -635,9 +664,7 @@ zenity --warning \
        --window-icon=$icon \
        --width=330 \
        --height=200 \
-       --text="$(gettext 'The version of the project folder and the version
-in the changelog file are not the same.
-Please rename the project folder or increase changelog.')"
+       --text="$(gettext 'Please increase changelog first.')"
 }
 
 
