@@ -1,5 +1,5 @@
 # Deb Cup
-GUI tool for creating deb packages and uploading them to a PPA.
+GUI tool for creating deb packages and uploading to a PPA.
 
 Beta version
 
