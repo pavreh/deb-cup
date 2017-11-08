@@ -2,3 +2,4 @@ Ubuntu 17.10
   - Bug: No icon
 Bug: New icon in higher resolution.
 
+Bug: There can be uppercase in the name of the project.

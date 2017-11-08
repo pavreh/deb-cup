@@ -132,7 +132,7 @@ if path_project_folder=$(zenity --file-selection --directory \
                                 --filename="$path_parent_folder/")
 then
     get_project_details
-    if [[ $project_version = *"-"[0-9]* ]]
+    if [[ $project_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
         echo $path_project_folder > $path_config_file || create_path_config_file
         echo $path_parent_folder > $parent_folder_config_file
