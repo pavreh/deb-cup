@@ -132,6 +132,8 @@ if path_project_folder=$(zenity --file-selection --directory \
                                 --filename="$path_parent_folder/")
 then
     get_project_details
+    # Needed for sorting [A-Za-z]
+    export LC_COLLATE=C
     if [[ $project_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
         echo $path_project_folder > $path_config_file || create_path_config_file
@@ -141,6 +143,8 @@ then
                --text="$(gettext 'Please set name and version of the folder in format
 name-version, e.g. myapp-0.1.0.')"
     fi
+    # Default Sorting [Aa-Zz]
+    export LC_COLLATE=""
 else
     :
 fi
