@@ -17,15 +17,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.5.0
+version=0.5.1
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
 path_config_file=$HOME/.config/deb-cup/path
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
+parent_folder_config_file=$HOME/.config/deb-cup/parent
 log_file=$HOME/.config/deb-cup/log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
+zenity_settings="--window-icon=$icon --width=330 --height=200"
 
 release=$(eval lsb_release -cs)
 if  [[ $release = sylvia ||
@@ -61,16 +63,9 @@ export TEXTDOMAINDIR
 
 main_window()
 {
-action=$(zenity --list \
-                --title="$title" \
-                --window-icon=$icon \
-                --width=270 \
-                --height=380 \
-                --hide-header \
-                --text "" \
-                --column "" \
-                --column "" \
-                --hide-column=1 \
+action=$(zenity --list --title="$title" \
+                --window-icon=$icon --width=270 --height=380 \
+                --hide-header --text "" --column "" --column "" --hide-column=1 \
                 fingerprint "$(gettext 'Set fingerprint...')" \
                 usr_ppa "$(gettext 'Set user and ppa...')" \
                 path "$(gettext 'Choose project folder...')" \
@@ -90,11 +85,7 @@ action=$(zenity --list \
 
 set_fingerprint()
 {
-if fingerprint=$(zenity --entry \
-                        --title="$title" \
-                        --window-icon=$icon \
-                        --width=330 \
-                        --height=200 \
+if fingerprint=$(zenity --entry --title="$title" $zenity_settings \
                         --text="$(gettext 'Please open terminal (Ctrl+Alt+T) and type:
 gpg --fingerprint
 Copy the key fingerprint (long alphanumeric code)
@@ -105,6 +96,7 @@ then
 fi
 }
 
+
 create_fingerprint_config_file()
 {
 mkdir $HOME/.config/deb-cup
@@ -114,11 +106,7 @@ echo $fingerprint > $fingerprint_config_file
 
 set_usr_ppa()
 {
-if user_ppa=$(zenity --entry \
-                     --title="$title" \
-                     --window-icon=$icon \
-                     --width=330 \
-                     --height=200 \
+if user_ppa=$(zenity --entry --title="$title" $zenity_settings \
                      --text="$(gettext 'Please set user name and name of your PPA in format:
  user/ppa')" \
                      --entry-text="$(cat $usr_ppa_config_file)")
@@ -126,6 +114,7 @@ then
     echo $user_ppa > $usr_ppa_config_file || create_usr_ppa_config_file
 fi
 }
+
 
 create_usr_ppa_config_file()
 {
@@ -136,22 +125,19 @@ echo $user_ppa > $usr_ppa_config_file
 
 set_project_folder()
 {
-if path_project_folder=$(zenity --file-selection \
-                                --window-icon=$icon \
-                                --filename="$HOME/" \
+set_path_parent_folder
+if path_project_folder=$(zenity --file-selection --directory \
                                 --title="$(gettext 'Choose a folder with the source code')" \
-                                --directory)
+                                --window-icon=$icon \
+                                --filename="$path_parent_folder/")
 then
-    get_project_name
+    get_project_details
     if [[ $project_version = *"-"[0-9]* ]]
     then
         echo $path_project_folder > $path_config_file || create_path_config_file
+        echo $path_parent_folder > $parent_folder_config_file
     else
-        zenity --warning \
-               --title="$title" \
-               --window-icon=$icon \
-               --width=330 \
-               --height=200 \
+        zenity --warning --title="$title" $zenity_settings \
                --text="$(gettext 'Please set name and version of the folder in format
 name-version, e.g. myapp-0.1.0.')"
     fi
@@ -160,10 +146,20 @@ else
 fi
 }
 
+
 create_path_config_file()
 {
 mkdir $HOME/.config/deb-cup
 echo $path_project_folder > $path_config_file
+}
+
+
+set_path_parent_folder()
+{
+if ! path_parent_folder=$(cat $parent_folder_config_file)
+then
+    path_parent_folder=$HOME
+fi
 }
 
 
@@ -189,11 +185,7 @@ then
         cd $path_project_folder
         dh_make --yes --indep --createorig
         touch debian/install
-        if zenity --info \
-                  --window-icon=$icon \
-                  --title="$title" \
-                  --width=330 \
-                  --height=200 \
+        if zenity --info --title="$title" $zenity_settings \
                   --ok-label="$(gettext 'Open debian folder')" \
                   --text="$(gettext 'Please edit the files in the debian folder now.')"
         then
@@ -227,13 +219,8 @@ then
     echo "90"
     rm debian.tar
     echo "100"
-    ) | zenity --progress \
-               --title="$title" \
-               --window-icon=$icon \
-               --width=330 \
-               --height=200 \
-               --auto-close \
-               --no-cancel \
+    ) | zenity --progress --title="$title" $zenity_settings \
+               --auto-close --no-cancel \
                --text="$(gettext 'Creating orig tarball...')"
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
@@ -254,13 +241,9 @@ then
         else
             text_renumber=$(gettext 'Renumber')
             path_project_folder=$(cat $path_config_file)
-            get_project_name
+            get_project_details
             changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
-            if answer=$(zenity --question \
-                      --title="$title" \
-                      --window-icon=$icon \
-                      --width=330 \
-                      --height=200 \
+            if answer=$(zenity --question --title="$title" $zenity_settings \
                       --ok-label="$(gettext 'Open changelog')" \
                       --cancel-label="$(gettext 'Cancel')" \
                       --extra-button="$text_renumber" \
@@ -319,20 +302,11 @@ then
                 echo "0"
                 debuild -us -uc -tc > $log_file
                 echo "100"
-                ) | zenity --progress \
-                           --title="$title" \
-                           --window-icon=$icon \
-                           --width=330 \
-                           --height=200 \
-                           --pulsate \
-                           --auto-close \
-                           --no-cancel \
+                ) | zenity --progress --title="$title" $zenity_settings \
+                           --pulsate --auto-close --no-cancel \
                            --text="$(gettext 'Creating deb binary package...')"
-                zenity --text-info \
-                       --window-icon=$icon \
-                       --title="$title" \
-                       --width=520 \
-                       --height=330 \
+                zenity --text-info --title="$title" \
+                       --window-icon=$icon --width=520 --height=330 \
                        --filename=$log_file
             else
                 warning_version_mishmash
@@ -347,6 +321,7 @@ else
     :
 fi
 }
+
 
 sign_packages()
 {
@@ -378,13 +353,8 @@ then
                 cd $path_project_folder
                 touch $log_file
                 text_no="$(gettext 'No')"
-                if answer=$(zenity --question \
-                          --title="$title" \
-                          --window-icon=$icon \
-                          --width=330 \
-                          --height=200 \
-                          --extra-button=$text_no \
-                          --cancel-label="$(gettext 'Cancel')" \
+                if answer=$(zenity --question --title="$title" $zenity_settings \
+                          --extra-button=$text_no --cancel-label="$(gettext 'Cancel')" \
                           --text="$(gettext 'Do you want to include orig tarball?')")
                 then
                     if [ $release = xenial ]
@@ -396,14 +366,8 @@ then
                         echo "0"
                         debuild -S -sa -k$sec_key >  $log_file
                         echo "100"
-                        ) | zenity --progress \
-                                   --window-icon=$icon \
-                                   --title="$title" \
-                                   --width=330 \
-                                   --height=200 \
-                                   --pulsate \
-                                   --auto-close \
-                                   --no-cancel \
+                        ) | zenity --progress --title="$title" $zenity_settings \
+                                   --pulsate --auto-close --no-cancel \
                                    --text="$(gettext 'Creating signed dsc and changes...')"
                         sign_packages_info
                     fi
@@ -421,14 +385,8 @@ then
                         echo "0"
                         debuild -S -sd -k$sec_key >  $log_file
                         echo "100"
-                        ) | zenity --progress \
-                                   --window-icon=$icon \
-                                   --title="$title" \
-                                   --width=330 \
-                                   --height=200 \
-                                   --pulsate \
-                                   --auto-close \
-                                   --no-cancel \
+                        ) | zenity --progress --title="$title" $zenity_settings \
+                                   --pulsate --auto-close --no-cancel \
                                    --text="$(gettext 'Creating signed dsc and changes...')"
                         sign_packages_info
                     fi
@@ -456,31 +414,24 @@ upload_file()
 user_ppa="$(cat $usr_ppa_config_file)"
 if [ "$user_ppa" = "" ]
 then
-    zenity --warning \
-           --title="$title" \
-           --window-icon=$icon \
-           --width=330 \
-           --height=200 \
+    zenity --warning --title="$title" $zenity_settings \
            --text="$(gettext 'Please set the user and the ppa first.')"
 else
     # Choose source.changes file
+    set_path_parent_folder
     if path_changes_file=$(zenity --file-selection \
+                                  --title="$(gettext 'Choose source.changes file')" \
                                   --window-icon=$icon \
                                   --filename="$path_parent_folder/" \
-                                  --title="$(gettext 'Choose source.changes file')" \
                                   --file-filter="source.changes | *source.changes")
     then
         # Print the part of string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
-        if zenity --question \
-                  --title="$title" \
-                  --window-icon=$icon \
-                  --width=330 \
-                  --height=200 \
+        if zenity --question --title="$title" $zenity_settings \
+                  --default-cancel \
                   --text="$(eval_gettext "Do you want to upload
 \$file_name
-to \$user_ppa?")" \
-                  --default-cancel
+to \$user_ppa?")"
         then
             # Upload changes and the source code to the PPA
             touch $log_file
@@ -488,21 +439,12 @@ to \$user_ppa?")" \
             echo "0"
             dput ppa:$user_ppa $path_changes_file > $log_file
             echo "100"
-            ) | zenity --progress \
-                       --window-icon=$icon \
-                       --title="$title" \
-                       --width=330 \
-                       --height=200 \
-                       --pulsate \
-                       --auto-close \
-                       --no-cancel \
+            ) | zenity --progress --title="$title" $zenity_settings \
+                       --pulsate --auto-close --no-cancel \
                        --text="$(gettext 'Uploading files to the PPA...')"
             log=$(cat $log_file)
-            zenity --info \
-                   --window-icon=$icon \
-                   --title="$title" \
-                   --width=520 \
-                   --height=330 \
+            zenity --info --title="$title" \
+                   --window-icon=$icon --width=520 --height=330 \
                    --text="$log"
         else
             :
@@ -516,11 +458,8 @@ fi
 
 open_help()
 {
-zenity --text-info \
-       --window-icon=$icon \
-       --title="$title - $(gettext Help)" \
-       --width=665 \
-       --height=500 \
+zenity --text-info --title="$title - $(gettext Help)" \
+       --window-icon=$icon --width=665 --height=500 \
        --html \
        --filename=/usr/share/doc/deb-cup/help
 }
@@ -528,11 +467,7 @@ zenity --text-info \
 
 open_about()
 {
-zenity --info \
-       --window-icon=$icon \
-       --title="$(gettext 'About') $title" \
-       --width=330 \
-       --height=200 \
+zenity --info --title="$(gettext 'About') $title" $gettext_settings \
        --text="<b>$title</b>
 
 $version
@@ -548,20 +483,13 @@ $(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
 
 sign_packages_info()
 {
-zenity --text-info \
-       --window-icon=$icon \
-       --title="$title" \
-       --width=520 \
-       --height=330 \
+zenity --text-info --title="$title" \
+       --window-icon=$icon --width=520 --height=330 \
        --filename=$log_file
 check_release
 if [ $changelog_release = UNRELEASED ]
 then
-    zenity --warning \
-           --title="$title" \
-           --window-icon=$icon \
-           --width=330 \
-           --height=200 \
+    zenity --warning --title="$title" $gettext_settings \
            --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
 else
     :
@@ -572,7 +500,7 @@ fi
 #	CHECK
 ##############################################################################
 
-get_project_name()
+get_project_details()
 {
 path_parent_folder=$(echo "${path_project_folder%/*}")
 project_version=$(echo "${path_project_folder##*/}")
@@ -603,7 +531,7 @@ testing()
 {
 result_test="OK"
 path_project_folder=$(cat $path_config_file)
-get_project_name
+get_project_details
 
 # Check whether the set project folder exist
 if ! ls $(cat $HOME/.config/deb-cup/path)
@@ -626,44 +554,28 @@ fi
 
 warning_set_project_folder()
 {
-zenity --warning \
-       --title="$title" \
-       --window-icon=$icon \
-       --width=330 \
-       --height=200 \
+zenity --warning --title="$title" $zenity_settings \
        --text="$(gettext 'Please choose a project folder first.')"
 }
 
 
 warning_create_debian_folder()
 {
-zenity --warning \
-       --title="$title" \
-       --window-icon=$icon \
-       --width=330 \
-       --height=200 \
+zenity --warning --title="$title" $zenity_settings \
        --text="$(gettext 'Please create a debian folder first.')"
 }
 
 
 warning_create_orig_tarball()
 {
-zenity --warning \
-       --window-icon=$icon \
-       --text="$(gettext 'Please create the orig tarball first.')" \
-       --width=330 \
-       --height=200 \
-       --title="$title"
+zenity --warning --title="$title" $zenity_settings \
+       --text="$(gettext 'Please create the orig tarball first.')"
 }
 
 
 warning_version_mishmash()
 {
-zenity --warning \
-       --title="$title" \
-       --window-icon=$icon \
-       --width=330 \
-       --height=200 \
+zenity --warning --title="$title" $zenity_settings \
        --text="$(gettext 'Please increase changelog first.')"
 }
 

@@ -9,7 +9,7 @@ Beta version
 ## What Deb Cup can do
 * Create the debian folder with template files and an empty install file
 * Create an original source package
-* Increment changelog
+* Increment changelog (Deb Cup uses a graphical text editor)
 * Create .deb binary package
 * Create signed dsc and changes files (needed for uploading to a PPA)
 * Send packages to a PPA
