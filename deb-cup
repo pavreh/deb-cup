@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#    Deb Cup: GUI tool for uploading packages to a PPA on launchpad.net.
+#    Deb Cup: GUI tool for creating deb packages and uploading to a PPA.
 #    Copyright (C) 2017  Pavel Řehák
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.5.1
+version=0.5.3
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -134,7 +134,7 @@ then
     get_project_details
     # Needed for sorting [A-Za-z]
     export LC_COLLATE=C
-    if [[ $project_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
+    if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
         echo $path_project_folder > $path_config_file || create_path_config_file
         echo $path_parent_folder > $parent_folder_config_file
@@ -213,11 +213,11 @@ then
     echo "0"
     cd $path_parent_folder
     echo "5"
-    tar -cf debian.tar $project_version/debian/
+    tar -cf debian.tar $project_name_version/debian/
     echo "25"
-    rm -fr $project_version/debian
+    rm -fr $project_name_version/debian
     echo "45"
-    tar -caf $project_name\_$version_number.orig.tar.xz $project_version
+    tar -caf $project_name\_$project_version.orig.tar.xz $project_name_version
     echo "75"
     tar -xf debian.tar
     echo "90"
@@ -234,43 +234,22 @@ fi
 update_changelog()
 {
 testing
-if [[ $result_test = "OK" ]]
+if [[ $result_test = OK ]]
 then
     if ls $path_project_folder/debian/changelog
     then
-        cd $path_project_folder/debian
-        if dch --fromdirname --controlmaint
+        check_name
+        if [[ $folder_changelog_name = same ]]
         then
-            :
+            cd $path_project_folder/debian
+            if dch --fromdirname --controlmaint
+            then
+                :
+            else
+                repair_version
+            fi
         else
-            text_renumber=$(gettext 'Renumber')
-            path_project_folder=$(cat $path_config_file)
-            get_project_details
-            changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
-            if answer=$(zenity --question --title="$title" $zenity_settings \
-                      --ok-label="$(gettext 'Open changelog')" \
-                      --cancel-label="$(gettext 'Cancel')" \
-                      --extra-button="$text_renumber" \
-                      --text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
-
-$(gettext 'Folder version'): $version_number
-$(gettext 'Changelog version'): $changelog_version
-
-")
-            then
-                dch --controlmaint
-            else
-                :
-            fi
-            if [ $answer = $text_renumber ]
-            then
-                new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
-                mv $path_project_folder $new_path_project_folder
-                echo $new_path_project_folder > $path_config_file
-                notify-send "$(gettext 'The project folder was renumbered to') $project_name-$changelog_version." --icon=$icon --expire-time=3000
-            else
-                :
-            fi
+            repair_name
         fi
     else
         warning_create_debian_folder
@@ -284,19 +263,21 @@ fi
 create_deb_binary()
 {
 testing
-if [[ $result_test = "OK" ]]
+if [[ $result_test = OK ]]
 then
     # Check whether changelog file exist
     if ls $path_project_folder/debian/changelog
     then
         cd $path_parent_folder
         # Check whether orig tarball exist
-        if ls $project_name\_$version_number.orig.tar.xz
+        if ls $project_name\_$project_version.orig.tar.xz
         then
             # Check wheter the version of the project folder and the version
             # in the changelog file are the same
             check_version
-            if [ $folder_changelog_version = same ]
+            check_name
+            if [[ $folder_changelog_version = same &&
+                 $folder_changelog_name = same ]]
             then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
@@ -313,7 +294,7 @@ then
                        --window-icon=$icon --width=520 --height=330 \
                        --filename=$log_file
             else
-                warning_version_mishmash
+                warning_name_version_mishmash
             fi
         else
             warning_create_orig_tarball
@@ -330,14 +311,16 @@ fi
 sign_packages()
 {
 testing
-if [[ $result_test = "OK" ]]
+if [[ $result_test = OK ]]
 then
     if ls $path_project_folder/debian/changelog
     then
         check_version
-        if [ $folder_changelog_version = same ]
+        check_name
+        if [[ $folder_changelog_version = same &&
+             $folder_changelog_name = same ]]
         then
-            if ls $path_parent_folder/$project_name\_$version_number.orig.tar.xz
+            if ls $path_parent_folder/$project_name\_$project_version.orig.tar.xz
             then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
@@ -401,7 +384,7 @@ then
                 warning_create_orig_tarball
             fi
         else
-            warning_version_mishmash
+            warning_name_version_mishmash
         fi
     else
         warning_create_debian_folder
@@ -507,16 +490,28 @@ fi
 get_project_details()
 {
 path_parent_folder=$(echo "${path_project_folder%/*}")
-project_version=$(echo "${path_project_folder##*/}")
-project_name=$(echo "${project_version%-*}")
-version_number=$(echo "${path_project_folder##*-}")
+project_name_version=$(echo "${path_project_folder##*/}")
+project_name=$(echo "${project_name_version%-*}")
+project_version=$(echo "${path_project_folder##*-}")
+}
+
+
+check_name()
+{
+changelog_name=$(head -1 $path_project_folder/debian/changelog | sed 's/\(.*\) (.*/\1/')
+if [ $changelog_name = $project_name ]
+then
+    folder_changelog_name="same"
+else
+    folder_changelog_name="different"
+fi
 }
 
 
 check_version()
 {
 changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
-if [ $changelog_version = $version_number ]
+if [ $changelog_version = $project_version ]
 then
     folder_changelog_version="same"
 else
@@ -537,7 +532,7 @@ result_test="OK"
 path_project_folder=$(cat $path_config_file)
 get_project_details
 
-# Check whether the set project folder exist
+# Check whether the folder name or version was not changed
 if ! ls $(cat $HOME/.config/deb-cup/path)
 then
     result_test="FALSE"
@@ -545,7 +540,7 @@ then
 fi
 
 # Check whether a project folder is set
-if ! [[ $project_version = *"-"[0-9]* ]]
+if ! [[ $project_name_version = *"-"[0-9]* ]]
 then
     result_test="FALSE"
     warning_set_project_folder
@@ -577,16 +572,83 @@ zenity --warning --title="$title" $zenity_settings \
 }
 
 
-warning_version_mishmash()
+warning_name_version_mishmash()
 {
 zenity --warning --title="$title" $zenity_settings \
        --text="$(gettext 'Please increase changelog first.')"
 }
 
 
+#    TOOLS
+##############################################################################
+
+repair_name()
+{
+text_folder=$(gettext 'Rename')
+if answer=$(zenity --question --title="$title" $zenity_settings \
+                   --ok-label="$(gettext 'Open changelog')" \
+                   --cancel-label="$(gettext 'Cancel')" \
+                   --extra-button="$text_folder" \
+                   --text="$(gettext 'The name of the project folder and the name in the changelog file are not the same. Please rename the project folder or update the changelog.')
+
+$(gettext 'Folder name'): $project_name
+$(gettext 'Changelog name'): $changelog_name")
+then
+    cd $path_project_folder/debian
+    dch --edit --check-dirname-regex $project_name_version
+else
+    :
+fi
+if [ $answer = $text_folder ]
+then
+    new_path_project_folder=$path_parent_folder/$changelog_name-$project_version
+    mv $path_project_folder $new_path_project_folder
+    echo $new_path_project_folder > $path_config_file
+    notify-send "$(gettext 'The project folder was renamed to') $changelog_name-$project_version." --icon=$icon --expire-time=3000
+else
+    :
+fi
+}
+
+
+repair_version()
+{
+text_renumber=$(gettext 'Renumber')
+path_project_folder=$(cat $path_config_file)
+get_project_details
+changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
+if answer=$(zenity --question --title="$title" $zenity_settings \
+                   --ok-label="$(gettext 'Open changelog')" \
+                   --cancel-label="$(gettext 'Cancel')" \
+                   --extra-button="$text_renumber" \
+                   --text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
+
+$(gettext 'Folder version'): $project_version
+$(gettext 'Changelog version'): $changelog_version")
+then
+    dch --controlmaint
+else
+    :
+fi
+if [ $answer = $text_renumber ]
+then
+    new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
+    mv $path_project_folder $new_path_project_folder
+    echo $new_path_project_folder > $path_config_file
+    notify-send "$(gettext 'The project folder was renumbered to') $project_name-$changelog_version." --icon=$icon --expire-time=3000
+else
+    :
+fi
+}
+
+
 ##############################################################################
 #	PROGRAM
 ##############################################################################
+
+# When close was forced, path_config_file was not deleted
+# Delete it now
+echo "" > $path_config_file
 
 run=1
 while [ "$run" = 1 ]

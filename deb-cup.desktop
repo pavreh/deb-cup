@@ -7,4 +7,4 @@ Exec=deb-cup
 Categories=Development;
 Terminal=false
 
-Comment[cs]=Vytváření deb balíčku a jejich posílání do PPA
+Comment[cs]=Vytváření deb balíčků a posílání do PPA

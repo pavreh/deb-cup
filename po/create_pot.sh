@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#    PPA Uploader: GUI tool for uploading packages to a PPA on launchpad.net.
+#    Deb Cup: GUI tool for creating deb packages and uploading to a PPA.
 #    Copyright (C) 2017  Pavel Řehák
 #
 #    This program is free software: you can redistribute it and/or modify
