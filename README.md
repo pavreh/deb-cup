@@ -16,6 +16,7 @@ Beta version
 
 ## Download and Install
 Supported operating systems are
+* Ubuntu 18.04 Bionic
 * Ubuntu 17.10 Artful
 * Ubuntu 16.04 Xenial
 * Linux Mint 18.X
