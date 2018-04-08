@@ -270,7 +270,7 @@ then
     then
         cd $path_parent_folder
         # Check whether orig tarball exist
-        if ls $project_name\_$project_version.orig.tar.xz
+        if ls $project_name\_$project_version.orig.tar.*
         then
             # Check wheter the version of the project folder and the version
             # in the changelog file are the same
@@ -320,7 +320,7 @@ then
         if [[ $folder_changelog_version = same &&
              $folder_changelog_name = same ]]
         then
-            if ls $path_parent_folder/$project_name\_$project_version.orig.tar.xz
+            if ls $path_parent_folder/$project_name\_$project_version.orig.tar.*
             then
                 cd $path_project_folder/debian
                 dch --release --controlmaint
