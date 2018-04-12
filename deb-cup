@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.5.3
+version=0.6.0
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -68,7 +68,7 @@ action=$(zenity --list --title="$title" \
                 --hide-header --text "" --column "" --column "" --column "" \
                 --hide-column=1,2 --print-column=2 \
                 f fingerprint "$(gettext 'Set fingerprint...')" \
-                s usr_ppa "$(gettext 'Set user and ppa...')" \
+                p usr_ppa "$(gettext 'Set user and ppa...')" \
                 o path "$(gettext 'Choose project folder...')" \
                 d debian "$(gettext 'Create/Open debian folder')" \
                 t tarball "$(gettext 'Create orig tarball')" \
