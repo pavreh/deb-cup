@@ -65,18 +65,19 @@ main_window()
 {
 action=$(zenity --list --title="$title" \
                 --window-icon=$icon --width=270 --height=380 \
-                --hide-header --text "" --column "" --column "" --hide-column=1 \
-                fingerprint "$(gettext 'Set fingerprint...')" \
-                usr_ppa "$(gettext 'Set user and ppa...')" \
-                path "$(gettext 'Choose project folder...')" \
-                debian "$(gettext 'Create/Open debian folder')" \
-                tarball "$(gettext 'Create orig tarball')" \
-                changelog "$(gettext 'Increment changelog...')" \
-                binary "$(gettext 'Create deb binary')" \
-                sign "$(gettext 'Create signed dsc and changes')" \
-                upload "$(gettext 'Upload to the PPA...')" \
-                doc-help "$(gettext 'Help')" \
-                about "$(gettext 'About')")
+                --hide-header --text "" --column "" --column "" --column "" \
+                --hide-column=1,2 --print-column=2 \
+                f fingerprint "$(gettext 'Set fingerprint...')" \
+                s usr_ppa "$(gettext 'Set user and ppa...')" \
+                o path "$(gettext 'Choose project folder...')" \
+                d debian "$(gettext 'Create/Open debian folder')" \
+                t tarball "$(gettext 'Create orig tarball')" \
+                c changelog "$(gettext 'Increment changelog...')" \
+                b binary "$(gettext 'Create deb binary')" \
+                s sign "$(gettext 'Create signed dsc and changes')" \
+                u upload "$(gettext 'Upload to the PPA...')" \
+                h doc-help "$(gettext 'Help')" \
+                a about "$(gettext 'About')")
 }
 
 
@@ -134,6 +135,7 @@ then
     get_project_details
     # Needed for sorting [A-Za-z]
     export LC_COLLATE=C
+    # A-Z not allowed
     if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
         echo $path_project_folder > $path_config_file || create_path_config_file
