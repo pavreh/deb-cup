@@ -38,8 +38,14 @@ then
     release=xenial
     VISUAL="xed --wait"
 else
-    VISUAL="gedit --wait"
+    if  [[ $release = tara ]]
+    then
+        VISUAL="xed --wait"
+    else
+        VISUAL="gedit --wait"
+    fi
 fi
+
 # Needed for dch
 export VISUAL
 
