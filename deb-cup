@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #    Deb Cup: GUI tool for creating deb packages and uploading to a PPA.
-#    Copyright (C) 2017  Pavel Řehák
+#    Copyright (C) 2017-2018  Pavel Řehák
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-version=0.6.0
+version=0.7.1
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -153,8 +153,6 @@ name-version, e.g. myapp-0.1.0.')"
     fi
     # Default Sorting [Aa-Zz]
     export LC_COLLATE=""
-else
-    :
 fi
 }
 
@@ -202,12 +200,8 @@ then
                   --text="$(gettext 'Please edit the files in the debian folder now.')"
         then
             xdg-open $path_project_folder/debian/
-        else
-            :
         fi
     fi
-else
-    :
 fi
 }
 
@@ -277,8 +271,6 @@ then
     else
         warning_create_debian_folder
     fi
-else
-    :
 fi
 }
 
@@ -325,8 +317,6 @@ then
     else
         warning_create_debian_folder
     fi
-else
-    :
 fi
 }
 
@@ -381,8 +371,6 @@ then
                                    --text="$(gettext 'Creating signed dsc and changes...')"
                         sign_packages_info
                     fi
-                else
-                    :
                 fi
                 if [ $answer = $text_no ]
                 then
@@ -400,8 +388,6 @@ then
                                    --text="$(gettext 'Creating signed dsc and changes...')"
                         sign_packages_info
                     fi
-                else
-                    :
                 fi
             else
                 warning_create_orig_tarball
@@ -412,8 +398,6 @@ then
     else
         warning_create_debian_folder
     fi
-else
-    :
 fi
 }
 
@@ -456,11 +440,7 @@ to \$user_ppa?")"
             zenity --info --title="$title" \
                    --window-icon=$icon --width=520 --height=330 \
                    --text="$log"
-        else
-            :
         fi
-    else
-        :
     fi
 fi
 }
@@ -503,8 +483,6 @@ if [ $changelog_release = UNRELEASED ]
 then
     zenity --warning --title="$title" $gettext_settings \
            --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
-else
-    :
 fi
 }
 
@@ -634,9 +612,8 @@ $(gettext 'Changelog name'): $changelog_name")
 then
     cd $path_project_folder/debian
     dch --edit --check-dirname-regex $project_name_version
-else
-    :
 fi
+
 if [ $answer = $text_folder ]
 then
     new_path_project_folder=$path_parent_folder/$changelog_name-$project_version
@@ -663,9 +640,8 @@ $(gettext 'Changelog version'): $changelog_version")
 then
     cd $path_project_folder/debian
     dch --controlmaint
-else
-    :
 fi
+
 if [ $answer = $text_renumber ]
 then
     new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
