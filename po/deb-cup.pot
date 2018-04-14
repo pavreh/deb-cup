@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-09 21:35+0100\n"
+"POT-Creation-Date: 2018-04-14 14:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,51 +17,51 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../deb-cup:69
+#: ../deb-cup:76
 msgid "Set fingerprint..."
 msgstr ""
 
-#: ../deb-cup:70
+#: ../deb-cup:77
 msgid "Set user and ppa..."
 msgstr ""
 
-#: ../deb-cup:71
+#: ../deb-cup:78
 msgid "Choose project folder..."
 msgstr ""
 
-#: ../deb-cup:72
+#: ../deb-cup:79
 msgid "Create/Open debian folder"
 msgstr ""
 
-#: ../deb-cup:73
+#: ../deb-cup:80
 msgid "Create orig tarball"
 msgstr ""
 
-#: ../deb-cup:74
+#: ../deb-cup:81
 msgid "Increment changelog..."
 msgstr ""
 
-#: ../deb-cup:75
+#: ../deb-cup:82
 msgid "Create deb binary"
 msgstr ""
 
-#: ../deb-cup:76
+#: ../deb-cup:83
 msgid "Create signed dsc and changes"
 msgstr ""
 
-#: ../deb-cup:77
+#: ../deb-cup:84
 msgid "Upload to the PPA..."
 msgstr ""
 
-#: ../deb-cup:78 ../deb-cup:448
+#: ../deb-cup:85 ../deb-cup:471
 msgid "Help"
 msgstr ""
 
-#: ../deb-cup:79 ../deb-cup:457
+#: ../deb-cup:86 ../deb-cup:480
 msgid "About"
 msgstr ""
 
-#: ../deb-cup:89
+#: ../deb-cup:96
 msgid ""
 "Please open terminal (Ctrl+Alt+T) and type:\n"
 "gpg --fingerprint\n"
@@ -69,67 +69,71 @@ msgid ""
 "which you want to use and paste it here without spaces."
 msgstr ""
 
-#: ../deb-cup:110
+#: ../deb-cup:117
 msgid ""
 "Please set user name and name of your PPA in format:\n"
 " user/ppa"
 msgstr ""
 
-#: ../deb-cup:130
+#: ../deb-cup:137
 msgid "Choose a folder with the source code"
 msgstr ""
 
-#: ../deb-cup:143
+#: ../deb-cup:151
 msgid ""
 "Please set name and version of the folder in format\n"
 "name-version, e.g. myapp-0.1.0."
 msgstr ""
 
-#: ../deb-cup:193
+#: ../deb-cup:201
 msgid "Open debian folder"
 msgstr ""
 
-#: ../deb-cup:194
+#: ../deb-cup:202
 msgid "Please edit the files in the debian folder now."
 msgstr ""
 
-#: ../deb-cup:228
+#: ../deb-cup:236
 msgid "Creating orig tarball..."
 msgstr ""
 
-#: ../deb-cup:229
+#: ../deb-cup:237
 msgid "Orig tarball created."
 msgstr ""
 
-#: ../deb-cup:292
+#: ../deb-cup:268 ../deb-cup:677
+msgid "The project folder was renumbered to"
+msgstr ""
+
+#: ../deb-cup:315
 msgid "Creating deb binary package..."
 msgstr ""
 
-#: ../deb-cup:342
+#: ../deb-cup:365
 msgid "No"
 msgstr ""
 
-#: ../deb-cup:344 ../deb-cup:590 ../deb-cup:622
+#: ../deb-cup:367 ../deb-cup:633 ../deb-cup:662
 msgid "Cancel"
 msgstr ""
 
-#: ../deb-cup:345
+#: ../deb-cup:368
 msgid "Do you want to include orig tarball?"
 msgstr ""
 
-#: ../deb-cup:358 ../deb-cup:377
+#: ../deb-cup:381 ../deb-cup:400
 msgid "Creating signed dsc and changes..."
 msgstr ""
 
-#: ../deb-cup:405
+#: ../deb-cup:428
 msgid "Please set the user and the ppa first."
 msgstr ""
 
-#: ../deb-cup:410
+#: ../deb-cup:433
 msgid "Choose source.changes file"
 msgstr ""
 
-#: ../deb-cup:419
+#: ../deb-cup:442
 #, sh-format
 msgid ""
 "Do you want to upload\n"
@@ -137,85 +141,81 @@ msgid ""
 "to $user_ppa?"
 msgstr ""
 
-#: ../deb-cup:431
+#: ../deb-cup:454
 msgid "Uploading files to the PPA..."
 msgstr ""
 
-#: ../deb-cup:462
+#: ../deb-cup:485
 msgid "GUI tool for creating deb packages and uploading them to a PPA."
 msgstr ""
 
-#: ../deb-cup:464
+#: ../deb-cup:487
 msgid "Homepage"
 msgstr ""
 
-#: ../deb-cup:480
+#: ../deb-cup:503
 msgid ""
 "The dsc and changes files was not signed because a release in the changelog "
 "file is UNRELEASED. If you want signed dsc and changes please save the "
 "changelog file, which was automatically opened, before closing."
 msgstr ""
 
-#: ../deb-cup:557
+#: ../deb-cup:580
 msgid "Please choose a project folder first."
 msgstr ""
 
-#: ../deb-cup:564
+#: ../deb-cup:587
 msgid "Please create a debian folder first."
 msgstr ""
 
-#: ../deb-cup:571
+#: ../deb-cup:594
 msgid "Please create the orig tarball first."
 msgstr ""
 
-#: ../deb-cup:578
+#: ../deb-cup:601
 msgid "Please increase changelog first."
 msgstr ""
 
-#: ../deb-cup:587
+#: ../deb-cup:630
 msgid "Rename"
 msgstr ""
 
-#: ../deb-cup:589 ../deb-cup:621
+#: ../deb-cup:632 ../deb-cup:661
 msgid "Open changelog"
 msgstr ""
 
-#: ../deb-cup:592
+#: ../deb-cup:635
 msgid ""
 "The name of the project folder and the name in the changelog file are not "
 "the same. Please rename the project folder or update the changelog."
 msgstr ""
 
-#: ../deb-cup:594
+#: ../deb-cup:637
 msgid "Folder name"
 msgstr ""
 
-#: ../deb-cup:595
+#: ../deb-cup:638
 msgid "Changelog name"
 msgstr ""
 
-#: ../deb-cup:607
+#: ../deb-cup:648
 msgid "The project folder was renamed to"
 msgstr ""
 
-#: ../deb-cup:616
+#: ../deb-cup:656
 msgid "Renumber"
 msgstr ""
 
-#: ../deb-cup:624
+#: ../deb-cup:664
 msgid ""
 "The version of the project folder and the version in the changelog file are "
 "not the same. Please renumber the project folder or update the changelog."
 msgstr ""
 
-#: ../deb-cup:626
+#: ../deb-cup:666
 msgid "Folder version"
 msgstr ""
 
-#: ../deb-cup:627
+#: ../deb-cup:667
 msgid "Changelog version"
-msgstr ""
-
-#: ../deb-cup:638
-msgid "The project folder was renumbered to"
 msgstr ""

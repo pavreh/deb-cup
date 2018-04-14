@@ -3,10 +3,12 @@
 <br>
 <h2>Supported operating systems</h2>
 <hr>
-<p>Ubuntu 17.10 Artful,<br>
-Ubuntu 16.04 Xenial and<br>
-Linux Mint 18.X.</p>
-<p>For other operating systems based on Ubuntu 17.10 please install <a href="apt://gedit">Gedit</a>.</p>
+<p>Ubuntu 18.04 Bionic,<br>
+Ubuntu 17.10 Artful,<br>
+Ubuntu 16.04 Xenial,<br>
+Linux Mint 18.X and<br>
+Linux Mint 19.X.</p>
+<p>For other operating systems based on Ubuntu please install <a href="apt://gedit">Gedit</a>.</p>
 <p>Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.</p>
 <h2>Set fingerprint</h2>
 <hr>
@@ -26,7 +28,7 @@ If you have more ppas, change this setting before uploading.</p>
 <hr>
 <p>If a debian folder do not exist, Deb Cup create one. Then a default file browser will be opened. Edit this folder manually according to your source code. See<br>
 <a href="https://www.debian.org/doc/manuals/maint-guide/dreq.en.html">https://www.debian.org/doc/manuals/maint-guide/dreq.en.html</a><br>
-If a debian folder exist, Deb Cup opens this debian folder only.</p>
+If a debian folder exist, Deb Cup opens it only.</p>
 <h2>Create orig tarball</h2>
 <hr>
 <p>Deb Cup packs your source code to the archive project_version.orig.tar.xz. This is needed for creating deb packages and creating signed dsc and changes.</p>
@@ -47,15 +49,31 @@ If a debian folder exist, Deb Cup opens this debian folder only.</p>
 <p>The changelog file will be opened. Check it and save.</p>
 <p>When you want to create signed dsc and changes, you must have a GPG key. You can create one when you are activating your PPA. See<br>
 <a href="https://help.launchpad.net/Packaging/PPA#Activating_a_PPA">https://help.launchpad.net/Packaging/PPA#Activating_a_PPA</a></p>
+<p> For import of an existing secret key from a backup use gpg --import secring.gpg in the folder with the key.</p>
 <br>
 <h4>Troubleshooting</h4>
 <p>When creation of signed dsc and changes is aborted because of unexpected source changes, create new orig tarball.</p>
 <h2>Upload to the PPA</h2>
 <hr>
 <p>Select a signed changes file you want to upload to your PPA.</p>
+<h2>Shortcuts</h2>
+<hr>
+<p>It is possible to use the keyboard to choose an action in the main window.<br>
+<br>
+f = Set fingerprint...<br>
+p = Set user and ppa...<br>
+o = Choose project folder...<br>
+d = Create/Open debian folder<br>
+t = Create orig tarball<br>
+c = Increment changelog...<br>
+b = Create deb binary<br>
+s = Create signed dsc and changes<br>
+u = Upload to the PPA...<br>
+h = Help<br>
+a = About</p>
 <br>
 <br>
 <hr>
-<p>Copyright (c) 2017, Pavel Řehák <a href="mailto:pavel-rehak@email.cz?subject=Deb Cup - Help">Send mail</a>.</p>
+<p>Copyright (c) 2017-2018, Pavel Řehák <a href="mailto:pavel-rehak@email.cz?subject=Deb Cup - Help">Send mail</a>.</p>
 <p>Homepage: <a href="https://github.com/pavreh/deb-cup">https://github.com/pavreh/deb-cup</a></p>
 <p>Deb Cup PPA: <a href="https://launchpad.net/~pavreh/+archive/ubuntu/ppa">https://launchpad.net/~pavreh/+archive/ubuntu/ppa</a></p>

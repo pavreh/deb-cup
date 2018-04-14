@@ -249,10 +249,25 @@ then
         check_name
         if [[ $folder_changelog_name = same ]]
         then
-            cd $path_project_folder/debian
-            if dch --fromdirname --controlmaint
+            check_version
+            if [[ $folder_changelog_version = same ]]
             then
-                :
+                cd $path_project_folder/debian
+                dch --controlmaint 2> $log_file
+                error_message=$(cat $log_file)
+                echo $error_message | grep -q "dch warning" && error="warning"
+                echo $error_message | grep -q "renamed" && error="renamed"
+                case $error in
+                    warning )
+                        zenity --warning --title="$title" $zenity_settings \
+                           --text="$error_message" ;;
+                    renamed )
+                        new_folder_version=$(echo $error_message | sed 's/.*-//g')
+                        new_path_project_folder=$path_parent_folder/$project_name-$new_folder_version
+                        echo $new_path_project_folder > $path_config_file
+                        notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
+                esac
+                error=""
             else
                 repair_version
             fi
@@ -453,10 +468,12 @@ fi
 
 open_help()
 {
+# Read compressed text file.
+zmore /usr/share/doc/deb-cup/help >$log_file
 zenity --text-info --title="$title - $(gettext Help)" \
        --window-icon=$icon --width=665 --height=500 \
        --html \
-       --filename=/usr/share/doc/deb-cup/help
+       --filename="$log_file"
 }
 
 
@@ -590,6 +607,19 @@ zenity --warning --title="$title" $zenity_settings \
 #    TOOLS
 ##############################################################################
 
+move_project_folder()
+{
+if mv -T $path_project_folder $new_path_project_folder 2>$log_file
+then
+    echo $new_path_project_folder > $path_config_file
+    notify-send "$notify_text" --icon=$icon --expire-time=3000
+else
+    error_message=$(cat $log_file)
+    zenity --warning --title="$title" $zenity_settings \
+           --text="$error_message"
+fi
+}
+
 repair_name()
 {
 text_folder=$(gettext 'Rename')
@@ -610,11 +640,8 @@ fi
 if [ $answer = $text_folder ]
 then
     new_path_project_folder=$path_parent_folder/$changelog_name-$project_version
-    mv $path_project_folder $new_path_project_folder
-    echo $new_path_project_folder > $path_config_file
-    notify-send "$(gettext 'The project folder was renamed to') $changelog_name-$project_version." --icon=$icon --expire-time=3000
-else
-    :
+    notify_text="$(gettext 'The project folder was renamed to') $changelog_name-$project_version."
+    move_project_folder
 fi
 }
 
@@ -634,6 +661,7 @@ if answer=$(zenity --question --title="$title" $zenity_settings \
 $(gettext 'Folder version'): $project_version
 $(gettext 'Changelog version'): $changelog_version")
 then
+    cd $path_project_folder/debian
     dch --controlmaint
 else
     :
@@ -641,11 +669,8 @@ fi
 if [ $answer = $text_renumber ]
 then
     new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
-    mv $path_project_folder $new_path_project_folder
-    echo $new_path_project_folder > $path_config_file
-    notify-send "$(gettext 'The project folder was renumbered to') $project_name-$changelog_version." --icon=$icon --expire-time=3000
-else
-    :
+    notify_text="$(gettext 'The project folder was renumbered to') $project_name-$changelog_version."
+    move_project_folder
 fi
 }
 
