@@ -300,7 +300,7 @@ then
                 touch $log_file
                 (
                 echo "0"
-                debuild -us -uc -tc > $log_file
+                yes | debuild -us -uc -tc > $log_file
                 echo "100"
                 ) | zenity --progress --title="$title" $zenity_settings \
                            --pulsate --auto-close --no-cancel \
@@ -364,7 +364,7 @@ then
                     else
                         (
                         echo "0"
-                        debuild -S -sa -k$sec_key >  $log_file
+                        yes | debuild -S -sa -k$sec_key >  $log_file
                         echo "100"
                         ) | zenity --progress --title="$title" $zenity_settings \
                                    --pulsate --auto-close --no-cancel \
@@ -381,7 +381,7 @@ then
                     else
                         (
                         echo "0"
-                        debuild -S -sd -k$sec_key >  $log_file
+                        yes | debuild -S -sd -k$sec_key >  $log_file
                         echo "100"
                         ) | zenity --progress --title="$title" $zenity_settings \
                                    --pulsate --auto-close --no-cancel \
