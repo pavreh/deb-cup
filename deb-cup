@@ -250,13 +250,14 @@ then
                 dch --controlmaint 2> $log_file
                 error_message=$(cat $log_file)
                 echo $error_message | grep -q "dch warning" && error="warning"
-                echo $error_message | grep -q "renamed" && error="renamed"
+                echo $error_message | grep -q "../$project_name-" && error="renamed"
                 case $error in
                     warning )
                         zenity --warning --title="$title" $zenity_settings \
                            --text="$error_message" ;;
                     renamed )
-                        new_folder_version=$(echo $error_message | sed 's/.*-//g')
+                        new_folder_version=$(echo $error_message |
+                                             sed 's/.*-\([0-9.]*\) .*/\1/')
                         new_path_project_folder=$path_parent_folder/$project_name-$new_folder_version
                         echo $new_path_project_folder > $path_config_file
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
