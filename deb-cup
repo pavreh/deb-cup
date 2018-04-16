@@ -94,12 +94,17 @@ action=$(zenity --list --title="$title" \
 
 set_fingerprint()
 {
-if fingerprint=$(zenity --entry --title="$title" $zenity_settings \
-                        --text="$(gettext 'Please open terminal (Ctrl+Alt+T) and type:
+zenity_text="$(gettext 'Please open terminal (Ctrl+Alt+T) and type:
 gpg --fingerprint
 Copy the key fingerprint (long alphanumeric code)
-which you want to use and paste it here without spaces.')" \
-                        --entry-text="$(cat $fingerprint_config_file)")
+which you want to use and paste it here without spaces.')"
+
+if fingerprint=$(zenity --entry \
+                        --title="$title" \
+                        --text="$zenity_text" \
+                        --entry-text="$(cat $fingerprint_config_file)" \
+                          $zenity_settings )
+
 then
     echo $fingerprint > $fingerprint_config_file || create_fingerprint_config_file
 fi
@@ -115,10 +120,14 @@ echo $fingerprint > $fingerprint_config_file
 
 set_usr_ppa()
 {
-if user_ppa=$(zenity --entry --title="$title" $zenity_settings \
-                     --text="$(gettext 'Please set user name and name of your PPA in format:
- user/ppa')" \
-                     --entry-text="$(cat $usr_ppa_config_file)")
+zenity_text="$(gettext 'Please set user name and name of your PPA in format:
+ user/ppa')"
+
+if user_ppa=$(zenity --entry \
+                     --title="$title" \
+                     --text="$zenity_text" \
+                     --entry-text="$(cat $usr_ppa_config_file)" \
+                       $zenity_settings )
 then
     echo $user_ppa > $usr_ppa_config_file || create_usr_ppa_config_file
 fi
@@ -134,11 +143,15 @@ echo $user_ppa > $usr_ppa_config_file
 
 set_project_folder()
 {
+zenity_text="$(gettext 'Please set name and version of the folder in format
+name-version, e.g. myapp-0.1.0.')"
+
 set_path_parent_folder
-if path_project_folder=$(zenity --file-selection --directory \
+if path_project_folder=$(zenity --file-selection \
+                                --directory \
                                 --title="$(gettext 'Choose a folder with the source code')" \
-                                --window-icon=$icon \
-                                --filename="$path_parent_folder/")
+                                --filename="$path_parent_folder/" \
+                                --window-icon=$icon )
 then
     get_project_details
     # Needed for sorting [A-Za-z]
@@ -149,9 +162,10 @@ then
         echo $path_project_folder > $path_config_file || create_path_config_file
         echo $path_parent_folder > $parent_folder_config_file
     else
-        zenity --warning --title="$title" $zenity_settings \
-               --text="$(gettext 'Please set name and version of the folder in format
-name-version, e.g. myapp-0.1.0.')"
+        zenity --warning \
+               --title="$title" \
+               --text="$zenity_text" \
+                 $zenity_settings
     fi
     # Default Sorting [Aa-Zz]
     export LC_COLLATE=""
@@ -197,9 +211,11 @@ then
         cd $path_project_folder
         dh_make --yes --indep --createorig
         touch debian/install
-        if zenity --info --title="$title" $zenity_settings \
+        if zenity --info \
+                  --title="$title" \
                   --ok-label="$(gettext 'Open debian folder')" \
-                  --text="$(gettext 'Please edit the files in the debian folder now.')"
+                  --text="$(gettext 'Please edit the files in the debian folder now.')" \
+                    $zenity_settings
         then
             xdg-open $path_project_folder/debian/
         fi
@@ -227,9 +243,12 @@ then
     echo "90"
     rm debian.tar
     echo "100"
-    ) | zenity --progress --title="$title" $zenity_settings \
-               --auto-close --no-cancel \
+    ) | zenity --progress \
+               --title="$title" $zenity_settings \
+               --auto-close \
+               --no-cancel \
                --text="$(gettext 'Creating orig tarball...')"
+
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
 }
@@ -255,8 +274,11 @@ then
                 echo $error_message | grep -q "../$project_name-" && error="renamed"
                 case $error in
                     warning )
-                        zenity --warning --title="$title" $zenity_settings \
-                           --text="$error_message" ;;
+                        zenity --warning \
+                               --title="$title" \
+                               --text="$error_message" \
+                                 $zenity_settings ;;
+
                     renamed )
                         new_folder_version=$(echo $error_message |
                                              sed 's/.*-\([0-9.]*\) .*/\1/')
@@ -293,11 +315,18 @@ then
         echo "0"
         yes | debuild -us -uc -tc > $log_file
         echo "100"
-        ) | zenity --progress --title="$title" $zenity_settings \
-                   --pulsate --auto-close --no-cancel \
+        ) | zenity --progress \
+                   --title="$title" $zenity_settings \
+                   --pulsate \
+                   --auto-close \
+                   --no-cancel \
                    --text="$(gettext 'Creating deb binary package...')"
-        zenity --text-info --title="$title" \
-               --window-icon=$icon --width=520 --height=330 \
+
+        zenity --text-info \
+               --title="$title" \
+               --window-icon=$icon \
+               --width=520 \
+               --height=330 \
                --filename=$log_file
     fi
 fi
@@ -329,9 +358,14 @@ then
         fi
         cd $path_project_folder
         text_no="$(gettext 'No')"
-        if answer=$(zenity --question --title="$title" $zenity_settings \
-                 --extra-button=$text_no --cancel-label="$(gettext 'Cancel')" \
-                 --text="$(gettext 'Do you want to include orig tarball?')")
+        zenity_text="$(gettext 'Do you want to include orig tarball?')"
+        if answer=$(zenity --question \
+                           --title="$title" \
+                           --extra-button=$text_no \
+                           --cancel-label="$(gettext 'Cancel')" \
+                           --text="$zenity_text" \
+                             $zenity_settings )
+
         then
             if [ $release = xenial ]
             then
@@ -342,9 +376,12 @@ then
                 echo "0"
                 yes | debuild -S -sa -k$sec_key >  $log_file
                 echo "100"
-                ) | zenity --progress --title="$title" $zenity_settings \
-                           --pulsate --auto-close --no-cancel \
-                      --text="$(gettext 'Creating signed dsc and changes...')"
+                ) | zenity --progress \
+                           --title="$title" $zenity_settings \
+                           --pulsate \
+                           --auto-close \
+                           --no-cancel \
+                           --text="$(gettext 'Creating signed dsc and changes...')"
                 sign_packages_info
             fi
         fi
@@ -359,9 +396,11 @@ then
                 echo "0"
                 yes | debuild -S -sd -k$sec_key >  $log_file
                 echo "100"
-                ) | zenity --progress --title="$title" $zenity_settings \
+                ) | zenity --progress \
+                           --title="$title" \
                            --pulsate --auto-close --no-cancel \
-                     --text="$(gettext 'Creating signed dsc and changes...')"
+                           --text="$(gettext 'Creating signed dsc and changes...')" \
+                             $zenity_settings
                 sign_packages_info
             fi
         fi
@@ -372,12 +411,18 @@ fi
 
 upload_file()
 {
+zenity_text="$(eval_gettext "Do you want to upload
+\$file_name
+to \$user_ppa?")"
+
 # Check whether an user and a ppa is set
 user_ppa="$(cat $usr_ppa_config_file)"
 if [ "$user_ppa" = "" ]
 then
-    zenity --warning --title="$title" $zenity_settings \
-           --text="$(gettext 'Please set the user and the ppa first.')"
+    zenity --warning \
+           --title="$title" \
+           --text="$(gettext 'Please set the user and the ppa first.')" \
+             $zenity_settings
 else
     # Choose source.changes file
     set_path_parent_folder
@@ -389,11 +434,12 @@ else
     then
         # Print the part of string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
-        if zenity --question --title="$title" $zenity_settings \
+        if zenity --question \
+                  --title="$title" \
                   --default-cancel \
-                  --text="$(eval_gettext "Do you want to upload
-\$file_name
-to \$user_ppa?")"
+                  --text="$zenity_text" \
+                    $zenity_settings
+
         then
             # Upload changes and the source code to the PPA
             touch $log_file
@@ -401,12 +447,20 @@ to \$user_ppa?")"
             echo "0"
             dput ppa:$user_ppa $path_changes_file > $log_file
             echo "100"
-            ) | zenity --progress --title="$title" $zenity_settings \
-                       --pulsate --auto-close --no-cancel \
-                       --text="$(gettext 'Uploading files to the PPA...')"
+            ) | zenity --progress \
+                       --title="$title" \
+                       --pulsate \
+                       --auto-close \
+                       --no-cancel \
+                       --text="$(gettext 'Uploading files to the PPA...')" \
+                         $zenity_settings
+
             log=$(cat $log_file)
-            zenity --info --title="$title" \
-                   --window-icon=$icon --width=520 --height=330 \
+            zenity --info \
+                   --title="$title" \
+                   --window-icon=$icon \
+                   --width=520 \
+                   --height=330 \
                    --text="$log"
         fi
     fi
@@ -418,8 +472,11 @@ open_help()
 {
 # Read compressed text file.
 zmore /usr/share/doc/deb-cup/help >$log_file
-zenity --text-info --title="$title - $(gettext Help)" \
-       --window-icon=$icon --width=665 --height=500 \
+zenity --text-info \
+       --title="$title - $(gettext Help)" \
+       --window-icon=$icon \
+       --width=665 \
+       --height=500 \
        --html \
        --filename="$log_file"
 }
@@ -427,14 +484,17 @@ zenity --text-info --title="$title - $(gettext Help)" \
 
 open_about()
 {
-zenity --info --title="$(gettext 'About') $title" $gettext_settings \
-       --text="<b>$title</b>
+zenity_text="<b>$title</b>
 
 $version
 
 $(gettext 'GUI tool for creating deb packages and uploading them to a PPA.')
 
 $(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
+
+zenity --info \
+       --title="$(gettext 'About') $title" $gettext_settings \
+       --text="$zenity_text"
 }
 
 
@@ -443,13 +503,19 @@ $(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
 
 sign_packages_info()
 {
-zenity --text-info --title="$title" \
-       --window-icon=$icon --width=520 --height=330 \
+zenity --text-info \
+       --title="$title" \
+       --window-icon=$icon \
+       --width=520 \
+       --height=330 \
        --filename=$log_file
+
 check_release
 if [ $changelog_release = UNRELEASED ]
 then
-    zenity --warning --title="$title" $gettext_settings \
+    zenity --warning \
+           --title="$title" \
+             $gettext_settings \
            --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
 fi
 }
@@ -590,22 +656,28 @@ then
     notify-send "$notify_text" --icon=$icon --expire-time=3000
 else
     error_message=$(cat $log_file)
-    zenity --warning --title="$title" $zenity_settings \
-           --text="$error_message"
+    zenity --warning \
+           --title="$title" \
+           --text="$error_message" \
+             $zenity_settings
 fi
 }
 
 repair_name()
 {
 text_folder=$(gettext 'Rename')
-if answer=$(zenity --question --title="$title" $zenity_settings \
+zenity_text="$(gettext 'The name of the project folder and the name in the changelog file are not the same. Please rename the project folder or update the changelog.')
+
+$(gettext 'Folder name'): $project_name
+$(gettext 'Changelog name'): $changelog_name"
+
+if answer=$(zenity --question \
+                   --title="$title" \
                    --ok-label="$(gettext 'Open changelog')" \
                    --cancel-label="$(gettext 'Cancel')" \
                    --extra-button="$text_folder" \
-                   --text="$(gettext 'The name of the project folder and the name in the changelog file are not the same. Please rename the project folder or update the changelog.')
-
-$(gettext 'Folder name'): $project_name
-$(gettext 'Changelog name'): $changelog_name")
+                   --text="$zenity_text" \
+                     $zenity_settings )
 then
     cd $path_project_folder/debian
     dch --edit --check-dirname-regex $project_name_version
@@ -626,14 +698,20 @@ text_renumber=$(gettext 'Renumber')
 path_project_folder=$(cat $path_config_file)
 get_project_details
 changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
-if answer=$(zenity --question --title="$title" $zenity_settings \
+
+zenity_text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
+
+$(gettext 'Folder version'): $project_version
+$(gettext 'Changelog version'): $changelog_version"
+
+if answer=$(zenity --question \
+                   --title="$title" \
                    --ok-label="$(gettext 'Open changelog')" \
                    --cancel-label="$(gettext 'Cancel')" \
                    --extra-button="$text_renumber" \
-                   --text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
+                   --text="$zenity_text" \
+                     $zenity_settings )
 
-$(gettext 'Folder version'): $project_version
-$(gettext 'Changelog version'): $changelog_version")
 then
     cd $path_project_folder/debian
     dch --controlmaint
