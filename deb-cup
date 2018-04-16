@@ -29,6 +29,8 @@ icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
 
+touch $log_file
+
 release=$(eval lsb_release -cs)
 if  [[ $release = sylvia ||
        $release = sonya  ||
@@ -185,8 +187,8 @@ echo "" > $config_file
 
 create_debian_folder()
 {
-testing
-if [[ $result_test = "OK" ]]
+base_test
+if [[ $base_test_result = "OK" ]]
 then
     if ls $path_project_folder/debian/
     then
@@ -208,8 +210,8 @@ fi
 
 create_orig_tarball()
 {
-testing
-if [[ $result_test = "OK" ]]
+base_test
+if [[ $base_test_result = "OK" ]]
 then
     (
     echo "0"
@@ -235,8 +237,8 @@ fi
 
 update_changelog()
 {
-testing
-if [[ $result_test = OK ]]
+base_test
+if [[ $base_test_result = OK ]]
 then
     if ls $path_project_folder/debian/changelog
     then
@@ -278,45 +280,25 @@ fi
 
 create_deb_binary()
 {
-testing
-if [[ $result_test = OK ]]
+base_test
+if [[ $base_test_result = OK ]]
 then
-    # Check whether changelog file exist
-    if ls $path_project_folder/debian/changelog
+    ctvn_test
+    if [[ $ctvn_test_result = OK ]]
     then
-        cd $path_parent_folder
-        # Check whether orig tarball exist
-        if ls $project_name\_$project_version.orig.tar.*
-        then
-            # Check wheter the version of the project folder and the version
-            # in the changelog file are the same
-            check_version
-            check_name
-            if [[ $folder_changelog_version = same &&
-                 $folder_changelog_name = same ]]
-            then
-                cd $path_project_folder/debian
-                dch --release --controlmaint
-                cd $path_project_folder
-                touch $log_file
-                (
-                echo "0"
-                yes | debuild -us -uc -tc > $log_file
-                echo "100"
-                ) | zenity --progress --title="$title" $zenity_settings \
-                           --pulsate --auto-close --no-cancel \
-                           --text="$(gettext 'Creating deb binary package...')"
-                zenity --text-info --title="$title" \
-                       --window-icon=$icon --width=520 --height=330 \
-                       --filename=$log_file
-            else
-                warning_name_version_mishmash
-            fi
-        else
-            warning_create_orig_tarball
-        fi
-    else
-        warning_create_debian_folder
+        cd $path_project_folder/debian
+        dch --release --controlmaint
+        cd $path_project_folder
+        (
+        echo "0"
+        yes | debuild -us -uc -tc > $log_file
+        echo "100"
+        ) | zenity --progress --title="$title" $zenity_settings \
+                   --pulsate --auto-close --no-cancel \
+                   --text="$(gettext 'Creating deb binary package...')"
+        zenity --text-info --title="$title" \
+               --window-icon=$icon --width=520 --height=330 \
+               --filename=$log_file
     fi
 fi
 }
@@ -324,81 +306,66 @@ fi
 
 sign_packages()
 {
-testing
-if [[ $result_test = OK ]]
+base_test
+if [[ $base_test_result = OK ]]
 then
-    if ls $path_project_folder/debian/changelog
+    ctvn_test
+    if [[ $ctvn_test_result = OK ]]
     then
-        check_version
-        check_name
-        if [[ $folder_changelog_version = same &&
-             $folder_changelog_name = same ]]
+        cd $path_project_folder/debian
+        dch --release --controlmaint
+        fingerprint=$(cat $fingerprint_config_file)
+        if [ $fingerprint =  ]
         then
-            if ls $path_parent_folder/$project_name\_$project_version.orig.tar.*
+            sec_key="$(eval gpg --list-secret-keys)"
+            if [ $release = xenial ]
             then
-                cd $path_project_folder/debian
-                dch --release --controlmaint
-                fingerprint=$(cat $fingerprint_config_file)
-                if [ $fingerprint =  ]
-                then
-                    sec_key="$(eval gpg --list-secret-keys)"
-                    if [ $release = xenial ]
-                    then
-                        sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
-                    else
-                        sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
-                    fi
-                else
-                    sec_key=$fingerprint
-                fi
-                cd $path_project_folder
-                touch $log_file
-                text_no="$(gettext 'No')"
-                if answer=$(zenity --question --title="$title" $zenity_settings \
-                          --extra-button=$text_no --cancel-label="$(gettext 'Cancel')" \
-                          --text="$(gettext 'Do you want to include orig tarball?')")
-                then
-                    if [ $release = xenial ]
-                    then
-                        command="debuild -S -sa -k$sec_key"
-                        gnome-terminal -e "bash -c \"$command; exec bash\""
-                    else
-                        (
-                        echo "0"
-                        yes | debuild -S -sa -k$sec_key >  $log_file
-                        echo "100"
-                        ) | zenity --progress --title="$title" $zenity_settings \
-                                   --pulsate --auto-close --no-cancel \
-                                   --text="$(gettext 'Creating signed dsc and changes...')"
-                        sign_packages_info
-                    fi
-                fi
-                if [ $answer = $text_no ]
-                then
-                    if [ $release = xenial ]
-                    then
-                        command="debuild -S -sd -k$sec_key"
-                        gnome-terminal -e "bash -c \"$command; exec bash\""
-                    else
-                        (
-                        echo "0"
-                        yes | debuild -S -sd -k$sec_key >  $log_file
-                        echo "100"
-                        ) | zenity --progress --title="$title" $zenity_settings \
-                                   --pulsate --auto-close --no-cancel \
-                                   --text="$(gettext 'Creating signed dsc and changes...')"
-                        sign_packages_info
-                    fi
-                fi
+                sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
             else
-                warning_create_orig_tarball
+                sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
             fi
         else
-            warning_name_version_mishmash
+            sec_key=$fingerprint
         fi
-    else
-        warning_create_debian_folder
-    fi
+        cd $path_project_folder
+        text_no="$(gettext 'No')"
+        if answer=$(zenity --question --title="$title" $zenity_settings \
+                 --extra-button=$text_no --cancel-label="$(gettext 'Cancel')" \
+                 --text="$(gettext 'Do you want to include orig tarball?')")
+        then
+            if [ $release = xenial ]
+            then
+                command="debuild -S -sa -k$sec_key"
+                gnome-terminal -e "bash -c \"$command; exec bash\""
+            else
+                (
+                echo "0"
+                yes | debuild -S -sa -k$sec_key >  $log_file
+                echo "100"
+                ) | zenity --progress --title="$title" $zenity_settings \
+                           --pulsate --auto-close --no-cancel \
+                      --text="$(gettext 'Creating signed dsc and changes...')"
+                sign_packages_info
+            fi
+        fi
+        if [ $answer = $text_no ]
+        then
+            if [ $release = xenial ]
+            then
+                command="debuild -S -sd -k$sec_key"
+                gnome-terminal -e "bash -c \"$command; exec bash\""
+            else
+                (
+                echo "0"
+                yes | debuild -S -sd -k$sec_key >  $log_file
+                echo "100"
+                ) | zenity --progress --title="$title" $zenity_settings \
+                           --pulsate --auto-close --no-cancel \
+                     --text="$(gettext 'Creating signed dsc and changes...')"
+                sign_packages_info
+            fi
+        fi
+  fi
 fi
 }
 
@@ -530,25 +497,54 @@ changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(U
 }
 
 
-testing()
+base_test()
 {
-result_test="OK"
+base_test_result="OK"
 path_project_folder=$(cat $path_config_file)
 get_project_details
 
 # Check whether the folder name or version was not changed
 if ! ls $(cat $HOME/.config/deb-cup/path)
 then
-    result_test="FALSE"
+    base_test_result="FALSE"
     warning_set_project_folder
 fi
 
 # Check whether a project folder is set
 if ! [[ $project_name_version = *"-"[0-9]* ]]
 then
-    result_test="FALSE"
+    base_test_result="FALSE"
     warning_set_project_folder
 fi
+}
+
+
+ctvn_test()
+{
+ctvn_test_result="FALSE"
+    # Check whether changelog file exist
+    if ls $path_project_folder/debian/changelog
+    then
+        # Check whether orig tarball exist
+        if ls $path_parent_folder/$project_name\_$project_version.orig.tar.*
+        then
+            # Check wheter the version of the project folder and the version
+            # in the changelog file are the same
+            check_version
+            check_name
+            if [[ $folder_changelog_version = same &&
+                 $folder_changelog_name = same ]]
+            then
+                ctvn_test_result="OK"
+            else
+                warning_name_version_mishmash
+            fi
+        else
+            warning_create_orig_tarball
+        fi
+    else
+        warning_create_debian_folder
+    fi
 }
 
 
