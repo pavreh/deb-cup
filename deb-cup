@@ -24,7 +24,7 @@ usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
 path_config_file=$HOME/.config/deb-cup/path
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
-log_file=$HOME/.config/deb-cup/log
+log_file=/tmp/deb-cup-log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
