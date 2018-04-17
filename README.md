@@ -20,6 +20,7 @@ Supported operating systems are
 * Ubuntu 17.10 Artful
 * Ubuntu 16.04 Xenial
 * Linux Mint 18.X
+* Linux Mint 19
 
 For other operating systems based on Ubuntu 17.10 please install Gedit.
 Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.
