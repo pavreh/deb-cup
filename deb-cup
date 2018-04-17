@@ -16,8 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-version=0.7.1
+version=0.7.3
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -415,10 +414,6 @@ fi
 
 upload_file()
 {
-zenity_text="$(eval_gettext "Do you want to upload
-\$file_name
-to \$user_ppa?")"
-
 # Check whether an user and a ppa is set
 user_ppa="$(cat $usr_ppa_config_file)"
 if [ "$user_ppa" = "" ]
@@ -438,6 +433,10 @@ else
     then
         # Print the part of string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
+        zenity_text="$(eval_gettext "Do you want to upload
+\$file_name
+to \$user_ppa?")"
+
         if zenity --question \
                   --title="$title" \
                   --default-cancel \
@@ -735,6 +734,29 @@ fi
 #	PROGRAM
 ##############################################################################
 
+# Parameters
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        --version | -v )
+            echo "deb-cup version $version"
+            exit
+            ;;
+
+        --help | -h )
+            echo "$title - GUI tool for creating deb packages and uploading to a PPA"
+            echo " "
+            echo "usage: deb-cup [option]"
+            echo " "
+            echo "options:"
+            echo "  -h, --help                show this help"
+            echo "  -v, --version             print version number"
+            exit
+            ;;
+    esac
+    shift
+done
+
 # When close was forced, path_config_file was not deleted
 # Delete it now
 echo "" > $path_config_file
@@ -745,47 +767,47 @@ do
 
 main_window
 
-if [ $action = tarball ]
+if [ "$action" = "tarball" ]
 then
     create_orig_tarball
 
-elif [ $action = changelog ]
+elif [ "$action" = "changelog" ]
 then
     update_changelog
 
-elif [ $action = binary ]
+elif [ "$action" = "binary" ]
 then
     create_deb_binary
 
-elif [ $action = sign ]
+elif [ "$action" = "sign" ]
 then
     sign_packages
 
-elif [ $action = upload ]
+elif [ "$action" = "upload" ]
 then
     upload_file
 
-elif [ $action = debian ]
+elif [ "$action" = "debian" ]
 then
     create_debian_folder
 
-elif [ $action = usr_ppa ]
+elif [ "$action" = "usr_ppa" ]
 then
     set_usr_ppa
 
-elif [ $action = path ]
+elif [ "$action" = "path" ]
 then
     set_project_folder
 
-elif [ $action = doc-help ]
+elif [ "$action" = "doc-help" ]
 then
     open_help
 
-elif [ $action = about ]
+elif [ "$action" = "about" ]
 then
     open_about
 
-elif [ $action = fingerprint ]
+elif [ "$action" = "fingerprint" ]
 then
     set_fingerprint
 
