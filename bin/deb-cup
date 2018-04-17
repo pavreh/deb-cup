@@ -18,6 +18,7 @@
 
 version=0.7.3
 
+
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
 path_config_file=$HOME/.config/deb-cup/path
@@ -27,6 +28,8 @@ log_file=/tmp/deb-cup-log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
+
+run=1
 
 touch $log_file
 
@@ -761,7 +764,6 @@ done
 # Delete it now
 echo "" > $path_config_file
 
-run=1
 while [ "$run" = 1 ]
 do
 
