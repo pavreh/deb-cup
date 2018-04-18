@@ -4,5 +4,5 @@
 # Common library files
 
 # Package source files
-../deb-cup
+../bin/deb-cup
 
