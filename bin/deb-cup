@@ -478,7 +478,7 @@ $(gettext 'GUI tool for creating deb packages and uploading them to a PPA.')
 $(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
 
 zenity --info \
-       --title="$(gettext 'About') $title" $gettext_settings \
+       --title="$(gettext 'About') $title" \
        --text="$zenity_text" \
          $zenity_settings
 }
