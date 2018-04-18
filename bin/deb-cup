@@ -145,9 +145,6 @@ echo $user_ppa > $usr_ppa_config_file
 
 set_project_folder()
 {
-zenity_text="$(gettext 'Please set name and version of the folder in format
-name-version, e.g. myapp-0.1.0.')"
-
 set_path_parent_folder
 if path_project_folder=$(zenity --file-selection \
                                 --directory \
@@ -164,10 +161,9 @@ then
         echo $path_project_folder > $path_config_file || create_path_config_file
         echo $path_parent_folder > $parent_folder_config_file
     else
-        zenity --warning \
-               --title="$title" \
-               --text="$zenity_text" \
-                 $zenity_settings
+        zenity_text="$(gettext 'Please set name and version of the folder in format
+name-version, e.g. myapp-0.1.0.')"
+        zenity_warning
     fi
     # Default Sorting [Aa-Zz]
     export LC_COLLATE=""
@@ -277,11 +273,8 @@ then
                 echo $error_message | grep -q "../$project_name-" && error="renamed"
                 case $error in
                     warning )
-                        zenity --warning \
-                               --title="$title" \
-                               --text="$error_message" \
-                                 $zenity_settings ;;
-
+                        zenity_text="$error_message"
+                        zenity_warning ;;
                     renamed )
                         new_folder_version=$(echo $error_message |
                                              sed 's/.*-\([0-9.]*\) .*/\1/')
@@ -421,10 +414,8 @@ upload_file()
 user_ppa="$(cat $usr_ppa_config_file)"
 if [ "$user_ppa" = "" ]
 then
-    zenity --warning \
-           --title="$title" \
-           --text="$(gettext 'Please set the user and the ppa first.')" \
-             $zenity_settings
+    zenity_text="$(gettext 'Please set the user and the ppa first.')"
+    zenity_warning
 else
     # Choose source.changes file
     set_path_parent_folder
@@ -520,10 +511,8 @@ zenity --text-info \
 check_release
 if [ $changelog_release = UNRELEASED ]
 then
-    zenity --warning \
-           --title="$title" \
-             $gettext_settings \
-           --text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
+    zenity_text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
+    zenity_warning
 fi
 }
 
@@ -652,6 +641,12 @@ zenity --warning --title="$title" $zenity_settings \
 }
 
 
+zenity_warning()
+{
+zenity --warning --title="$title" --text="$zenity_text" $zenity_settings
+}
+
+
 #    TOOLS
 ##############################################################################
 
@@ -662,11 +657,8 @@ then
     echo $new_path_project_folder > $path_config_file
     notify-send "$notify_text" --icon=$icon --expire-time=3000
 else
-    error_message=$(cat $log_file)
-    zenity --warning \
-           --title="$title" \
-           --text="$error_message" \
-             $zenity_settings
+    zenity_text=$(cat $log_file)
+    zenity_warning
 fi
 }
 
