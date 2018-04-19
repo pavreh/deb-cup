@@ -40,14 +40,14 @@ if  [[ $release = sylvia ||
        $release = sarah ]]
 then
     release=xenial
+fi
+
+# check editors and set the installed one
+if dpkg --status xed
+then
     VISUAL="xed --wait"
 else
-    if  [[ $release = tara ]]
-    then
-        VISUAL="xed --wait"
-    else
-        VISUAL="gedit --wait"
-    fi
+    VISUAL="gedit --wait"
 fi
 
 # Needed for dch
@@ -98,7 +98,8 @@ action=$(zenity --list --title="$title" \
 
 choose_recent()
 {
-recent="$(cat $path_config_file | sort --reverse)"
+# tac = read file backwards
+recent="$(cat $path_config_file | tac)"
 if ! [ "$recent" = "" ]
 then
     set_path_parent_folder
@@ -304,18 +305,19 @@ then
             then
                 cd $path_project_folder/debian
                 dch --controlmaint 2> $log_file
-                error_message=$(cat $log_file)
-                echo $error_message | grep -q "dch warning" && error="warning"
-                echo $error_message | grep -q "../$project_name-" && error="renamed"
+                error_message=$(cat "$log_file")
+                echo $error_message | grep --quiet "dch warning" && error="warning"
+                echo $error_message | grep --quiet "../$project_name-" && error="renamed"
                 case $error in
                     warning )
                         zenity_text="$error_message"
                         zenity_warning ;;
                     renamed )
-                        new_folder_version=$(echo $error_message |
-                                             sed 's/.*-\([0-9.]*\) .*/\1/')
-                        new_path_project_folder=$path_parent_folder/$project_name-$new_folder_version
-                        echo $new_path_project_folder >> $path_config_file
+                        project_version=$(echo "$error_message" |
+                                          grep "../$project_name-" |
+                                          sed 's/.*-//g' )
+                        path_project_folder=$path_parent_folder/$project_name-$project_version
+                        echo $path_project_folder >> $path_config_file
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
@@ -463,7 +465,6 @@ to \$user_ppa?")"
 
         then
             # Upload changes and the source code to the PPA
-            touch $log_file
             (
             echo "0"
             dput ppa:$user_ppa $path_changes_file > $log_file
@@ -837,7 +838,7 @@ else
     run=0
     # let last 10 projects
     recent="$(tail $path_config_file)"
-    echo "$recent" > $path_config_file
+    echo "$recent" | uniq > $path_config_file
 fi
 
 done
