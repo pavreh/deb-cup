@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version=0.7.4
+version=0.8.0
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
@@ -75,7 +75,8 @@ main_window()
 {
 action=$(zenity --list --title="$title" \
                 --window-icon=$icon --width=270 --height=380 \
-                --hide-header --text "" --column "" --column "" --column "" \
+                 --text "" \
+                --column "" --column "" --column "Project:    $project_name-$project_version" \
                 --hide-column=1,2 --print-column=2 \
                 f fingerprint "$(gettext 'Set fingerprint...')" \
                 p usr_ppa "$(gettext 'Set user and ppa...')" \
@@ -93,6 +94,41 @@ action=$(zenity --list --title="$title" \
 
 #	SETTING
 ##############################################################################
+
+
+choose_recent()
+{
+recent="$(cat $path_config_file | sort --reverse)"
+if ! [ "$recent" = "" ]
+then
+    set_path_parent_folder
+    button_text=$(gettext "New project")
+    if path_project_folder=$(zenity --list \
+                                    --title="$title" \
+                                    --hide-header \
+                                    --text="$(gettext 'Choose a project')" \
+                                    --extra-button="$button_text" \
+                                    --column "" \
+                                    --print-column=1 \
+                                      $zenity_settings \
+                                      $recent )
+    then
+        if ls $path_project_folder
+        then
+            get_project_details
+        else
+            zenity_text="$(gettext 'Folder of the choosen project is missing.')"
+            zenity_warning
+        fi
+    elif [ "$path_project_folder" = "$button_text" ]
+    then
+        set_project_folder
+    else
+        run=0
+    fi
+fi
+}
+
 
 set_fingerprint()
 {
@@ -158,7 +194,7 @@ then
     # A-Z not allowed
     if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
-        echo $path_project_folder > $path_config_file || create_path_config_file
+        echo $path_project_folder >> $path_config_file || create_path_config_file
         echo $path_parent_folder > $parent_folder_config_file
     else
         zenity_text="$(gettext 'Please set name and version of the folder in format
@@ -279,7 +315,7 @@ then
                         new_folder_version=$(echo $error_message |
                                              sed 's/.*-\([0-9.]*\) .*/\1/')
                         new_path_project_folder=$path_parent_folder/$project_name-$new_folder_version
-                        echo $new_path_project_folder > $path_config_file
+                        echo $new_path_project_folder >> $path_config_file
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
@@ -550,11 +586,10 @@ changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(U
 base_test()
 {
 base_test_result="OK"
-path_project_folder=$(cat $path_config_file)
 get_project_details
 
 # Check whether the folder name or version was not changed
-if ! ls $(cat $HOME/.config/deb-cup/path)
+if ! ls $path_project_folder
 then
     base_test_result="FALSE"
     warning_set_project_folder
@@ -642,7 +677,7 @@ move_project_folder()
 {
 if mv -T $path_project_folder $new_path_project_folder 2>$log_file
 then
-    echo $new_path_project_folder > $path_config_file
+    echo $new_path_project_folder >> $path_config_file
     notify-send "$notify_text" --icon=$icon --expire-time=3000
 else
     zenity_text=$(cat $log_file)
@@ -682,7 +717,6 @@ fi
 repair_version()
 {
 text_renumber=$(gettext 'Renumber')
-path_project_folder=$(cat $path_config_file)
 get_project_details
 changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
 
@@ -714,10 +748,12 @@ fi
 
 
 ##############################################################################
-#	PROGRAM
+#    PROGRAM
 ##############################################################################
 
-# Parameters
+
+#    PARAMETERS
+##############################################################################
 while [ $# -gt 0 ]
 do
     case "$1" in
@@ -740,9 +776,13 @@ do
     shift
 done
 
-# When close was forced, path_config_file was not deleted
-# Delete it now
-echo "" > $path_config_file
+
+##############################################################################
+
+choose_recent
+
+
+##############################################################################
 
 while [ "$run" = 1 ]
 do
@@ -794,8 +834,10 @@ then
     set_fingerprint
 
 else
-    echo "" > $path_config_file
     run=0
+    # let last 10 projects
+    recent="$(tail $path_config_file)"
+    echo "$recent" > $path_config_file
 fi
 
 done
