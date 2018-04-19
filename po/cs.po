@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:28+0200\n"
+"POT-Creation-Date: 2018-04-19 16:19+0200\n"
 "PO-Revision-Date: 2017-11-09 21:37+0100\n"
 "Last-Translator: Pavel Rehak <pavel-rehak@email.cz>\n"
 "Language-Team: \n"
@@ -110,39 +110,39 @@ msgstr "Vytváří se tarball..."
 msgid "Orig tarball created."
 msgstr "Orig tarball vytvořen."
 
-#: ../bin/deb-cup:283 ../bin/deb-cup:710
+#: ../bin/deb-cup:284 ../bin/deb-cup:710
 msgid "The project folder was renumbered to"
 msgstr "Složka projektu byla přečíslována na"
 
-#: ../bin/deb-cup:319
+#: ../bin/deb-cup:320
 msgid "Creating deb binary package..."
 msgstr "Vytváří se deb balík..."
 
-#: ../bin/deb-cup:357
+#: ../bin/deb-cup:358
 msgid "No"
 msgstr "Ne"
 
-#: ../bin/deb-cup:358
+#: ../bin/deb-cup:359
 msgid "Do you want to include orig tarball?"
 msgstr "Chcete zahrnout orig tarball?"
 
-#: ../bin/deb-cup:364 ../bin/deb-cup:664 ../bin/deb-cup:697
+#: ../bin/deb-cup:365 ../bin/deb-cup:664 ../bin/deb-cup:697
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: ../bin/deb-cup:389
+#: ../bin/deb-cup:390
 msgid "Creating signed dsc and changes..."
 msgstr "Vytváří se podepsané dsc a changes..."
 
-#: ../bin/deb-cup:405
+#: ../bin/deb-cup:406
 msgid "Please set the user and the ppa first."
 msgstr "Prosím nejdříve nastavte uživatele a ppa."
 
-#: ../bin/deb-cup:411
+#: ../bin/deb-cup:412
 msgid "Choose source.changes file"
 msgstr "Vybrat soubor source.changes"
 
-#: ../bin/deb-cup:418
+#: ../bin/deb-cup:419
 #, sh-format
 msgid ""
 "Do you want to upload\n"
