@@ -74,7 +74,7 @@ export TEXTDOMAINDIR
 main_window()
 {
 action=$(zenity --list --title="$title" \
-                --window-icon=$icon --width=270 --height=380 \
+                --window-icon=$icon --width=270 --height=405 \
                  --text "" \
                 --column "" --column "" --column "Project:    $project_name-$project_version" \
                 --hide-column=1,2 --print-column=2 \
