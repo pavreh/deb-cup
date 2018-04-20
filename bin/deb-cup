@@ -679,6 +679,8 @@ move_project_folder()
 if mv -T $path_project_folder $new_path_project_folder 2>$log_file
 then
     echo $new_path_project_folder >> $path_config_file
+    path_project_folder=$new_path_project_folder
+    get_project_details
     notify-send "$notify_text" --icon=$icon --expire-time=3000
 else
     zenity_text=$(cat $log_file)
