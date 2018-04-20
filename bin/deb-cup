@@ -639,6 +639,7 @@ zenity --warning --title="$title" --text="$zenity_text" $zenity_settings
 ##############################################################################
 
 move_project_folder()
+# used by repair_version and repair_name
 {
 if mv -T $path_project_folder $new_path_project_folder 2>$log_file
 then
@@ -674,6 +675,7 @@ if [ $answer = $text_folder ]
 then
     new_path_project_folder=$path_parent_folder/$changelog_name-$project_version
     notify_text="$(gettext 'The project folder was renamed to') $changelog_name-$project_version."
+    # used by repair_version too
     move_project_folder
 fi
 }
@@ -708,6 +710,7 @@ if [ $answer = $text_renumber ]
 then
     new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
     notify_text="$(gettext 'The project folder was renumbered to') $project_name-$changelog_version."
+    # used by repair_name too
     move_project_folder
 fi
 }
