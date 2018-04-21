@@ -21,7 +21,7 @@ version=0.8.0
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
-path_config_file=$HOME/.config/deb-cup/path
+path_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
 log_file=/tmp/deb-cup-log
