@@ -568,7 +568,8 @@ fi
 
 check_version()
 {
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
+changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
+                    sed 's/.*://g' )
 if [ $changelog_version = $project_version ]
 then
     folder_changelog_version="same"
@@ -675,6 +676,7 @@ zenity --warning --title="$title" --text="$zenity_text" $zenity_settings
 ##############################################################################
 
 move_project_folder()
+# used by repair_version and repair_name
 {
 if mv -T $path_project_folder $new_path_project_folder 2>$log_file
 then
@@ -712,6 +714,7 @@ if [ $answer = $text_folder ]
 then
     new_path_project_folder=$path_parent_folder/$changelog_name-$project_version
     notify_text="$(gettext 'The project folder was renamed to') $changelog_name-$project_version."
+    # used by repair_version too
     move_project_folder
 fi
 }
@@ -720,9 +723,6 @@ fi
 repair_version()
 {
 text_renumber=$(gettext 'Renumber')
-get_project_details
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
-
 zenity_text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
 
 $(gettext 'Folder version'): $project_version
@@ -745,6 +745,7 @@ if [ $answer = $text_renumber ]
 then
     new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
     notify_text="$(gettext 'The project folder was renumbered to') $project_name-$changelog_version."
+    # used by repair_name too
     move_project_folder
 fi
 }
