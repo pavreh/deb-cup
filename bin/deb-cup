@@ -125,7 +125,7 @@ then
     then
         set_project_folder
     else
-        run=0
+        :
     fi
 fi
 }
@@ -859,7 +859,7 @@ then
 
 elif [ "$action" = "path" ]
 then
-    set_project_folder
+    choose_recent
 
 elif [ "$action" = "doc-help" ]
 then
