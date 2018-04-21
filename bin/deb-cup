@@ -318,7 +318,7 @@ then
                                           sed 's/.*-//g' )
                         path_project_folder=$path_parent_folder/$project_name-$project_version
                         echo $path_project_folder >> $path_config_file
-                        notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
+                        notify-send "$(gettext 'The project folder was renumbered to') $project_name-$project_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
             else
