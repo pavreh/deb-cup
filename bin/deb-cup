@@ -357,12 +357,48 @@ then
                    --text="$(gettext 'Creating deb binary package...')" \
                      $zenity_settings
 
-        zenity --text-info \
+        # create dummy package with build dependecies
+        build_dependencies=$(cat "$log_file" |
+                             grep "Unmet build dependencies" ) && echo $?
+        if [ $? -eq 0 ]
+        then
+            if zenity --question \
+                      --text="$(gettext 'Some build dependencies are missing. Do you wan to install them now?
+
+Dummy deb package will be created so the dependencies can be easily uninstalled.')" \
+                        $zenity_settings
+            then
+                (
+                echo 0
+                build_dependencies=$(echo $build_dependencies |
+                                     sed 's/.*Unmet build dependencies: //g' |
+                                     sed 's/\([a-z0-9)]\) \([a-z0-9]\)/\1, \2/g' )
+                mkdir $path_parent_folder/deb-cup-$project_name-dep-0.1
+                cd $path_parent_folder/deb-cup-$project_name-dep-0.1
+                dh_make --yes --indep --createorig
+                cd debian
+                rm *ex *EX *docs README*
+                sed -i "/^Depends.*/ c\Depends: $build_dependencies" control
+                yes | debuild -us -uc -tc
+                echo 100
+                ) | zenity --progress \
+                           --title="$title" \
+                           --pulsate \
+                           --auto-close \
+                           --no-cancel \
+                           --text="$(gettext 'Creating dummy package...')" \
+                             $zenity_settings
+                gdebi-gtk $path_parent_folder/deb-cup-$project_name-dep_0.1*.deb
+                fi
+
+        else
+            zenity --text-info \
                --title="$title" \
                --window-icon=$icon \
                --width=520 \
                --height=330 \
                --filename=$log_file
+        fi
     fi
 fi
 }
