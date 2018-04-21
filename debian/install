@@ -1,0 +1,3 @@
+bin usr
+share usr
+debian/build/locale usr/share
