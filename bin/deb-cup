@@ -117,6 +117,7 @@ then
         if ls $path_project_folder
         then
             get_project_details
+            echo $path_parent_folder > $parent_folder_config_file
         else
             zenity_text="$(gettext 'Folder of the choosen project is missing.')"
             zenity_warning
