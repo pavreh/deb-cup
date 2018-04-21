@@ -531,7 +531,8 @@ fi
 
 check_version()
 {
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
+changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
+                    sed 's/.*://g' )
 if [ $changelog_version = $project_version ]
 then
     folder_changelog_version="same"
@@ -684,10 +685,6 @@ fi
 repair_version()
 {
 text_renumber=$(gettext 'Renumber')
-path_project_folder=$(cat $path_config_file)
-get_project_details
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.]\+\).*/\1/g')
-
 zenity_text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
 
 $(gettext 'Folder version'): $project_version
