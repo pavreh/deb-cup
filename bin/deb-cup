@@ -157,10 +157,10 @@ then
     # Needed for sorting [A-Za-z]
     export LC_COLLATE=C
     # A-Z not allowed
-    if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
+    if [[ "$project_name_version" =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
-        echo $path_project_folder > $path_config_file || create_path_config_file
-        echo $path_parent_folder > $parent_folder_config_file
+        echo "$path_project_folder" > "$path_config_file" || create_path_config_file
+        echo "$path_parent_folder" > "$parent_folder_config_file"
     else
         zenity_text="$(gettext 'Please set name and version of the folder in format
 name-version, e.g. myapp-0.1.0.')"
@@ -175,7 +175,7 @@ fi
 create_path_config_file()
 {
 mkdir $HOME/.config/deb-cup
-echo $path_project_folder > $path_config_file
+echo "$path_project_folder" > "$path_config_file"
 }
 
 
@@ -203,11 +203,11 @@ create_debian_folder()
 base_test
 if [[ $base_test_result = "OK" ]]
 then
-    if ls $path_project_folder/debian/
+    if ls "$path_project_folder/debian/"
     then
-        xdg-open $path_project_folder/debian/
+        xdg-open "$path_project_folder/debian/"
     else
-        cd $path_project_folder
+        cd "$path_project_folder"
         dh_make --yes --indep --createorig
         touch debian/install
         if zenity --info \
@@ -216,7 +216,7 @@ then
                   --text="$(gettext 'Please edit the files in the debian folder now.')" \
                     $zenity_settings
         then
-            xdg-open $path_project_folder/debian/
+            xdg-open "$path_project_folder/debian/"
         fi
     fi
 fi
@@ -230,7 +230,7 @@ if [[ $base_test_result = "OK" ]]
 then
     (
     echo "0"
-    cd $path_parent_folder
+    cd "$path_parent_folder"
     echo "5"
     tar -cf debian.tar $project_name_version/debian/
     echo "25"
@@ -259,7 +259,7 @@ update_changelog()
 base_test
 if [[ $base_test_result = OK ]]
 then
-    if ls $path_project_folder/debian/changelog
+    if ls "$path_project_folder/debian/changelog"
     then
         check_name
         if [[ $folder_changelog_name = same ]]
@@ -267,7 +267,7 @@ then
             check_version
             if [[ $folder_changelog_version = same ]]
             then
-                cd $path_project_folder/debian
+                cd "$path_project_folder/debian"
                 dch --controlmaint 2> $log_file
                 error_message=$(cat "$log_file")
                 echo $error_message | grep --quiet "dch warning" && error="warning"
@@ -280,8 +280,8 @@ then
                         new_folder_version=$(echo "$error_message" |
                                              grep "../$project_name-" |
                                              sed 's/.*-//g' )
-                        new_path_project_folder=$path_parent_folder/$project_name-$new_folder_version
-                        echo $new_path_project_folder > $path_config_file
+                        new_path_project_folder="$path_parent_folder/$project_name-$new_folder_version"
+                        echo "$new_path_project_folder" > "$path_config_file"
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
@@ -306,9 +306,9 @@ then
     ctvn_test
     if [[ $ctvn_test_result = OK ]]
     then
-        cd $path_project_folder/debian
+        cd "$path_project_folder/debian"
         dch --release --controlmaint
-        cd $path_project_folder
+        cd "$path_project_folder"
         (
         echo "0"
         yes | debuild -us -uc -tc > $log_file
@@ -340,7 +340,7 @@ then
     ctvn_test
     if [[ $ctvn_test_result = OK ]]
     then
-        cd $path_project_folder/debian
+        cd "$path_project_folder/debian"
         dch --release --controlmaint
         fingerprint=$(cat $fingerprint_config_file)
         if [ $fingerprint =  ]
@@ -350,12 +350,12 @@ then
             then
                 sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
             else
-                sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
+                sec_key=$(echo "$sec_key" | sed 's/.* \(.*\) uid.*/\1/')
             fi
         else
             sec_key=$fingerprint
         fi
-        cd $path_project_folder
+        cd "$path_project_folder"
         text_no="$(gettext 'No')"
         zenity_text="$(gettext 'Do you want to include orig tarball?')"
         sasd=""
@@ -520,7 +520,7 @@ project_version=$(echo "${path_project_folder##*-}")
 
 check_name()
 {
-changelog_name=$(head -1 $path_project_folder/debian/changelog | sed 's/\(.*\) (.*/\1/')
+changelog_name=$(head -1 "$path_project_folder/debian/changelog" | sed 's/\(.*\) (.*/\1/')
 if [ $changelog_name = $project_name ]
 then
     folder_changelog_name="same"
@@ -532,7 +532,7 @@ fi
 
 check_version()
 {
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
+changelog_version=$(head -1 "$path_project_folder/debian/changelog" | sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
                     sed 's/.*://g' )
 if [ $changelog_version = $project_version ]
 then
@@ -545,18 +545,18 @@ fi
 
 check_release()
 {
-changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(UNRELEASED\).*/\1/')
+changelog_release=$(head -1 "$path_project_folder/debian/changelog" | sed 's/.*\(UNRELEASED\).*/\1/')
 }
 
 
 base_test()
 {
 base_test_result="OK"
-path_project_folder=$(cat $path_config_file)
+path_project_folder=$(cat "$path_config_file")
 get_project_details
 
 # Check whether the folder name or version was not changed
-if ! ls $(cat $HOME/.config/deb-cup/path)
+if ! ls "$(cat $HOME/.config/deb-cup/path)"
 then
     base_test_result="FALSE"
     warning_set_project_folder
@@ -575,10 +575,10 @@ ctvn_test()
 {
 ctvn_test_result="FALSE"
     # Check whether changelog file exist
-    if ls $path_project_folder/debian/changelog
+    if ls "$path_project_folder/debian/changelog"
     then
         # Check whether orig tarball exist
-        if ls $path_parent_folder/$project_name\_$project_version.orig.tar.*
+        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.*
         then
             # Check wheter the version of the project folder and the version
             # in the changelog file are the same
@@ -643,9 +643,9 @@ zenity --warning --title="$title" --text="$zenity_text" $zenity_settings
 move_project_folder()
 # used by repair_version and repair_name
 {
-if mv -T $path_project_folder $new_path_project_folder 2>$log_file
+if mv -T "$path_project_folder" "$new_path_project_folder" 2>$log_file
 then
-    echo $new_path_project_folder > $path_config_file
+    echo "$new_path_project_folder" > "$path_config_file"
     notify-send "$notify_text" --icon=$icon --expire-time=3000
 else
     zenity_text=$(cat $log_file)
@@ -669,13 +669,13 @@ if answer=$(zenity --question \
                    --text="$zenity_text" \
                      $zenity_settings )
 then
-    cd $path_project_folder/debian
+    cd "$path_project_folder/debian"
     dch --edit --check-dirname-regex $project_name_version
 fi
 
 if [ $answer = $text_folder ]
 then
-    new_path_project_folder=$path_parent_folder/$changelog_name-$project_version
+    new_path_project_folder="$path_parent_folder/$changelog_name-$project_version"
     notify_text="$(gettext 'The project folder was renamed to') $changelog_name-$project_version."
     # used by repair_version too
     move_project_folder
@@ -700,13 +700,13 @@ if answer=$(zenity --question \
                      $zenity_settings )
 
 then
-    cd $path_project_folder/debian
+    cd "$path_project_folder/debian"
     dch --controlmaint
 fi
 
 if [ $answer = $text_renumber ]
 then
-    new_path_project_folder=$path_parent_folder/$project_name-$changelog_version
+    new_path_project_folder="$path_parent_folder/$project_name-$changelog_version"
     notify_text="$(gettext 'The project folder was renumbered to') $project_name-$changelog_version."
     # used by repair_name too
     move_project_folder
@@ -743,7 +743,7 @@ done
 
 # When close was forced, path_config_file was not deleted
 # Delete it now
-echo "" > $path_config_file
+echo "" > "$path_config_file"
 
 while [ "$run" = 1 ]
 do
@@ -795,7 +795,7 @@ then
     set_fingerprint
 
 else
-    echo "" > $path_config_file
+    echo "" > "$path_config_file"
     run=0
 fi
 
