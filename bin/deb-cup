@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version=0.8.0
+version=0.8.0 UNRELEASED
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
@@ -393,12 +393,29 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 fi
 
         else
-            zenity --text-info \
+            # log window
+            button_text="$(gettext 'Install')"
+            answer=$(zenity --text-info \
                --title="$title" \
                --window-icon=$icon \
                --width=520 \
                --height=330 \
-               --filename=$log_file
+               --extra-button="$button_text" \
+               --filename=$log_file )
+
+           # Install the created deb package
+           if [ "$answer" = "$button_text" ]
+           then
+               if
+               answer=$(zenity --file-selection \
+                                  --title="$(gettext 'Choose deb file')" \
+                                  --window-icon=$icon \
+                                  --filename="$path_parent_folder/" \
+                                  --file-filter="deb | *.deb" )
+               then
+                   gdebi-gtk $answer
+               fi
+           fi
         fi
     fi
 fi
