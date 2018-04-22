@@ -43,12 +43,20 @@ else
     release=$(eval lsb_release -cs)
 fi
 
-# check editors and set the installed one
+# needed for alias
+shopt -s expand_aliases
+
+# check installed packages
 if dpkg --status xed
 then
     VISUAL="xed --wait"
 else
     VISUAL="gedit --wait"
+fi
+
+if ! dpkg --status gnome-terminal
+then
+    alias gnome-terminal="xterm"
 fi
 
 # Needed for dch
