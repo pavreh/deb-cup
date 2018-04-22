@@ -559,13 +559,17 @@ get_project_details
 if ! ls "$(cat $HOME/.config/deb-cup/path)"
 then
     base_test_result="FALSE"
-    warning_set_project_folder
 fi
 
 # Check whether a project folder is set
 if ! [[ $project_name_version = *"-"[0-9]* ]]
 then
     base_test_result="FALSE"
+
+fi
+
+if [ "$base_test_result" = "FALSE" ]
+then
     warning_set_project_folder
 fi
 }
