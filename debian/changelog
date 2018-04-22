@@ -2,6 +2,7 @@ deb-cup (0.8.0-1) bionic; urgency=medium
 
   * Add recent projects window.
   * Add create dummy package with build dependencies.
+  * Install created deb package.
 
  -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 21 Apr 2018 14:44:41 +0200
 
