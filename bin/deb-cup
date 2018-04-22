@@ -369,7 +369,8 @@ then
 
         # create dummy package with build dependecies
         build_dependencies=$(cat "$log_file" |
-                             grep "Unmet build dependencies" ) && echo $?
+                             grep "Unmet build dependencies" ) &&
+                             echo $?
         if [ $? -eq 0 ]
         then
             if zenity --question \
@@ -407,22 +408,22 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
             # log window
             button_text="$(gettext 'Install')"
             answer=$(zenity --text-info \
-               --title="$title" \
-               --window-icon=$icon \
-               --width=520 \
-               --height=330 \
-               --extra-button="$button_text" \
-               --filename=$log_file )
+                            --title="$title" \
+                            --window-icon=$icon \
+                            --width=520 \
+                            --height=330 \
+                            --extra-button="$button_text" \
+                            --filename=$log_file )
 
            # Install the created deb package
            if [ "$answer" = "$button_text" ]
            then
                if
                answer=$(zenity --file-selection \
-                                  --title="$(gettext 'Choose deb file')" \
-                                  --window-icon=$icon \
-                                  --filename="$path_parent_folder/" \
-                                  --file-filter="deb | *.deb" )
+                               --title="$(gettext 'Choose deb file')" \
+                               --window-icon=$icon \
+                               --filename="$path_parent_folder/" \
+                               --file-filter="deb | *.deb" )
                then
                    gdebi-gtk $answer
                fi
