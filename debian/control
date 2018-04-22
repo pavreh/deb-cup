@@ -20,7 +20,6 @@ Depends: ${misc:Depends},
          gnome-terminal ( >= 3.18.3),
          gnupg ( >= 1.4.20),
          libnotify-bin ( >= 0.7.6),
-         dpkg,
          gdebi | gdebi-kde,
          xed | gedit
 Description: GUI tool for creating deb packages and uploading to a PPA
