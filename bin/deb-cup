@@ -42,7 +42,10 @@ then
     release=xenial
 fi
 
-# check editors and set the installed one
+# needed for alias
+shopt -s expand_aliases
+
+# check installed packages
 if dpkg --status xed
 then
     VISUAL="xed --wait"
@@ -50,8 +53,14 @@ else
     VISUAL="gedit --wait"
 fi
 
+if dpkg --status gdebi-kde
+then
+    alias gdebi-gtk="gdebi-kde"
+fi
+
 # Needed for dch
 export VISUAL
+
 
 
 ##############################################################################
