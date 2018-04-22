@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version=0.7.4
+version=0.7.5 UNRELEASED
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
@@ -33,13 +33,14 @@ run=1
 
 touch $log_file
 
-release=$(eval lsb_release -cs)
-if  [[ $release = sylvia ||
-       $release = sonya  ||
-       $release = serena ||
-       $release = sarah ]]
+# check upstream release for Ubuntu derivatives
+if release=$(cat /etc/upstream-release/lsb-release)
 then
-    release=xenial
+    release=$(echo "$release" |
+              grep "DISTRIB_CODENAME" |
+              sed 's/.*=//')
+else
+    release=$(eval lsb_release -cs)
 fi
 
 # check editors and set the installed one
