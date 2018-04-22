@@ -128,8 +128,6 @@ then
     else
         :
     fi
-else
-    echo "no_recent"
 fi
 }
 
@@ -185,32 +183,28 @@ echo $user_ppa > $usr_ppa_config_file
 
 set_project_folder()
 {
-local result=$(choose_recent)
-if [ "$result" = "no_recent" ]
+set_path_parent_folder
+if path_project_folder=$(zenity --file-selection \
+                                --directory \
+                                --title="$(gettext 'Choose a folder with the source code')" \
+                                --filename="$path_parent_folder/" \
+                                --window-icon=$icon )
 then
-    set_path_parent_folder
-    if path_project_folder=$(zenity --file-selection \
-                                    --directory \
-                                    --title="$(gettext 'Choose a folder with the source code')" \
-                                    --filename="$path_parent_folder/" \
-                                    --window-icon=$icon )
+    get_project_details
+    # Needed for sorting [A-Za-z]
+    export LC_COLLATE=C
+    # A-Z not allowed
+    if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
-        get_project_details
-        # Needed for sorting [A-Za-z]
-        export LC_COLLATE=C
-        # A-Z not allowed
-        if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
-        then
-            echo $path_project_folder >> $path_config_file || create_path_config_file
-            echo $path_parent_folder > $parent_folder_config_file
-        else
-            zenity_text="$(gettext 'Please set name and version of the folder in format
+        echo $path_project_folder >> $path_config_file || create_path_config_file
+        echo $path_parent_folder > $parent_folder_config_file
+    else
+        zenity_text="$(gettext 'Please set name and version of the folder in format
 name-version, e.g. myapp-0.1.0.')"
-            zenity_warning
-        fi
-        # Default Sorting [Aa-Zz]
-        export LC_COLLATE=""
+        zenity_warning
     fi
+    # Default Sorting [Aa-Zz]
+    export LC_COLLATE=""
 fi
 }
 
