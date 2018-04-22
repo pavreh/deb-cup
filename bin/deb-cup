@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version=0.8.0 UNRELEASED
+version="0.8.0 UNRELEASED"
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
@@ -85,7 +85,7 @@ main_window()
 action=$(zenity --list --title="$title" \
                 --window-icon=$icon --width=270 --height=405 \
                  --text "" \
-                --column "" --column "" --column "Project:    $project_name-$project_version" \
+                --column "" --column "" --column "$(gettext Project):    $project_name-$project_version" \
                 --hide-column=1,2 --print-column=2 \
                 f fingerprint "$(gettext 'Set fingerprint...')" \
                 p usr_ppa "$(gettext 'Set user and ppa...')" \
@@ -155,7 +155,8 @@ if fingerprint=$(zenity --entry \
                           $zenity_settings )
 
 then
-    echo $fingerprint > $fingerprint_config_file || create_fingerprint_config_file
+    echo $fingerprint > $fingerprint_config_file ||
+        create_fingerprint_config_file
 fi
 }
 
@@ -178,7 +179,8 @@ if user_ppa=$(zenity --entry \
                      --entry-text="$(cat $usr_ppa_config_file)" \
                        $zenity_settings )
 then
-    echo $user_ppa > $usr_ppa_config_file || create_usr_ppa_config_file
+    echo $user_ppa > $usr_ppa_config_file ||
+        create_usr_ppa_config_file
 fi
 }
 
@@ -205,7 +207,8 @@ then
     # A-Z not allowed
     if [[ $project_name_version =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
     then
-        echo $path_project_folder >> $path_config_file || create_path_config_file
+        echo $path_project_folder >> $path_config_file ||
+            create_path_config_file
         echo $path_parent_folder > $parent_folder_config_file
     else
         zenity_text="$(gettext 'Please set name and version of the folder in format
@@ -316,8 +319,12 @@ then
                 cd $path_project_folder/debian
                 dch --controlmaint 2> $log_file
                 error_message=$(cat "$log_file")
-                echo $error_message | grep --quiet "dch warning" && error="warning"
-                echo $error_message | grep --quiet "../$project_name-" && error="renamed"
+                echo $error_message |
+                    grep --quiet "dch warning" &&
+                    error="warning"
+                echo $error_message |
+                    grep --quiet "../$project_name-" &&
+                    error="renamed"
                 case $error in
                     warning )
                         zenity_text="$error_message"
@@ -457,9 +464,12 @@ then
             sec_key="$(eval gpg --list-secret-keys)"
             if [ $release = xenial ]
             then
-                sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+                sec_key=$(echo "$sec_key" |
+                          sed -n '/sec /p' |
+                          sed 's/.*\/\(.*\) .*/\1/' )
             else
-                sec_key=$(echo $sec_key | sed 's/.* \(.*\) uid.*/\1/')
+                sec_key=$(echo $sec_key |
+                          sed 's/.* \(.*\) uid.*/\1/' )
             fi
         else
             sec_key=$fingerprint
@@ -629,7 +639,8 @@ project_version=$(echo "${path_project_folder##*-}")
 
 check_name()
 {
-changelog_name=$(head -1 $path_project_folder/debian/changelog | sed 's/\(.*\) (.*/\1/')
+changelog_name=$(head -1 $path_project_folder/debian/changelog |
+                 sed 's/\(.*\) (.*/\1/')
 if [ $changelog_name = $project_name ]
 then
     folder_changelog_name="same"
@@ -641,7 +652,8 @@ fi
 
 check_version()
 {
-changelog_version=$(head -1 $path_project_folder/debian/changelog | sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
+changelog_version=$(head -1 $path_project_folder/debian/changelog |
+                    sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
                     sed 's/.*://g' )
 if [ $changelog_version = $project_version ]
 then
@@ -654,7 +666,8 @@ fi
 
 check_release()
 {
-changelog_release=$(head -1 $path_project_folder/debian/changelog | sed 's/.*\(UNRELEASED\).*/\1/')
+changelog_release=$(head -1 $path_project_folder/debian/changelog |
+                    sed 's/.*\(UNRELEASED\).*/\1/'  )
 }
 
 
@@ -914,7 +927,8 @@ else
     run=0
     # let last 10 projects
     recent="$(tail $path_config_file)"
-    echo "$recent" | uniq > $path_config_file
+    echo "$recent" |
+        uniq > $path_config_file
 fi
 
 done
