@@ -379,12 +379,12 @@ then
 Dummy deb package will be created so the dependencies can be easily uninstalled.')" \
                         $zenity_settings
             then
+                dummy_version=$(date +%s)
                 (
                 echo 0
                 build_dependencies=$(echo $build_dependencies |
                                      sed 's/.*Unmet build dependencies: //g' |
                                      sed 's/\([a-z0-9)]\) \([a-z0-9]\)/\1, \2/g' )
-                dummy_version=$(date +%s)
                 dummy_directory="$path_parent_folder/deb-cup-$project_name-dep-$dummy_version"
                 mkdir "$dummy_directory"
                 cd "$dummy_directory"
