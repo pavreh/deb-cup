@@ -380,18 +380,20 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                         $zenity_settings
             then
                 dummy_version=$(date +%s)
+                dummy_directory="$path_parent_folder/deb-cup-$project_name-dep-$dummy_version"
                 (
                 echo 0
                 build_dependencies=$(echo $build_dependencies |
                                      sed 's/.*Unmet build dependencies: //g' |
                                      sed 's/\([a-z0-9)]\) \([a-z0-9]\)/\1, \2/g' )
-                dummy_directory="$path_parent_folder/deb-cup-$project_name-dep-$dummy_version"
                 mkdir "$dummy_directory"
                 cd "$dummy_directory"
                 dh_make --yes --indep --createorig
                 cd debian
                 rm *ex *EX *docs README*
-                sed -i "/^Depends.*/ c\Depends: $build_dependencies" control
+                sed -i "/^Depends/ c\Depends: deb-cup, $build_dependencies" control
+                sed -i "/^Description/ c\Description: Deb Cup's dummy package with build dependencies for $project_name." control
+                sed -i '/^ <insert long description/ c\' control
                 yes | debuild -us -uc -tc
                 echo 100
                 ) | zenity --progress \
@@ -401,7 +403,12 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                            --no-cancel \
                            --text="$(gettext 'Creating dummy package...')" \
                              $zenity_settings
-                gdebi-gtk $path_parent_folder/deb-cup-$project_name-dep_$dummy_version*.deb
+                dummy_files="$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"
+                mv "$dummy_files"*.deb "$dummy_directory"
+                rm "$dummy_files"*
+                mv "$dummy_directory/"*.deb "$path_parent_folder"
+                rm -fr "$dummy_directory"
+                gdebi-gtk "$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"*.deb
                 fi
 
         else
