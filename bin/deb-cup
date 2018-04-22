@@ -400,7 +400,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                            --no-cancel \
                            --text="$(gettext 'Creating dummy package...')" \
                              $zenity_settings
-                gdebi-gtk $path_parent_folder/deb-cup-$project_name-dep_0.1*.deb
+                gdebi-gtk $path_parent_folder/deb-cup-$project_name-dep_$dummy_version*.deb
                 fi
 
         else
