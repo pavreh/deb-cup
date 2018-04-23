@@ -105,44 +105,6 @@ action=$(zenity --list --title="$title" \
 ##############################################################################
 
 
-choose_recent()
-{
-# tac = read file backwards
-recent="$(cat $path_config_file | tac)"
-if ! [ "$recent" = "" ]
-then
-    button_text=$(gettext "New project")
-    if path_project_folder=$(zenity --list \
-                                    --title="$title" \
-                                    --hide-header \
-                                    --text="$(gettext 'Choose a project')" \
-                                    --extra-button="$button_text" \
-                                    --column "" \
-                                    --print-column=1 \
-                                      $zenity_settings \
-                                      $recent )
-    then
-        if ls $path_project_folder
-        then
-            get_project_details
-            echo $path_parent_folder > $parent_folder_config_file
-        else
-            zenity_text="$(gettext 'Folder of the choosen project is missing.')"
-            zenity_warning
-        fi
-    elif [ "$path_project_folder" = "$button_text" ]
-    then
-        set_project_folder
-    fi
-else
-    if [ "$run_from_menu" = "TRUE" ]
-    then
-        set_project_folder
-    fi
-fi
-}
-
-
 set_fingerprint()
 {
 zenity_text="$(gettext 'Please open terminal (Ctrl+Alt+T) and type:
@@ -198,6 +160,44 @@ choose_project_folder()
 {
 run_from_menu="TRUE"
 choose_recent
+}
+
+
+choose_recent()
+{
+# tac = read file backwards
+recent="$(cat $path_config_file | tac)"
+if ! [ "$recent" = "" ]
+then
+    button_text=$(gettext "New project")
+    if path_project_folder=$(zenity --list \
+                                    --title="$title" \
+                                    --hide-header \
+                                    --text="$(gettext 'Choose a project')" \
+                                    --extra-button="$button_text" \
+                                    --column "" \
+                                    --print-column=1 \
+                                      $zenity_settings \
+                                      $recent )
+    then
+        if ls $path_project_folder
+        then
+            get_project_details
+            echo $path_parent_folder > $parent_folder_config_file
+        else
+            zenity_text="$(gettext 'Folder of the choosen project is missing.')"
+            zenity_warning
+        fi
+    elif [ "$path_project_folder" = "$button_text" ]
+    then
+        set_project_folder
+    fi
+else
+    if [ "$run_from_menu" = "TRUE" ]
+    then
+        set_project_folder
+    fi
+fi
 }
 
 
