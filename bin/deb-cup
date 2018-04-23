@@ -82,10 +82,16 @@ export TEXTDOMAINDIR
 
 main_window()
 {
-action=$(zenity --list --title="$title" \
-                --window-icon=$icon --width=270 --height=405 \
-                 --text "" \
-                --column "" --column "" --column "$(gettext Project):    $project_name-$project_version" \
+column_text="$(gettext Project):    $project_name-$project_version"
+action=$(zenity --list \
+                --title="$title" \
+                --window-icon=$icon \
+                --width=270 \
+                --height=405 \
+                --text "" \
+                --column "" \
+                --column "" \
+                --column "$column_text" \
                 --hide-column=1,2 --print-column=2 \
                 f fingerprint "$(gettext 'Set fingerprint...')" \
                 p usr_ppa "$(gettext 'Set user and ppa...')" \
