@@ -44,7 +44,7 @@ else
 fi
 
 # needed for alias
-shopt -s expand_aliases
+#shopt -s expand_aliases
 
 # check installed packages
 if dpkg --status xed
@@ -52,11 +52,6 @@ then
     VISUAL="xed --wait"
 else
     VISUAL="gedit --wait"
-fi
-
-if ! dpkg --status gnome-terminal
-then
-    alias gnome-terminal="xterm"
 fi
 
 # Needed for dch
@@ -385,7 +380,10 @@ then
             if [ "$release" = "xenial" ]
             then
                 command="debuild -S $sasd -k$sec_key"
-                gnome-terminal -e "bash -c \"$command; exec bash\""
+                xterm -fa 'Monospace' \
+                      -fs 10 \
+                      -T 'Deb Cup' \
+                      -e "bash -c \"$command; exec bash\""
             else
                 (
                 echo "0"

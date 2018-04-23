@@ -16,7 +16,7 @@ Depends: ${misc:Depends},
          build-essential ( >= 12.1),
          dh-make ( >= 2),
          lintian ( >= 2.5.43),
-         gnome-terminal | xterm,
+         xterm,
          gnupg ( >= 1.4.20),
          libnotify-bin ( >= 0.7.6),
          xed | gedit
