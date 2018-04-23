@@ -111,7 +111,6 @@ choose_recent()
 recent="$(cat $path_config_file | tac)"
 if ! [ "$recent" = "" ]
 then
-    set_path_parent_folder
     button_text=$(gettext "New project")
     if path_project_folder=$(zenity --list \
                                     --title="$title" \
@@ -134,8 +133,11 @@ then
     elif [ "$path_project_folder" = "$button_text" ]
     then
         set_project_folder
-    else
-        :
+    fi
+else
+    if [ "$run_from_menu" = "TRUE" ]
+    then
+        set_project_folder
     fi
 fi
 }
@@ -189,6 +191,13 @@ create_usr_ppa_config_file()
 {
 mkdir $HOME/.config/deb-cup
 echo $user_ppa > $usr_ppa_config_file
+}
+
+
+choose_project_folder()
+{
+run_from_menu="TRUE"
+choose_recent
 }
 
 
@@ -909,7 +918,7 @@ then
 
 elif [ "$action" = "path" ]
 then
-    set_project_folder
+    choose_project_folder
 
 elif [ "$action" = "doc-help" ]
 then
