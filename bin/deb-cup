@@ -160,7 +160,8 @@ then
     # Needed for sorting [A-Za-z]
     export LC_COLLATE=C
     # A-Z not allowed
-    if [[ "$project_name_version" =~ ^[a-z0-9\.-]*"-"[0-9\.]*$ ]]
+    # $ Matches the end of a line or string.
+    if [[ "$project_name_version" =~ ^[a-z0-9]+[a-z0-9+-\.]+"-"[0-9]+[a-z0-9\.+:~]*$ ]]
     then
         echo "$path_project_folder" > "$path_config_file" || create_path_config_file
         echo "$path_parent_folder" > "$parent_folder_config_file"
@@ -538,8 +539,9 @@ fi
 
 check_version()
 {
-changelog_version=$(head -1 "$path_project_folder/debian/changelog" | sed 's/.*(\([0-9\.:]\+\).*/\1/g' |
+changelog_version=$(head -1 "$path_project_folder/debian/changelog" | sed 's/.*(\([a-z0-9\.+:~]\+\).*/\1/g' |
                     sed 's/.*://g' )
+
 if [ $changelog_version = $project_version ]
 then
     folder_changelog_version="same"
