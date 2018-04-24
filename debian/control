@@ -21,7 +21,12 @@ Depends: ${misc:Depends},
          libnotify-bin ( >= 0.7.6),
          xed | gedit
 Description: GUI tool for creating deb packages and uploading to a PPA
- GUI tool for creating deb packages and
- uploading to a PPA on launchpad.net.
+ Deb Cup can:
+  * Create the debian folder with template files and an empty install file.
+  * Create an original source package.
+  * Increment changelog.
+  * Create .deb binary package.
+  * Create signed dsc and changes files (needed for uploading to a PPA).
+  * Send packages to a PPA.
  .
  Beta version.
