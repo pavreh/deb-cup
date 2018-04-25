@@ -1,5 +1,5 @@
 # Deb Cup
-GUI tool for creating deb packages and uploading to a PPA.
+GTK+ GUI tool for creating deb packages and uploading to a PPA.
 
 Beta version
 
@@ -9,9 +9,9 @@ Beta version
 ## What Deb Cup can do
 * Create the debian folder with template files and an empty install file
 * Create an original source package
-* Increment changelog (Deb Cup uses a graphical text editor)
-* Create dummy package with build dependecies
-* Create .deb binary package
+* Increment changelog
+* Create and install a dummy package with build dependecies
+* Create and install .deb binary package
 * Create signed dsc and changes files (needed for uploading to a PPA)
 * Send packages to a PPA
 
