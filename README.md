@@ -10,7 +10,7 @@ Beta version
 * Create the debian folder with template files and an empty install file
 * Create an original source package
 * Increment changelog
-* Create and install a dummy package with build dependencies
+* **Create and install a dummy package with build dependencies**
 * Create and install .deb binary package
 * Create signed dsc and changes files (needed for uploading to a PPA)
 * Send packages to a PPA
