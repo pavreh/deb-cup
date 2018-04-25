@@ -406,7 +406,7 @@ then
                    --text="$(gettext 'Creating deb binary package...')" \
                      $zenity_settings
 
-        # create dummy package with build dependecies
+        # create dummy package with build dependencies
         build_dependencies=$(cat "$log_file" |
                              grep "Unmet build dependencies" ) &&
                              echo $?
