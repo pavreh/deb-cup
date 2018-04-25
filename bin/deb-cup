@@ -112,7 +112,8 @@ if fingerprint=$(zenity --entry \
                           $zenity_settings )
 
 then
-    echo $fingerprint > $fingerprint_config_file || create_fingerprint_config_file
+    echo $fingerprint > $fingerprint_config_file ||
+        create_fingerprint_config_file
 fi
 }
 
@@ -135,7 +136,8 @@ if user_ppa=$(zenity --entry \
                      --entry-text="$(cat $usr_ppa_config_file)" \
                        $zenity_settings )
 then
-    echo $user_ppa > $usr_ppa_config_file || create_usr_ppa_config_file
+    echo $user_ppa > $usr_ppa_config_file ||
+        create_usr_ppa_config_file
 fi
 }
 
@@ -163,7 +165,8 @@ then
     # $ Matches the end of a line or string.
     if [[ "$project_name_version" =~ ^[a-z0-9]+[a-z0-9+-\.]+"-"[0-9]+[a-z0-9\.+:~]*$ ]]
     then
-        echo "$path_project_folder" > "$path_config_file" || create_path_config_file
+        echo "$path_project_folder" > "$path_config_file" ||
+            create_path_config_file
         echo "$path_parent_folder" > "$parent_folder_config_file"
     else
         zenity_text="$(gettext 'Please set name and version of the folder in format
@@ -274,8 +277,12 @@ then
                 cd "$path_project_folder/debian"
                 dch --controlmaint 2> $log_file
                 error_message=$(cat "$log_file")
-                echo $error_message | grep --quiet "dch warning" && error="warning"
-                echo $error_message | grep --quiet "../$project_name-" && error="renamed"
+                echo $error_message |
+                    grep --quiet "dch warning" &&
+                    error="warning"
+                echo $error_message |
+                    grep --quiet "../$project_name-" &&
+                    error="renamed"
                 case $error in
                     warning )
                         zenity_text="$error_message"
@@ -352,9 +359,12 @@ then
             sec_key="$(eval gpg --list-secret-keys)"
             if [ $release = xenial ]
             then
-                sec_key=$(echo "$sec_key" | sed -n '/sec /p' | sed 's/.*\/\(.*\) .*/\1/')
+                sec_key=$(echo "$sec_key" |
+                          sed -n '/sec /p' |
+                          sed 's/.*\/\(.*\) .*/\1/' )
             else
-                sec_key=$(echo "$sec_key" | sed 's/.* \(.*\) uid.*/\1/')
+                sec_key=$(echo "$sec_key" |
+                          sed 's/.* \(.*\) uid.*/\1/' )
             fi
         else
             sec_key=$fingerprint
@@ -527,7 +537,8 @@ project_version=$(echo "${path_project_folder##*-}")
 
 check_name()
 {
-changelog_name=$(head -1 "$path_project_folder/debian/changelog" | sed 's/\(.*\) (.*/\1/')
+changelog_name=$(head -1 "$path_project_folder/debian/changelog" |
+                 sed 's/\(.*\) (.*/\1/')
 if [ $changelog_name = $project_name ]
 then
     folder_changelog_name="same"
@@ -539,7 +550,8 @@ fi
 
 check_version()
 {
-changelog_version=$(head -1 "$path_project_folder/debian/changelog" | sed 's/.*(\([a-z0-9\.+:~]\+\).*/\1/g' |
+changelog_version=$(head -1 "$path_project_folder/debian/changelog" |
+                    sed 's/.*(\([a-z0-9\.+:~]\+\).*/\1/g' |
                     sed 's/.*://g' )
 
 if [ $changelog_version = $project_version ]
@@ -553,7 +565,8 @@ fi
 
 check_release()
 {
-changelog_release=$(head -1 "$path_project_folder/debian/changelog" | sed 's/.*\(UNRELEASED\).*/\1/')
+changelog_release=$(head -1 "$path_project_folder/debian/changelog" |
+                    sed 's/.*\(UNRELEASED\).*/\1/' )
 }
 
 
@@ -573,7 +586,6 @@ fi
 if ! [[ $project_name_version = *"-"[0-9]* ]]
 then
     base_test_result="FALSE"
-
 fi
 
 if [ "$base_test_result" = "FALSE" ]
@@ -727,10 +739,12 @@ fi
 
 
 ##############################################################################
-#	PROGRAM
+#    PROGRAM
 ##############################################################################
 
-# Parameters
+
+#    PARAMETERS
+##############################################################################
 while [ $# -gt 0 ]
 do
     case "$1" in
