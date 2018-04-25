@@ -77,10 +77,18 @@ export TEXTDOMAINDIR
 
 main_window()
 {
-action=$(zenity --list --title="$title" \
-                --window-icon=$icon --width=270 --height=380 \
-                --hide-header --text "" --column "" --column "" --column "" \
-                --hide-column=1,2 --print-column=2 \
+action=$(zenity --list \
+                --title="$title" \
+                --window-icon=$icon \
+                --width=270 \
+                --height=380 \
+                --hide-header \
+                --text "" \
+                --column "" \
+                --column "" \
+                --column "" \
+                --hide-column=1,2 \
+                --print-column=2 \
                 f fingerprint "$(gettext 'Set fingerprint...')" \
                 p usr_ppa "$(gettext 'Set user and ppa...')" \
                 o path "$(gettext 'Choose project folder...')" \
