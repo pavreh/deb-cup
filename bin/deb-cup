@@ -483,17 +483,20 @@ then
                           sed 's/^Version: //' |
                           sed 's/-.*//' )
 
-            if [[ "$gpg_version" < "1.5." ]]
+            # xenial
+            if [[ "$gpg_version" < "1.5" ]]
             then
                 sec_key=$(echo "$sec_key" |
                           sed -n '/sec /p' |
                           sed 's/.*\/\(.*\) .*/\1/' )
 
+            # artful
             elif [[ "$gpg_version" < "2.2" ]]
             then
                 sec_key=$(echo "$sec_key" |
                           sed 's/.* \(.*\) uid.*/\1/' )
 
+            # bionic
             elif [[ "$gpg_version" > "2.2.3" ]]
             then
                 sec_key=$(echo "$sec_key" |
