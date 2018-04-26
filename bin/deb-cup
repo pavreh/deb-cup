@@ -154,17 +154,24 @@ choose_recent
 
 choose_recent()
 {
-config_file=$(cat $path_config_file)
+# Remove duplicity
+config_file=$(awk '!a[$0]++' $path_config_file)
+
+# let last 10 projects
+echo "$config_file" |
+    head > $path_config_file
+
 if ! [ "$config_file" = "" ]
 then
     # Solution of a white space in a folder name.
-    lines_count=$(wc -l < $path_config_file)
+    lines_count=$(echo "$config_file" |
+                  wc -l )
     n=0
     while [ $n -lt $lines_count ];
     do
         recent=$(echo "$config_file" |
-                 tail -$(($n+1)) |
-                 head -1 )
+                 head -$(($n+1)) |
+                 tail -1 )
         array[$n]="$recent"
         n=$(($n+1))
     done
@@ -188,7 +195,8 @@ then
         if ls "$path_project_folder"
         then
             get_project_details
-            echo "$path_project_folder" >> "$path_config_file"
+            # add as the first line
+            sed -i "1i$path_project_folder" "$path_config_file"
             echo "$path_parent_folder" > "$parent_folder_config_file"
         else
             zenity_text="$(gettext 'Folder of the chosen project is missing.')"
@@ -223,7 +231,7 @@ then
     # $ Matches the end of a line or string.
     if [[ "$project_name_version" =~ ^[a-z0-9]+[a-z0-9+-\.]+"-"[0-9]+[a-z0-9\.+:~]*$ ]]
     then
-        echo "$path_project_folder" >> "$path_config_file" ||
+        sed -i "1i$path_project_folder" "$path_config_file" ||
             create_path_config_file
         echo "$path_parent_folder" > "$parent_folder_config_file"
     else
@@ -240,7 +248,7 @@ fi
 create_path_config_file()
 {
 mkdir $HOME/.config/deb-cup
-echo "$path_project_folder" > "$path_config_file"
+sed -i "1i$path_project_folder" "$path_config_file"
 }
 
 
@@ -350,7 +358,7 @@ then
                                           grep "../$project_name-" |
                                           sed 's/.*-//g' )
                         path_project_folder="$path_parent_folder/$project_name-$project_version"
-                        echo "$path_project_folder" >> "$path_config_file"
+                        sed -i "1i$path_project_folder" "$path_config_file"
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$project_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
@@ -823,7 +831,7 @@ move_project_folder()
 {
 if mv -T "$path_project_folder" "$new_path_project_folder" 2>$log_file
 then
-    echo "$new_path_project_folder" >> "$path_config_file"
+    sed -i "1i$new_path_project_folder" "$path_config_file"
     path_project_folder=$new_path_project_folder
     get_project_details
     notify-send "$notify_text" --icon=$icon --expire-time=3000
@@ -982,10 +990,6 @@ then
 
 else
     run=0
-    # let last 10 projects
-    recent="$(tail $path_config_file)"
-    echo "$recent" |
-        uniq > $path_config_file
 fi
 
 done
