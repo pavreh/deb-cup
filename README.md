@@ -16,14 +16,15 @@ Beta version
 * Send packages to a PPA
 
 ## Download and Install
-Supported operating systems are
+Supported operating systems
 * Ubuntu 18.04 Bionic
 * Ubuntu 17.10 Artful
 * Ubuntu 16.04 Xenial
-* Linux Mint 18.X
 * Linux Mint 19
+* Linux Mint 18
 
-For other operating systems based on Ubuntu 17.10 please install Gedit.
 Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.
 
-https://launchpad.net/~pavreh/+archive/ubuntu/ppa
+[![Packaging status](https://repology.org/badge/vertical-allrepos/deb-cup.svg)](https://repology.org/metapackage/deb-cup)
+
+[PPA](https://launchpad.net/~pavreh/+archive/ubuntu/ppa) `` `` 0.7.4
