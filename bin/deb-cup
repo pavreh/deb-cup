@@ -33,15 +33,6 @@ run=1
 
 touch $log_file
 
-# check upstream release for Ubuntu derivatives
-if release=$(cat /etc/upstream-release/lsb-release)
-then
-    release=$(echo "$release" |
-              grep "DISTRIB_CODENAME" |
-              sed 's/.*=//')
-else
-    release=$(eval lsb_release -cs)
-fi
 
 # check installed packages
 if dpkg --status xed
@@ -483,17 +474,32 @@ then
         cd "$path_project_folder/debian"
         dch --release --controlmaint
         fingerprint=$(cat $fingerprint_config_file)
-        if [ $fingerprint =  ]
+        if [ "$fingerprint" = "" ]
         then
             sec_key="$(eval gpg --list-secret-keys)"
-            if [ $release = xenial ]
+            gpg_version=$(dpkg --status gnupg |
+                          grep ^Version |
+                          sed 's/^Version: //' |
+                          sed 's/-.*//' )
+
+            if [[ "$gpg_version" < "1.5." ]]
             then
                 sec_key=$(echo "$sec_key" |
                           sed -n '/sec /p' |
                           sed 's/.*\/\(.*\) .*/\1/' )
-            else
+
+            elif [[ "$gpg_version" < "2.2" ]]
+            then
                 sec_key=$(echo "$sec_key" |
                           sed 's/.* \(.*\) uid.*/\1/' )
+
+            elif [[ "$gpg_version" > "2.2.3" ]]
+            then
+                sec_key=$(echo "$sec_key" |
+                          head -4 |
+                          tail -1 |
+                          sed 's/ *//' )
+
             fi
         else
             sec_key=$fingerprint
@@ -517,7 +523,7 @@ then
         fi
         if [ "$sasd" != "" ]
         then
-            if [ "$release" = "xenial" ]
+            if [[ "$gpg_version" < "1.5." ]]
             then
                 command="debuild -S $sasd -k$sec_key"
                 xterm -fa 'Monospace' \
