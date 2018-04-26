@@ -476,6 +476,7 @@ then
         fingerprint=$(cat $fingerprint_config_file)
         if [ "$fingerprint" = "" ]
         then
+            error=0
             sec_key="$(eval gpg --list-secret-keys)"
             gpg_version=$(dpkg --status gnupg |
                           grep ^Version |
@@ -500,10 +501,21 @@ then
                           tail -1 |
                           sed 's/ *//' )
 
+            else
+                error=1
             fi
+
+            if [ "$sec_key" = "" ]
+            then
+                error=1
+            fi
+
         else
             sec_key=$fingerprint
         fi
+
+        if [ "$error" = "0" ]
+            then
         cd "$path_project_folder"
         text_no="$(gettext 'No')"
         zenity_text="$(gettext 'Do you want to include orig tarball?')"
@@ -544,6 +556,10 @@ then
                              $zenity_settings
                 sign_packages_info
             fi
+        fi
+        else
+            zenity_text="$(gettext 'Please set the fingerprint first.')"
+            zenity_warning
         fi
     fi
 fi
