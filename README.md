@@ -22,7 +22,8 @@ Supported operating systems are
 * Linux Mint 18.X
 * Linux Mint 19
 
-For other operating systems based on Ubuntu 17.10 please install Gedit.
 Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.
 
-https://launchpad.net/~pavreh/+archive/ubuntu/ppa
+[![Packaging status](https://repology.org/badge/vertical-allrepos/deb-cup.svg)](https://repology.org/metapackage/deb-cup)
+
+[PPA](https://launchpad.net/~pavreh/+archive/ubuntu/ppa) `` `` 0.7.4
