@@ -423,15 +423,15 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                             --height=330 \
                             --extra-button="$button_text" \
                             --filename=$log_file )
+
             # Install the created deb package
             if [ "$answer" = "$button_text" ]
             then
-                if
-                answer=$(zenity --file-selection \
-                                --title="$(gettext 'Choose deb file')" \
-                                --window-icon=$icon \
-                                --filename="$path_parent_folder/" \
-                                --file-filter="deb | *.deb" )
+                if answer=$(zenity --file-selection \
+                                   --title="$(gettext 'Choose deb file')" \
+                                   --window-icon=$icon \
+                                   --filename="$path_parent_folder/" \
+                                   --file-filter="deb | *.deb" )
                 then
                     gdebi-gtk "$answer"
                 fi
