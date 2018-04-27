@@ -6,15 +6,15 @@
 <p>Ubuntu 18.04 Bionic,<br>
 Ubuntu 17.10 Artful,<br>
 Ubuntu 16.04 Xenial,<br>
-Linux Mint 18.X and<br>
-Linux Mint 19.X.</p>
+Linux Mint 19 and<br>
+Linux Mint 18</p>
 <p>Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.</p>
 
 <h2>Set fingerprint</h2>
 <hr>
 <p>A GPG key is needed when you want to sign a dsc and changes and upload them to a PPA.</p>
 <p>If you have just one GPG key, you need not set a fingerprint. Deb Cup will find your GPG key automatically.</p>
-<p>If you have more GPG keys, maybe you want to choose one of them. You can do that in this setting. Otherwise Deb Cup will use one of your GPG keys.</p>  
+<p>If you have more GPG keys, maybe you want to choose one of them. You can do that in this setting. Otherwise Deb Cup will use one of your GPG keys.</p>
 <p>If you have not a GPG key, see the chapter Create signed dsc and changes.</p>
 
 <h2>Set user and ppa</h2>
@@ -25,7 +25,7 @@ If you have more ppas, change this setting before uploading.</p>
 <h2>Choose a project folder</h2>
 <hr>
 <p>Choose a folder with the source code. The name of the folder have to be in format name-version, e.g. myapp-0.1.0.<p>
-<p>Only lower case, numbers, dot and dash are accepted as the name.</p>
+<p>Only lower case, number, dot, dash and plus are accepted as the name.</p>
 
 <h2>Create/Open the debian folder</h2>
 <hr>
@@ -39,8 +39,9 @@ If a debian folder exist, Deb Cup opens it only.</p>
 
 <h2>Increment changelog</h2>
 <hr>
-<p>When you want to create the deb package or signed dsc and changes, changelog file in the debian folder have to be actualized. The name and version of your project have to be the same as the name of the folder with the source code.</p>
-<p>When a changelog is incremented a new entry is added. A release in the new entry is UNRELEASED. Leave the changelog unreleased. A release will be set when a deb package or signed dsc and changes are creating.  
+<p>When you want to create the deb package or signed dsc and changes, changelog file in the debian folder have to be actualized. The name and version of your project have to be the same as the name and version of the folder with the source code. Therefore, when you change the version in the
+changelog, version of the folder will be automatically renumbered.</p>
+<p>When a changelog is incremented a new entry is added. A release in the new entry is UNRELEASED. Leave the changelog unreleased. A release will be set when a deb package or signed dsc and changes are creating.
 <p>A version in the last changelog file entry cannot be lower then the version in the previous entry.</p>
 <p>Maintainer name and email is taken from the debian/control Maintainer field.</p>
 
@@ -48,8 +49,6 @@ If a debian folder exist, Deb Cup opens it only.</p>
 <hr>
 <p>The changelog file will be opened. Check it and save.</p>
 <br>
-<h4>Troubleshooting</h4>
-<p>When creation of a deb package is aborted because of unexpected source changes, create new orig tarball.</p>
 
 <h2>Create signed dsc and changes</h2>
 <hr>
@@ -58,8 +57,6 @@ If a debian folder exist, Deb Cup opens it only.</p>
 <a href="https://help.launchpad.net/Packaging/PPA#Activating_a_PPA">https://help.launchpad.net/Packaging/PPA#Activating_a_PPA</a></p>
 <p> For import of an existing secret key from a backup use gpg --import secring.gpg in the folder with the key.</p>
 <br>
-<h4>Troubleshooting</h4>
-<p>When creation of signed dsc and changes is aborted because of unexpected source changes, create new orig tarball.</p>
 
 <h2>Upload to the PPA</h2>
 <hr>
