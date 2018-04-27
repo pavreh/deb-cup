@@ -527,48 +527,48 @@ then
         fi
 
         if [ "$error" = "0" ]
+        then
+            cd "$path_project_folder"
+            text_no="$(gettext 'No')"
+            zenity_text="$(gettext 'Do you want to include orig tarball?')"
+            sasd=""
+            answer=""
+            if answer=$(zenity --question \
+                               --title="$title" \
+                               --extra-button=$text_no \
+                               --cancel-label="$(gettext 'Cancel')" \
+                               --text="$zenity_text" \
+                                 $zenity_settings )
             then
-        cd "$path_project_folder"
-        text_no="$(gettext 'No')"
-        zenity_text="$(gettext 'Do you want to include orig tarball?')"
-        sasd=""
-        answer=""
-        if answer=$(zenity --question \
-                           --title="$title" \
-                           --extra-button=$text_no \
-                           --cancel-label="$(gettext 'Cancel')" \
-                           --text="$zenity_text" \
-                             $zenity_settings )
-        then
-            sasd="-sa"
-        elif [ "$answer" = "$text_no" ]
-        then
-            sasd="-sd"
-        fi
-        if [ "$sasd" != "" ]
-        then
-            if [[ "$gpg_version" < "1.5." ]]
+                sasd="-sa"
+            elif [ "$answer" = "$text_no" ]
             then
-                command="debuild -S $sasd -k$sec_key"
-                xterm -fa 'Monospace' \
-                      -fs 10 \
-                      -T 'Deb Cup' \
-                      -e "bash -c \"$command; exec bash\""
-            else
-                (
-                echo "0"
-                yes | debuild -S $sasd -k$sec_key >  $log_file
-                echo "100"
-                ) | zenity --progress \
-                           --title="$title" \
-                           --pulsate \
-                           --auto-close \
-                           --no-cancel \
-                           --text="$(gettext 'Creating signed dsc and changes...')" \
-                             $zenity_settings
-                sign_packages_info
+                sasd="-sd"
             fi
-        fi
+            if [ "$sasd" != "" ]
+            then
+                if [[ "$gpg_version" < "1.5." ]]
+                then
+                    command="debuild -S $sasd -k$sec_key"
+                    xterm -fa 'Monospace' \
+                          -fs 10 \
+                          -T 'Deb Cup' \
+                          -e "bash -c \"$command; exec bash\""
+                else
+                    (
+                    echo "0"
+                    yes | debuild -S $sasd -k$sec_key >  $log_file
+                    echo "100"
+                    ) | zenity --progress \
+                               --title="$title" \
+                               --pulsate \
+                               --auto-close \
+                               --no-cancel \
+                               --text="$(gettext 'Creating signed dsc and changes...')" \
+                                 $zenity_settings
+                    sign_packages_info
+                fi
+            fi
         else
             zenity_text="$(gettext 'Please set the fingerprint first.')"
             zenity_warning
