@@ -440,7 +440,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 mv "$dummy_directory/"*.deb "$path_parent_folder"
                 rm -fr "$dummy_directory"
                 gdebi-gtk "$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"*.deb
-                fi
+            fi
 
         else
             # log window
@@ -452,20 +452,19 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                             --height=330 \
                             --extra-button="$button_text" \
                             --filename=$log_file )
-
-           # Install the created deb package
-           if [ "$answer" = "$button_text" ]
-           then
-               if
-               answer=$(zenity --file-selection \
-                               --title="$(gettext 'Choose deb file')" \
-                               --window-icon=$icon \
-                               --filename="$path_parent_folder/" \
-                               --file-filter="deb | *.deb" )
-               then
-                   gdebi-gtk "$answer"
-               fi
-           fi
+            # Install the created deb package
+            if [ "$answer" = "$button_text" ]
+            then
+                if
+                answer=$(zenity --file-selection \
+                                --title="$(gettext 'Choose deb file')" \
+                                --window-icon=$icon \
+                                --filename="$path_parent_folder/" \
+                                --file-filter="deb | *.deb" )
+                then
+                    gdebi-gtk "$answer"
+                fi
+            fi
         fi
     fi
 fi
