@@ -16,12 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version="0.7.5 UNRELEASED"
+version="0.8.0"
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
-path_config_file=$HOME/.config/deb-cup/path
+path_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
 log_file=/tmp/deb-cup-log
@@ -33,18 +33,6 @@ run=1
 
 touch $log_file
 
-# check upstream release for Ubuntu derivatives
-if release=$(cat /etc/upstream-release/lsb-release)
-then
-    release=$(echo "$release" |
-              grep "DISTRIB_CODENAME" |
-              sed 's/.*=//')
-else
-    release=$(eval lsb_release -cs)
-fi
-
-# needed for alias
-#shopt -s expand_aliases
 
 # check installed packages
 if dpkg --status xed
@@ -77,16 +65,16 @@ export TEXTDOMAINDIR
 
 main_window()
 {
+column_text="$(gettext Project):    $project_name-$project_version"
 action=$(zenity --list \
                 --title="$title" \
                 --window-icon=$icon \
                 --width=270 \
-                --height=380 \
-                --hide-header \
+                --height=405 \
                 --text "" \
                 --column "" \
                 --column "" \
-                --column "" \
+                --column "$column_text" \
                 --hide-column=1,2 \
                 --print-column=2 \
                 f fingerprint "$(gettext 'Set fingerprint...')" \
@@ -157,6 +145,79 @@ echo $user_ppa > $usr_ppa_config_file
 }
 
 
+choose_project_folder()
+{
+run_from_menu="TRUE"
+choose_recent
+}
+
+
+choose_recent()
+{
+# Remove duplicity
+config_file=$(awk '!a[$0]++' $path_config_file)
+
+# let last 10 projects
+echo "$config_file" |
+    head > $path_config_file
+
+if ! [ "$config_file" = "" ]
+then
+    # Solution of a white space in a folder name.
+    lines_count=$(echo "$config_file" |
+                  wc -l )
+    n=0
+    while [ $n -lt $lines_count ];
+    do
+        recent=$(echo "$config_file" |
+                 head -$(($n+1)) |
+                 tail -1 )
+        array[$n]="$recent"
+        n=$(($n+1))
+    done
+
+    tmp="$path_project_folder"
+    button_text=$(gettext "New project")
+    if path_project_folder=$(zenity --list \
+                                    --title="$title" \
+                                    --hide-header \
+                                    --text="$(gettext 'Choose a project')" \
+                                    --extra-button="$button_text" \
+                                    --column "" \
+                                    --print-column=1 \
+                                      $zenity_settings \
+                                     `# Solution of the white space.` \
+                                     "${array[0]}" "${array[1]}" \
+                                     "${array[2]}" "${array[3]}" \
+                                     "${array[4]}" "${array[5]}" \
+                                     "${array[6]}" "${array[7]}" \
+                                     "${array[8]}" "${array[9]}" )
+    then
+        if ls "$path_project_folder"
+        then
+            get_project_details
+            # add as the first line
+            sed -i "1i$path_project_folder" "$path_config_file"
+            echo "$path_parent_folder" > "$parent_folder_config_file"
+        else
+            zenity_text="$(gettext 'Folder of the chosen project is missing.')"
+            zenity_warning
+        fi
+    elif [ "$path_project_folder" = "$button_text" ]
+    then
+        set_project_folder
+    else
+        path_project_folder="$tmp"
+    fi
+else
+    if [ "$run_from_menu" = "TRUE" ]
+    then
+        set_project_folder
+    fi
+fi
+}
+
+
 set_project_folder()
 {
 set_path_parent_folder
@@ -173,7 +234,7 @@ then
     # $ Matches the end of a line or string.
     if [[ "$project_name_version" =~ ^[a-z0-9]+[a-z0-9+-\.]+"-"[0-9]+[a-z0-9\.+:~]*$ ]]
     then
-        echo "$path_project_folder" > "$path_config_file" ||
+        sed -i "1i$path_project_folder" "$path_config_file" ||
             create_path_config_file
         echo "$path_parent_folder" > "$parent_folder_config_file"
     else
@@ -190,7 +251,7 @@ fi
 create_path_config_file()
 {
 mkdir $HOME/.config/deb-cup
-echo "$path_project_folder" > "$path_config_file"
+sed -i "1i$path_project_folder" "$path_config_file"
 }
 
 
@@ -296,12 +357,12 @@ then
                         zenity_text="$error_message"
                         zenity_warning ;;
                     renamed )
-                        new_folder_version=$(echo "$error_message" |
-                                             grep "../$project_name-" |
-                                             sed 's/.*-//g' )
-                        new_path_project_folder="$path_parent_folder/$project_name-$new_folder_version"
-                        echo "$new_path_project_folder" > "$path_config_file"
-                        notify-send "$(gettext 'The project folder was renumbered to') $project_name-$new_folder_version." --icon=$icon --expire-time=3000 ;;
+                        project_version=$(echo "$error_message" |
+                                          grep "../$project_name-" |
+                                          sed 's/.*-//g' )
+                        path_project_folder="$path_parent_folder/$project_name-$project_version"
+                        sed -i "1i$path_project_folder" "$path_config_file"
+                        notify-send "$(gettext 'The project folder was renumbered to') $project_name-$project_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
             else
@@ -340,12 +401,45 @@ then
                    --text="$(gettext 'Creating deb binary package...')" \
                      $zenity_settings
 
-        zenity --text-info \
-               --title="$title" \
-               --window-icon=$icon \
-               --width=520 \
-               --height=330 \
-               --filename=$log_file
+        # Check missing build dependencies
+        build_dependencies=$(cat "$log_file" |
+                             grep "Unmet build dependencies" ) &&
+                             echo $?
+        if [ $? -eq 0 ]
+        then
+            if zenity --question \
+                      --text="$(gettext 'Some build dependencies are missing. Do you want to install them now?
+
+Dummy deb package will be created so the dependencies can be easily uninstalled.')" \
+                        $zenity_settings
+            then
+                create_install_dummy
+            fi
+
+        else
+            # log window
+            button_text="$(gettext 'Install')"
+            answer=$(zenity --text-info \
+                            --title="$title" \
+                            --window-icon=$icon \
+                            --width=520 \
+                            --height=330 \
+                            --extra-button="$button_text" \
+                            --filename=$log_file )
+
+            # Install the created deb package
+            if [ "$answer" = "$button_text" ]
+            then
+                if answer=$(zenity --file-selection \
+                                   --title="$(gettext 'Choose deb file')" \
+                                   --window-icon=$icon \
+                                   --filename="$path_parent_folder/" \
+                                   --file-filter="deb | *.deb" )
+                then
+                    gdebi-gtk "$answer"
+                fi
+            fi
+        fi
     fi
 fi
 }
@@ -362,61 +456,95 @@ then
         cd "$path_project_folder/debian"
         dch --release --controlmaint
         fingerprint=$(cat $fingerprint_config_file)
-        if [ $fingerprint =  ]
+        if [ "$fingerprint" = "" ]
         then
+            error=0
             sec_key="$(eval gpg --list-secret-keys)"
-            if [ $release = xenial ]
+            gpg_version=$(dpkg --status gnupg |
+                          grep ^Version |
+                          sed 's/^Version: //' |
+                          sed 's/-.*//' )
+
+            # xenial
+            if [[ "$gpg_version" < "1.5" ]]
             then
                 sec_key=$(echo "$sec_key" |
                           sed -n '/sec /p' |
                           sed 's/.*\/\(.*\) .*/\1/' )
-            else
+
+            # artful
+            elif [[ "$gpg_version" < "2.2" ]]
+            then
                 sec_key=$(echo "$sec_key" |
                           sed 's/.* \(.*\) uid.*/\1/' )
+
+            # bionic
+            elif [[ "$gpg_version" > "2.2.3" ]]
+            then
+                sec_key=$(echo "$sec_key" |
+                          head -4 |
+                          tail -1 |
+                          sed 's/ *//' )
+
+            else
+                error=1
             fi
+
+            if [ "$sec_key" = "" ]
+            then
+                error=1
+            fi
+
         else
             sec_key=$fingerprint
         fi
-        cd "$path_project_folder"
-        text_no="$(gettext 'No')"
-        zenity_text="$(gettext 'Do you want to include orig tarball?')"
-        sasd=""
-        answer=""
-        if answer=$(zenity --question \
-                           --title="$title" \
-                           --extra-button=$text_no \
-                           --cancel-label="$(gettext 'Cancel')" \
-                           --text="$zenity_text" \
-                             $zenity_settings )
+
+        if [ "$error" = "0" ]
         then
-            sasd="-sa"
-        elif [ "$answer" = "$text_no" ]
-        then
-            sasd="-sd"
-        fi
-        if [ "$sasd" != "" ]
-        then
-            if [ "$release" = "xenial" ]
+            cd "$path_project_folder"
+            text_no="$(gettext 'No')"
+            zenity_text="$(gettext 'Do you want to include orig tarball?')"
+            sasd=""
+            answer=""
+            if answer=$(zenity --question \
+                               --title="$title" \
+                               --extra-button=$text_no \
+                               --cancel-label="$(gettext 'Cancel')" \
+                               --text="$zenity_text" \
+                                 $zenity_settings )
             then
-                command="debuild -S $sasd -k$sec_key"
-                xterm -fa 'Monospace' \
-                      -fs 10 \
-                      -T 'Deb Cup' \
-                      -e "bash -c \"$command; exec bash\""
-            else
-                (
-                echo "0"
-                yes | debuild -S $sasd -k$sec_key >  $log_file
-                echo "100"
-                ) | zenity --progress \
-                           --title="$title" \
-                           --pulsate \
-                           --auto-close \
-                           --no-cancel \
-                           --text="$(gettext 'Creating signed dsc and changes...')" \
-                             $zenity_settings
-                sign_packages_info
+                sasd="-sa"
+            elif [ "$answer" = "$text_no" ]
+            then
+                sasd="-sd"
             fi
+            if [ "$sasd" != "" ]
+            then
+                if [[ "$gpg_version" < "1.5." ]]
+                then
+                    command="debuild -S $sasd -k$sec_key"
+                    xterm -fa 'Monospace' \
+                          -fs 10 \
+                          -T 'Deb Cup' \
+                          -e "bash -c \"$command; exec bash\""
+                else
+                    (
+                    echo "0"
+                    yes | debuild -S $sasd -k$sec_key >  $log_file
+                    echo "100"
+                    ) | zenity --progress \
+                               --title="$title" \
+                               --pulsate \
+                               --auto-close \
+                               --no-cancel \
+                               --text="$(gettext 'Creating signed dsc and changes...')" \
+                                 $zenity_settings
+                    sign_packages_info
+                fi
+            fi
+        else
+            zenity_text="$(gettext 'Please set the fingerprint first.')"
+            zenity_warning
         fi
     fi
 fi
@@ -581,11 +709,10 @@ changelog_release=$(head -1 "$path_project_folder/debian/changelog" |
 base_test()
 {
 base_test_result="OK"
-path_project_folder=$(cat "$path_config_file")
 get_project_details
 
 # Check whether the folder name or version was not changed
-if ! ls "$(cat $HOME/.config/deb-cup/path)"
+if ! ls "$path_project_folder"
 then
     base_test_result="FALSE"
 fi
@@ -677,7 +804,9 @@ move_project_folder()
 {
 if mv -T "$path_project_folder" "$new_path_project_folder" 2>$log_file
 then
-    echo "$new_path_project_folder" > "$path_config_file"
+    sed -i "1i$new_path_project_folder" "$path_config_file"
+    path_project_folder=$new_path_project_folder
+    get_project_details
     notify-send "$notify_text" --icon=$icon --expire-time=3000
 else
     zenity_text=$(cat $log_file)
@@ -746,6 +875,42 @@ fi
 }
 
 
+create_install_dummy()
+{
+dummy_version=$(date +%s)
+dummy_directory="$path_parent_folder/deb-cup-$project_name-dep-$dummy_version"
+(
+echo 0
+build_dependencies=$(echo $build_dependencies |
+                     sed 's/.*Unmet build dependencies: //g' |
+                     sed 's/\([a-z0-9)]\) \([a-z0-9]\)/\1, \2/g' )
+mkdir "$dummy_directory"
+cd "$dummy_directory"
+dh_make --yes --indep --createorig
+cd debian
+rm *ex *EX *docs README*
+sed -i "/^Depends/ c\Depends: deb-cup, $build_dependencies" control
+sed -i "/^Description/ c\Description: Deb Cup's dummy package with build dependencies for $project_name." control
+sed -i '/^ <insert long description/ c\' control
+yes | debuild -us -uc -tc
+echo 100
+) | zenity --progress \
+           --title="$title" \
+           --pulsate \
+           --auto-close \
+           --no-cancel \
+           --text="$(gettext 'Creating dummy package...')" \
+             $zenity_settings
+
+dummy_files="$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"
+mv "$dummy_files"*.deb "$dummy_directory"
+rm "$dummy_files"*
+mv "$dummy_directory/"*.deb "$path_parent_folder"
+rm -fr "$dummy_directory"
+gdebi-gtk "$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"*.deb
+}
+
+
 ##############################################################################
 #    PROGRAM
 ##############################################################################
@@ -775,9 +940,13 @@ do
     shift
 done
 
-# When close was forced, path_config_file was not deleted
-# Delete it now
-echo "" > "$path_config_file"
+
+##############################################################################
+
+choose_recent
+
+
+##############################################################################
 
 while [ "$run" = 1 ]
 do
@@ -814,7 +983,7 @@ then
 
 elif [ "$action" = "path" ]
 then
-    set_project_folder
+    choose_project_folder
 
 elif [ "$action" = "doc-help" ]
 then
@@ -829,7 +998,6 @@ then
     set_fingerprint
 
 else
-    echo "" > "$path_config_file"
     run=0
 fi
 

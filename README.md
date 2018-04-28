@@ -1,7 +1,5 @@
 # Deb Cup
-GUI tool for creating deb packages and uploading to a PPA.
-
-Beta version
+GTK+ GUI tool for creating deb packages and uploading to a PPA.
 
 ## Screenshot
 ![deb-cup main window](/git_files/deb-cup-screenshot.png?raw=true)
@@ -9,21 +7,22 @@ Beta version
 ## What Deb Cup can do
 * Create the debian folder with template files and an empty install file
 * Create an original source package
-* Increment changelog (Deb Cup uses a graphical text editor)
-* Create .deb binary package
+* Increment changelog
+* **Create and install a dummy package with build dependencies**
+* Create and install .deb binary package
 * Create signed dsc and changes files (needed for uploading to a PPA)
 * Send packages to a PPA
 
 ## Download and Install
-Supported operating systems are
+Supported operating systems
 * Ubuntu 18.04 Bionic
 * Ubuntu 17.10 Artful
 * Ubuntu 16.04 Xenial
-* Linux Mint 18.X
 * Linux Mint 19
+* Linux Mint 18
 
 Operating systems which are not mentioned here are not tested. Deb Cup need not work properly with them.
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/deb-cup.svg)](https://repology.org/metapackage/deb-cup)
 
-[PPA](https://launchpad.net/~pavreh/+archive/ubuntu/ppa) `` `` 0.7.4
+[PPA](https://launchpad.net/~pavreh/+archive/ubuntu/ppa) `` `` 0.8.0

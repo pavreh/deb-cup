@@ -19,14 +19,14 @@ Depends: ${misc:Depends},
          xterm,
          gnupg ( >= 1.4.20),
          libnotify-bin ( >= 0.7.6),
+         gdebi,
          xed | gedit
-Description: GUI tool for creating deb packages and uploading to a PPA
+Description: GTK+ GUI tool for creating deb packages and uploading to a PPA
  Deb Cup can:
   * Create the debian folder with template files and an empty install file.
   * Create an original source package.
   * Increment changelog.
-  * Create .deb binary package.
+  * Create and install a dummy package with build dependencies.
+  * Create and install .deb binary package.
   * Create signed dsc and changes files (needed for uploading to a PPA).
   * Send packages to a PPA.
- .
- Beta version.
