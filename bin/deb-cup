@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version="0.8.0"
+version="0.9.0 UNRELEASED"
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
@@ -25,10 +25,22 @@ path_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
 log_file=/tmp/deb-cup-log
-icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
 
+# Icons
+icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
+icons=$HOME/Git/deb-cup/share/icons/hicolor/16x16/apps
+icon1="$icons/deb-cup-white.png"
+icon2="$icons/deb-cup-folder.png"
+icon3="$icons/deb-cup-folder-open.png"
+icon4="$icons/deb-cup-package-x-generic.png"
+icon5="$icons/deb-cup-text-x-preview.png"
+icon6="$icons/deb-cup-package-x-generic.png"
+icon7="$icons/deb-cup-gcr-gnupg.png"
+icon8="$icons/deb-cup-upload.png"
+
+####
 run=1
 
 touch $log_file
@@ -66,28 +78,30 @@ export TEXTDOMAINDIR
 main_window()
 {
 column_text="$(gettext Project):    $project_name-$project_version"
-action=$(zenity --list \
+action=$(yad --list \
                 --title="$title" \
                 --window-icon=$icon \
                 --width=270 \
                 --height=405 \
                 --text "" \
-                --column "" \
-                --column "" \
-                --column "$column_text" \
-                --hide-column=1,2 \
-                --print-column=2 \
-                f fingerprint "$(gettext 'Set fingerprint...')" \
-                p usr_ppa "$(gettext 'Set user and ppa...')" \
-                o path "$(gettext 'Choose project folder...')" \
-                d debian "$(gettext 'Create/Open debian folder')" \
-                t tarball "$(gettext 'Create orig tarball')" \
-                c changelog "$(gettext 'Increment changelog...')" \
-                b binary "$(gettext 'Create deb binary')" \
-                s sign "$(gettext 'Create signed dsc and changes')" \
-                u upload "$(gettext 'Upload to the PPA...')" \
-                h doc-help "$(gettext 'Help')" \
-                a about "$(gettext 'About')")
+                --column="" \
+                --column="":IMG \
+                --column="$column_text" \
+                --hide-column=1 \
+                --search-column=1 \
+                --print-column=1 \
+                --separator="" \
+                f "$icon1" "$(gettext 'Set fingerprint...')" \
+                p "$icon1" "$(gettext 'Set user and ppa...')" \
+                o "$icon2" "$(gettext 'Choose project folder...')" \
+                d "$icon3" "$(gettext 'Create/Open debian folder')" \
+                t "$icon4" "$(gettext 'Create orig tarball')" \
+                c "$icon5" "$(gettext 'Increment changelog...')" \
+                b "$icon6" "$(gettext 'Create deb binary')" \
+                s "$icon7" "$(gettext 'Create signed dsc and changes')" \
+                u "$icon8" "$(gettext 'Upload to the PPA...')" \
+                h "$icon1" "$(gettext 'Help')" \
+                a "$icon1" "$(gettext 'About')")
 }
 
 
@@ -953,47 +967,47 @@ do
 
 main_window
 
-if [ "$action" = "tarball" ]
+if [ "$action" = "t" ]
 then
     create_orig_tarball
 
-elif [ "$action" = "changelog" ]
+elif [ "$action" = "c" ]
 then
     update_changelog
 
-elif [ "$action" = "binary" ]
+elif [ "$action" = "b" ]
 then
     create_deb_binary
 
-elif [ "$action" = "sign" ]
+elif [ "$action" = "s" ]
 then
     sign_packages
 
-elif [ "$action" = "upload" ]
+elif [ "$action" = "u" ]
 then
     upload_file
 
-elif [ "$action" = "debian" ]
+elif [ "$action" = "d" ]
 then
     create_debian_folder
 
-elif [ "$action" = "usr_ppa" ]
+elif [ "$action" = "p" ]
 then
     set_usr_ppa
 
-elif [ "$action" = "path" ]
+elif [ "$action" = "o" ]
 then
     choose_project_folder
 
-elif [ "$action" = "doc-help" ]
+elif [ "$action" = "h" ]
 then
     open_help
 
-elif [ "$action" = "about" ]
+elif [ "$action" = "a" ]
 then
     open_about
 
-elif [ "$action" = "fingerprint" ]
+elif [ "$action" = "f" ]
 then
     set_fingerprint
 
