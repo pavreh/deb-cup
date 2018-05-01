@@ -77,16 +77,16 @@ export TEXTDOMAINDIR
 
 main_window()
 {
-column_text="$(gettext Project):    $project_name-$project_version"
+column_text="$(gettext Project)"
 action=$(yad --list \
                 --title="$title" \
+                --no-click \
                 --window-icon=$icon \
                 --width=270 \
-                --height=405 \
-                --text "" \
+                --height=350 \
                 --column="" \
                 --column="":IMG \
-                --column="$column_text" \
+                --column="$project_name-$project_version" \
                 --hide-column=1 \
                 --search-column=1 \
                 --print-column=1 \
@@ -101,7 +101,7 @@ action=$(yad --list \
                 s "$icon7" "$(gettext 'Create signed dsc and changes')" \
                 u "$icon8" "$(gettext 'Upload to the PPA...')" \
                 h "$icon1" "$(gettext 'Help')" \
-                a "$icon1" "$(gettext 'About')")
+                a "$icon1" "$(gettext 'About')" )
 }
 
 
