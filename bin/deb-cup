@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version="0.8.0"
+version="0.8.1 UNRELEASED"
 
 
 #. $HOME/.config/deb-cup/deb-cup.cfg
@@ -881,9 +881,12 @@ dummy_version=$(date +%s)
 dummy_directory="$path_parent_folder/deb-cup-$project_name-dep-$dummy_version"
 (
 echo 0
+# Get the build dependencies from the control file.
+build_dependencies=$(cat "$path_project_folder/debian/control")
 build_dependencies=$(echo $build_dependencies |
-                     sed 's/.*Unmet build dependencies: //g' |
-                     sed 's/\([a-z0-9)]\) \([a-z0-9]\)/\1, \2/g' )
+                     sed 's/.*Build-Depends://' |
+                     sed 's/[A-Z].*//' )
+
 mkdir "$dummy_directory"
 cd "$dummy_directory"
 dh_make --yes --indep --createorig
