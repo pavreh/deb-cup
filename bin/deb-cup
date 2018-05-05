@@ -35,7 +35,8 @@ touch $log_file
 
 
 # check installed packages
-if dpkg --status xed
+if dpkg --status xed \
+   >/dev/null
 then
     VISUAL="xed --wait"
 else
@@ -87,7 +88,8 @@ action=$(zenity --list \
                 s sign "$(gettext 'Create signed dsc and changes')" \
                 u upload "$(gettext 'Upload to the PPA...')" \
                 h doc-help "$(gettext 'Help')" \
-                a about "$(gettext 'About')")
+                a about "$(gettext 'About')" \
+                2>/dev/null )
 }
 
 
@@ -105,7 +107,8 @@ if fingerprint=$(zenity --entry \
                         --title="$title" \
                         --text="$zenity_text" \
                         --entry-text="$(cat $fingerprint_config_file)" \
-                          $zenity_settings )
+                          $zenity_settings \
+                          2>/dev/null )
 
 then
     echo $fingerprint > $fingerprint_config_file ||
@@ -130,7 +133,8 @@ if user_ppa=$(zenity --entry \
                      --title="$title" \
                      --text="$zenity_text" \
                      --entry-text="$(cat $usr_ppa_config_file)" \
-                       $zenity_settings )
+                       $zenity_settings \
+                       2>/dev/null )
 then
     echo $user_ppa > $usr_ppa_config_file ||
         create_usr_ppa_config_file
@@ -191,9 +195,11 @@ then
                                      "${array[2]}" "${array[3]}" \
                                      "${array[4]}" "${array[5]}" \
                                      "${array[6]}" "${array[7]}" \
-                                     "${array[8]}" "${array[9]}" )
+                                     "${array[8]}" "${array[9]}" \
+                                      2>/dev/null )
     then
-        if ls "$path_project_folder"
+        if ls "$path_project_folder" \
+              >/dev/null
         then
             get_project_details
             # add as the first line
@@ -279,7 +285,8 @@ create_debian_folder()
 base_test
 if [[ $base_test_result = "OK" ]]
 then
-    if ls "$path_project_folder/debian/"
+    if ls "$path_project_folder/debian/" \
+          >/dev/null
     then
         xdg-open "$path_project_folder/debian/"
     else
@@ -290,7 +297,8 @@ then
                   --title="$title" \
                   --ok-label="$(gettext 'Open debian folder')" \
                   --text="$(gettext 'Please edit the files in the debian folder now.')" \
-                    $zenity_settings
+                    $zenity_settings \
+                    2>/dev/null
         then
             xdg-open "$path_project_folder/debian/"
         fi
@@ -323,7 +331,8 @@ then
                --auto-close \
                --no-cancel \
                --text="$(gettext 'Creating orig tarball...')" \
-                 $zenity_settings
+                 $zenity_settings \
+                 2>/dev/null
 
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
@@ -335,7 +344,8 @@ update_changelog()
 base_test
 if [[ $base_test_result = OK ]]
 then
-    if ls "$path_project_folder/debian/changelog"
+    if ls "$path_project_folder/debian/changelog" \
+          >/dev/null
     then
         check_name
         if [[ $folder_changelog_name = same ]]
@@ -399,7 +409,8 @@ then
                    --auto-close \
                    --no-cancel \
                    --text="$(gettext 'Creating deb binary package...')" \
-                     $zenity_settings
+                     $zenity_settings \
+                     2>/dev/null
 
         # Check missing build dependencies
         build_dependencies=$(cat "$log_file" |
@@ -411,7 +422,8 @@ then
                       --text="$(gettext 'Some build dependencies are missing. Do you want to install them now?
 
 Dummy deb package will be created so the dependencies can be easily uninstalled.')" \
-                        $zenity_settings
+                        $zenity_settings \
+                        2>/dev/null
             then
                 create_install_dummy
             fi
@@ -425,7 +437,8 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                             --width=520 \
                             --height=330 \
                             --extra-button="$button_text" \
-                            --filename=$log_file )
+                            --filename=$log_file \
+                              2>/dev/null )
 
             # Install the created deb package
             if [ "$answer" = "$button_text" ]
@@ -434,7 +447,8 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                                    --title="$(gettext 'Choose deb file')" \
                                    --window-icon=$icon \
                                    --filename="$path_parent_folder/" \
-                                   --file-filter="deb | *.deb" )
+                                   --file-filter="deb | *.deb" \
+                                     2>/dev/null )
                 then
                     gdebi-gtk "$answer"
                 fi
@@ -511,7 +525,8 @@ then
                                --extra-button=$text_no \
                                --cancel-label="$(gettext 'Cancel')" \
                                --text="$zenity_text" \
-                                 $zenity_settings )
+                                 $zenity_settings \
+                                 2>/dev/null )
             then
                 sasd="-sa"
             elif [ "$answer" = "$text_no" ]
@@ -538,7 +553,9 @@ then
                                --auto-close \
                                --no-cancel \
                                --text="$(gettext 'Creating signed dsc and changes...')" \
-                                 $zenity_settings
+                                 $zenity_settings \
+                                 2>/dev/null
+
                     sign_packages_info
                 fi
             fi
@@ -566,7 +583,8 @@ else
                                   --title="$(gettext 'Choose source.changes file')" \
                                   --window-icon=$icon \
                                   --filename="$path_parent_folder/" \
-                                  --file-filter="source.changes | *source.changes")
+                                  --file-filter="source.changes | *source.changes" \
+                                    2>/dev/null )
     then
         # Print the part of string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
@@ -578,7 +596,8 @@ to \$user_ppa?")"
                   --title="$title" \
                   --default-cancel \
                   --text="$zenity_text" \
-                    $zenity_settings
+                    $zenity_settings \
+                    2>/dev/null
 
         then
             # Upload changes and the source code to the PPA
@@ -592,7 +611,8 @@ to \$user_ppa?")"
                        --auto-close \
                        --no-cancel \
                        --text="$(gettext 'Uploading files to the PPA...')" \
-                         $zenity_settings
+                         $zenity_settings \
+                         2>/dev/null
 
             log=$(cat $log_file)
             zenity --info \
@@ -600,7 +620,8 @@ to \$user_ppa?")"
                    --window-icon=$icon \
                    --width=520 \
                    --height=330 \
-                   --text="$log"
+                   --text="$log" \
+                     2>/dev/null
         fi
     fi
 fi
@@ -617,7 +638,8 @@ zenity --text-info \
        --width=665 \
        --height=500 \
        --html \
-       --filename="$log_file"
+       --filename="$log_file" \
+         2>/dev/null
 }
 
 
@@ -634,7 +656,8 @@ $(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
 zenity --info \
        --title="$(gettext 'About') $title" \
        --text="$zenity_text" \
-         $zenity_settings
+         $zenity_settings \
+         2>/dev/null
 }
 
 
@@ -648,7 +671,8 @@ zenity --text-info \
        --window-icon=$icon \
        --width=520 \
        --height=330 \
-       --filename=$log_file
+       --filename=$log_file \
+         2>/dev/null
 
 check_release
 if [ $changelog_release = UNRELEASED ]
@@ -712,7 +736,8 @@ base_test_result="OK"
 get_project_details
 
 # Check whether the folder name or version was not changed
-if ! ls "$path_project_folder"
+if ! ls "$path_project_folder" \
+        >/dev/null
 then
     base_test_result="FALSE"
 fi
@@ -734,10 +759,12 @@ ctvn_test()
 {
 ctvn_test_result="FALSE"
     # Check whether changelog file exist
-    if ls "$path_project_folder/debian/changelog"
+    if ls "$path_project_folder/debian/changelog" \
+          >/dev/null
     then
         # Check whether orig tarball exist
-        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.*
+        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.* \
+              >/dev/null
         then
             # Check wheter the version of the project folder and the version
             # in the changelog file are the same
@@ -765,34 +792,39 @@ ctvn_test_result="FALSE"
 warning_set_project_folder()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please choose a project folder first.')"
+       --text="$(gettext 'Please choose a project folder first.')" \
+         2>/dev/null
 }
 
 
 warning_create_debian_folder()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please create a debian folder first.')"
+       --text="$(gettext 'Please create a debian folder first.')" \
+         2>/dev/null
 }
 
 
 warning_create_orig_tarball()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please create the orig tarball first.')"
+       --text="$(gettext 'Please create the orig tarball first.')" \
+         2>/dev/null
 }
 
 
 warning_name_version_mishmash()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please increase changelog first.')"
+       --text="$(gettext 'Please increase changelog first.')" \
+         2>/dev/null
 }
 
 
 zenity_warning()
 {
-zenity --warning --title="$title" --text="$zenity_text" $zenity_settings
+zenity --warning --title="$title" --text="$zenity_text" $zenity_settings \
+         2>/dev/null
 }
 
 
@@ -828,7 +860,8 @@ if answer=$(zenity --question \
                    --cancel-label="$(gettext 'Cancel')" \
                    --extra-button="$text_folder" \
                    --text="$zenity_text" \
-                     $zenity_settings )
+                     $zenity_settings \
+                     2>/dev/null)
 then
     cd "$path_project_folder/debian"
     dch --edit --check-dirname-regex $project_name_version
@@ -858,7 +891,8 @@ if answer=$(zenity --question \
                    --cancel-label="$(gettext 'Cancel')" \
                    --extra-button="$text_renumber" \
                    --text="$zenity_text" \
-                     $zenity_settings )
+                     $zenity_settings \
+                     2>/dev/null)
 
 then
     cd "$path_project_folder/debian"
@@ -903,7 +937,8 @@ echo 100
            --auto-close \
            --no-cancel \
            --text="$(gettext 'Creating dummy package...')" \
-             $zenity_settings
+             $zenity_settings \
+             2>/dev/null
 
 dummy_files="$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"
 mv "$dummy_files"*.deb "$dummy_directory"
