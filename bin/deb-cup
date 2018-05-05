@@ -675,7 +675,7 @@ zenity --text-info \
          2>/dev/null
 
 check_release
-if [ $changelog_release = UNRELEASED ]
+if [ "$changelog_release" = "UNRELEASED" ]
 then
     zenity_text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
     zenity_warning
