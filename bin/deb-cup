@@ -261,6 +261,7 @@ fi
 create_path_recent_config_file()
 {
 mkdir $HOME/.config/deb-cup
+echo "" > "$path_recent_config_file"
 sed -i "1i$path_project_folder" "$path_recent_config_file"
 }
 
