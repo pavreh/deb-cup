@@ -20,6 +20,7 @@ Depends: ${misc:Depends},
          gnupg ( >= 1.4.20),
          libnotify-bin ( >= 0.7.6),
          gdebi,
+         equivs,
          xed | gedit
 Description: GTK+ GUI tool for creating deb packages and uploading to a PPA
  Deb Cup can:
