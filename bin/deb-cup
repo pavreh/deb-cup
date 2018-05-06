@@ -24,6 +24,7 @@ usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
 path_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
+patches_folder_config_file=$HOME/.config/deb-cup/patches
 log_file=/tmp/deb-cup-log
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
@@ -82,6 +83,7 @@ action=$(zenity --list \
                 p usr_ppa "$(gettext 'Set user and ppa...')" \
                 o path "$(gettext 'Choose project folder...')" \
                 d debian "$(gettext 'Create/Open debian folder')" \
+                i patch "$(gettext 'Import patch...')" \
                 t tarball "$(gettext 'Create orig tarball')" \
                 c changelog "$(gettext 'Increment changelog...')" \
                 b binary "$(gettext 'Create deb binary')" \
@@ -270,6 +272,15 @@ fi
 }
 
 
+set_path_patches_folder()
+{
+if ! path_patches_folder=$(cat $patches_folder_config_file)
+then
+    path_patches_folder=$HOME
+fi
+}
+
+
 create_cfg()
 {
 mkdir $HOME/.config/deb-cup
@@ -302,6 +313,69 @@ then
         then
             xdg-open "$path_project_folder/debian/"
         fi
+    fi
+fi
+}
+
+
+import_patch()
+{
+base_test
+if [[ $base_test_result = "OK" ]]
+then
+    path_debian="$path_project_folder/debian"
+    if ls "$path_debian/" \
+          >/dev/null
+    then
+        source_format=$(cat "$path_debian/source/format")
+        if echo $source_format |
+           grep "quilt"
+        then
+            format="quilt"
+        else
+            if zenity --question \
+                      --title "$title" \
+                      --text "$(eval_gettext "Source format is \$source_format. For apply patches it needs to be 3.0 (quilt). Do you want to switch the source format now?")" \
+                        $zenity_settings
+            then
+                echo "3.0 (quilt)" > "$path_debian/source/format"
+                format="quilt"
+            fi
+        fi
+
+        if [ "$format" = "quilt" ]
+        then
+            set_path_patches_folder
+            if path_patch=$(zenity --file-selection \
+                                   --title="$(gettext 'Choose patch')" \
+                                   --window-icon=$icon \
+                                   --filename="$path_patches_folder/" \
+                                   --file-filter="patch | *.patch" \
+                                     2>/dev/null )
+            then
+                file_name=$(echo "${path_patch##*/}")
+                if ls "$path_debian/patches/$file_name" \
+                       >/dev/null
+                then
+                    if zenity --question \
+                              --default-cancel \
+                              --title "$title" \
+                              --text "$(eval_gettext "File \$file_name exist. Overwrite?")" \
+                                $zenity_settings
+                    then
+                        cp "$path_patch" "$path_debian/patches/"
+                    fi
+                else
+                    mkdir "$path_debian/patches"
+                    cp "$path_patch" "$path_debian/patches/"
+                    echo "$file_name" >> "$path_debian/patches/series"
+                fi
+                path_patch=$(echo "${path_patch%/*}")
+                echo "$path_patch" > "$patches_folder_config_file"
+            fi
+        fi
+    else
+        warning_create_debian_folder
     fi
 fi
 }
@@ -991,7 +1065,11 @@ do
 
 main_window
 
-if [ "$action" = "tarball" ]
+if [ "$action" = "patch" ]
+then
+    import_patch
+
+elif [ "$action" = "tarball" ]
 then
     create_orig_tarball
 
