@@ -16,16 +16,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version="0.8.1 UNRELEASED"
+version="0.9.0 UNRELEASED"
 
 
+# Config files
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
-path_config_file=$HOME/.config/deb-cup/recent
+path_recent_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
 patches_folder_config_file=$HOME/.config/deb-cup/patches
 log_file=/tmp/deb-cup-log
+
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
@@ -161,11 +163,11 @@ choose_recent
 choose_recent()
 {
 # Remove duplicity
-config_file=$(awk '!a[$0]++' $path_config_file)
+config_file=$(awk '!a[$0]++' $path_recent_config_file)
 
 # let last 10 projects
 echo "$config_file" |
-    head > $path_config_file
+    head > $path_recent_config_file
 
 if ! [ "$config_file" = "" ]
 then
@@ -205,7 +207,7 @@ then
         then
             get_project_details
             # add as the first line
-            sed -i "1i$path_project_folder" "$path_config_file"
+            sed -i "1i$path_project_folder" "$path_recent_config_file"
             echo "$path_parent_folder" > "$parent_folder_config_file"
         else
             zenity_text="$(gettext 'Folder of the chosen project is missing.')"
@@ -242,8 +244,8 @@ then
     # $ Matches the end of a line or string.
     if [[ "$project_name_version" =~ ^[a-z0-9]+[a-z0-9+-\.]+"-"[0-9]+[a-z0-9\.+:~]*$ ]]
     then
-        sed -i "1i$path_project_folder" "$path_config_file" ||
-            create_path_config_file
+        sed -i "1i$path_project_folder" "$path_recent_config_file" ||
+            create_path_recent_config_file
         echo "$path_parent_folder" > "$parent_folder_config_file"
     else
         zenity_text="$(gettext 'Please set name and version of the folder in format
@@ -256,10 +258,10 @@ fi
 }
 
 
-create_path_config_file()
+create_path_recent_config_file()
 {
 mkdir $HOME/.config/deb-cup
-sed -i "1i$path_project_folder" "$path_config_file"
+sed -i "1i$path_project_folder" "$path_recent_config_file"
 }
 
 
@@ -445,7 +447,7 @@ then
                                           grep "../$project_name-" |
                                           sed 's/.*-//g' )
                         path_project_folder="$path_parent_folder/$project_name-$project_version"
-                        sed -i "1i$path_project_folder" "$path_config_file"
+                        sed -i "1i$path_project_folder" "$path_recent_config_file"
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$project_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
@@ -660,7 +662,7 @@ else
                                   --file-filter="source.changes | *source.changes" \
                                     2>/dev/null )
     then
-        # Print the part of string after last "/"
+        # Print the part of the string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
         zenity_text="$(eval_gettext "Do you want to upload
 \$file_name
@@ -910,7 +912,7 @@ move_project_folder()
 {
 if mv -T "$path_project_folder" "$new_path_project_folder" 2>$log_file
 then
-    sed -i "1i$new_path_project_folder" "$path_config_file"
+    sed -i "1i$new_path_project_folder" "$path_recent_config_file"
     path_project_folder=$new_path_project_folder
     get_project_details
     notify-send "$notify_text" --icon=$icon --expire-time=3000
