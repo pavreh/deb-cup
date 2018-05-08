@@ -210,6 +210,9 @@ then
             sed -i "1i$path_project_folder" "$path_recent_config_file"
             echo "$path_parent_folder" > "$parent_folder_config_file"
         else
+            echo "$(grep -v "$path_project_folder" "$path_recent_config_file")" > \
+                 "$path_recent_config_file"
+                 unset 'array[@]'
             zenity_text="$(gettext 'Folder of the chosen project is missing.')"
             zenity_warning
         fi
