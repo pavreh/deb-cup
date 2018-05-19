@@ -837,7 +837,7 @@ then
 fi
 
 # Check whether a project folder is set
-if ! [[ $project_name_version = *"-"[0-9]* ]]
+if ! [[ $project_name_version = *"-"[0-9a-z]* ]]
 then
     base_test_result="FALSE"
 fi
