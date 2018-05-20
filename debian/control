@@ -25,6 +25,7 @@ Depends: ${misc:Depends},
 Description: GTK+ GUI tool for creating deb packages and uploading to a PPA
  Deb Cup can:
   * Create the debian folder with template files and an empty install file.
+  * Import patch.
   * Create an original source package.
   * Increment changelog.
   * Create and install a dummy package with build dependencies.
