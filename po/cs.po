@@ -1,6 +1,6 @@
-# Translation of ppa-uploader to Czech.
-# Copyright (C) 2017 Pavel Řehák
-# This file is distributed under the same license as the ppa-uploader package.
+# Translation of deb-cup to Czech.
+# Copyright (C) 2017-2018 Pavel Řehák
+# This file is distributed under the same license as the deb-cup package.
 # Pavel Řehák <pavel-rehak@email.cz>, 2017.
 #
 msgid ""
