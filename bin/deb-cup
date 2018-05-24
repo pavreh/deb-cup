@@ -16,14 +16,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-version="0.9.0 UNRELEASED"
+version="1.0.0 UNRELEASED"
 
 
+# Config files
 #. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
-path_config_file=$HOME/.config/deb-cup/recent
+path_recent_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
 parent_folder_config_file=$HOME/.config/deb-cup/parent
+patches_folder_config_file=$HOME/.config/deb-cup/patches
 log_file=/tmp/deb-cup-log
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
@@ -47,7 +49,8 @@ touch $log_file
 
 
 # check installed packages
-if dpkg --status xed
+if dpkg --status xed \
+   >/dev/null
 then
     VISUAL="xed --wait"
 else
@@ -83,7 +86,7 @@ action=$(yad --list \
                 --no-click \
                 --window-icon=$icon \
                 --width=270 \
-                --height=350 \
+                --height=405 \
                 --column="" \
                 --column="":IMG \
                 --column="$project_name-$project_version" \
@@ -95,6 +98,7 @@ action=$(yad --list \
                 p "$icon1" "$(gettext 'Set user and ppa...')" \
                 o "$icon2" "$(gettext 'Choose project folder...')" \
                 d "$icon3" "$(gettext 'Create/Open debian folder')" \
+                i "$icon1" "$(gettext 'Import patch...')" \
                 t "$icon4" "$(gettext 'Create orig tarball')" \
                 c "$icon5" "$(gettext 'Increment changelog...')" \
                 b "$icon6" "$(gettext 'Create deb binary')" \
@@ -119,7 +123,8 @@ if fingerprint=$(zenity --entry \
                         --title="$title" \
                         --text="$zenity_text" \
                         --entry-text="$(cat $fingerprint_config_file)" \
-                          $zenity_settings )
+                          $zenity_settings \
+                          2>/dev/null )
 
 then
     echo $fingerprint > $fingerprint_config_file ||
@@ -144,7 +149,8 @@ if user_ppa=$(zenity --entry \
                      --title="$title" \
                      --text="$zenity_text" \
                      --entry-text="$(cat $usr_ppa_config_file)" \
-                       $zenity_settings )
+                       $zenity_settings \
+                       2>/dev/null )
 then
     echo $user_ppa > $usr_ppa_config_file ||
         create_usr_ppa_config_file
@@ -169,11 +175,11 @@ choose_recent
 choose_recent()
 {
 # Remove duplicity
-config_file=$(awk '!a[$0]++' $path_config_file)
+config_file=$(awk '!a[$0]++' $path_recent_config_file)
 
 # let last 10 projects
 echo "$config_file" |
-    head > $path_config_file
+    head > $path_recent_config_file
 
 if ! [ "$config_file" = "" ]
 then
@@ -205,15 +211,20 @@ then
                                      "${array[2]}" "${array[3]}" \
                                      "${array[4]}" "${array[5]}" \
                                      "${array[6]}" "${array[7]}" \
-                                     "${array[8]}" "${array[9]}" )
+                                     "${array[8]}" "${array[9]}" \
+                                      2>/dev/null )
     then
-        if ls "$path_project_folder"
+        if ls "$path_project_folder" \
+              >/dev/null
         then
             get_project_details
             # add as the first line
-            sed -i "1i$path_project_folder" "$path_config_file"
+            sed -i "1i$path_project_folder" "$path_recent_config_file"
             echo "$path_parent_folder" > "$parent_folder_config_file"
         else
+            echo "$(grep -v "$path_project_folder" "$path_recent_config_file")" > \
+                 "$path_recent_config_file"
+                 unset 'array[@]'
             zenity_text="$(gettext 'Folder of the chosen project is missing.')"
             zenity_warning
         fi
@@ -248,8 +259,8 @@ then
     # $ Matches the end of a line or string.
     if [[ "$project_name_version" =~ ^[a-z0-9]+[a-z0-9+-\.]+"-"[0-9]+[a-z0-9\.+:~]*$ ]]
     then
-        sed -i "1i$path_project_folder" "$path_config_file" ||
-            create_path_config_file
+        sed -i "1i$path_project_folder" "$path_recent_config_file" ||
+            create_path_recent_config_file
         echo "$path_parent_folder" > "$parent_folder_config_file"
     else
         zenity_text="$(gettext 'Please set name and version of the folder in format
@@ -262,10 +273,11 @@ fi
 }
 
 
-create_path_config_file()
+create_path_recent_config_file()
 {
 mkdir $HOME/.config/deb-cup
-sed -i "1i$path_project_folder" "$path_config_file"
+echo "" > "$path_recent_config_file"
+sed -i "1i$path_project_folder" "$path_recent_config_file"
 }
 
 
@@ -274,6 +286,15 @@ set_path_parent_folder()
 if ! path_parent_folder=$(cat $parent_folder_config_file)
 then
     path_parent_folder=$HOME
+fi
+}
+
+
+set_path_patches_folder()
+{
+if ! path_patches_folder=$(cat $patches_folder_config_file)
+then
+    path_patches_folder=$HOME
 fi
 }
 
@@ -293,7 +314,8 @@ create_debian_folder()
 base_test
 if [[ $base_test_result = "OK" ]]
 then
-    if ls "$path_project_folder/debian/"
+    if ls "$path_project_folder/debian/" \
+          >/dev/null
     then
         xdg-open "$path_project_folder/debian/"
     else
@@ -304,10 +326,74 @@ then
                   --title="$title" \
                   --ok-label="$(gettext 'Open debian folder')" \
                   --text="$(gettext 'Please edit the files in the debian folder now.')" \
-                    $zenity_settings
+                    $zenity_settings \
+                    2>/dev/null
         then
             xdg-open "$path_project_folder/debian/"
         fi
+    fi
+fi
+}
+
+
+import_patch()
+{
+base_test
+if [[ $base_test_result = "OK" ]]
+then
+    path_debian="$path_project_folder/debian"
+    if ls "$path_debian/" \
+          >/dev/null
+    then
+        source_format=$(cat "$path_debian/source/format")
+        if echo $source_format |
+           grep "quilt"
+        then
+            format="quilt"
+        else
+            if zenity --question \
+                      --title "$title" \
+                      --text "$(eval_gettext "Source format is \$source_format. For apply patches it needs to be 3.0 (quilt). Do you want to switch the source format now?")" \
+                        $zenity_settings
+            then
+                echo "3.0 (quilt)" > "$path_debian/source/format"
+                format="quilt"
+            fi
+        fi
+
+        if [ "$format" = "quilt" ]
+        then
+            set_path_patches_folder
+            if path_patch=$(zenity --file-selection \
+                                   --title="$(gettext 'Choose patch')" \
+                                   --window-icon=$icon \
+                                   --filename="$path_patches_folder/" \
+                                   --file-filter="patch | *.patch" \
+                                     2>/dev/null )
+            then
+                file_name=$(echo "${path_patch##*/}")
+                if ls "$path_debian/patches/$file_name" \
+                       >/dev/null
+                then
+                    if zenity --question \
+                              --default-cancel \
+                              --title "$title" \
+                              --text "$(eval_gettext "File \$file_name exist. Overwrite?")" \
+                                $zenity_settings
+                    then
+                        cp "$path_patch" "$path_debian/patches/"
+                    fi
+                else
+                    mkdir "$path_debian/patches"
+                    cp "$path_patch" "$path_debian/patches/"
+                    echo "$file_name" >> "$path_debian/patches/series"
+                fi
+                path_patch=$(echo "${path_patch%/*}")
+                echo "$path_patch" > "$patches_folder_config_file"
+            fi
+        fi
+    else
+        warning_create_debian_folder
     fi
 fi
 }
@@ -337,7 +423,8 @@ then
                --auto-close \
                --no-cancel \
                --text="$(gettext 'Creating orig tarball...')" \
-                 $zenity_settings
+                 $zenity_settings \
+                 2>/dev/null
 
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
@@ -349,7 +436,8 @@ update_changelog()
 base_test
 if [[ $base_test_result = OK ]]
 then
-    if ls "$path_project_folder/debian/changelog"
+    if ls "$path_project_folder/debian/changelog" \
+          >/dev/null
     then
         check_name
         if [[ $folder_changelog_name = same ]]
@@ -375,7 +463,7 @@ then
                                           grep "../$project_name-" |
                                           sed 's/.*-//g' )
                         path_project_folder="$path_parent_folder/$project_name-$project_version"
-                        sed -i "1i$path_project_folder" "$path_config_file"
+                        sed -i "1i$path_project_folder" "$path_recent_config_file"
                         notify-send "$(gettext 'The project folder was renumbered to') $project_name-$project_version." --icon=$icon --expire-time=3000 ;;
                 esac
                 error=""
@@ -413,7 +501,8 @@ then
                    --auto-close \
                    --no-cancel \
                    --text="$(gettext 'Creating deb binary package...')" \
-                     $zenity_settings
+                     $zenity_settings \
+                     2>/dev/null
 
         # Check missing build dependencies
         build_dependencies=$(cat "$log_file" |
@@ -425,9 +514,24 @@ then
                       --text="$(gettext 'Some build dependencies are missing. Do you want to install them now?
 
 Dummy deb package will be created so the dependencies can be easily uninstalled.')" \
-                        $zenity_settings
+                        $zenity_settings \
+                        2>/dev/null
             then
-                create_install_dummy
+                (
+                echo 0
+                cd "$path_parent_folder"
+                mk-build-deps $path_project_folder/debian/control
+                echo 100
+                ) | zenity --progress \
+                           --title="$title" \
+                           --pulsate \
+                           --auto-close \
+                           --no-cancel \
+                           --text="$(gettext 'Creating dummy package...')" \
+                             $zenity_settings \
+                             2>/dev/null
+
+                gdebi-gtk "$path_parent_folder"/"$project_name"-build-deps_"$project_version"*.deb
             fi
 
         else
@@ -439,7 +543,8 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                             --width=520 \
                             --height=330 \
                             --extra-button="$button_text" \
-                            --filename=$log_file )
+                            --filename=$log_file \
+                              2>/dev/null )
 
             # Install the created deb package
             if [ "$answer" = "$button_text" ]
@@ -448,7 +553,8 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                                    --title="$(gettext 'Choose deb file')" \
                                    --window-icon=$icon \
                                    --filename="$path_parent_folder/" \
-                                   --file-filter="deb | *.deb" )
+                                   --file-filter="deb | *.deb" \
+                                     2>/dev/null )
                 then
                     gdebi-gtk "$answer"
                 fi
@@ -525,7 +631,8 @@ then
                                --extra-button=$text_no \
                                --cancel-label="$(gettext 'Cancel')" \
                                --text="$zenity_text" \
-                                 $zenity_settings )
+                                 $zenity_settings \
+                                 2>/dev/null )
             then
                 sasd="-sa"
             elif [ "$answer" = "$text_no" ]
@@ -552,7 +659,9 @@ then
                                --auto-close \
                                --no-cancel \
                                --text="$(gettext 'Creating signed dsc and changes...')" \
-                                 $zenity_settings
+                                 $zenity_settings \
+                                 2>/dev/null
+
                     sign_packages_info
                 fi
             fi
@@ -580,9 +689,10 @@ else
                                   --title="$(gettext 'Choose source.changes file')" \
                                   --window-icon=$icon \
                                   --filename="$path_parent_folder/" \
-                                  --file-filter="source.changes | *source.changes")
+                                  --file-filter="source.changes | *source.changes" \
+                                    2>/dev/null )
     then
-        # Print the part of string after last "/"
+        # Print the part of the string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
         zenity_text="$(eval_gettext "Do you want to upload
 \$file_name
@@ -592,7 +702,8 @@ to \$user_ppa?")"
                   --title="$title" \
                   --default-cancel \
                   --text="$zenity_text" \
-                    $zenity_settings
+                    $zenity_settings \
+                    2>/dev/null
 
         then
             # Upload changes and the source code to the PPA
@@ -606,7 +717,8 @@ to \$user_ppa?")"
                        --auto-close \
                        --no-cancel \
                        --text="$(gettext 'Uploading files to the PPA...')" \
-                         $zenity_settings
+                         $zenity_settings \
+                         2>/dev/null
 
             log=$(cat $log_file)
             zenity --info \
@@ -614,7 +726,8 @@ to \$user_ppa?")"
                    --window-icon=$icon \
                    --width=520 \
                    --height=330 \
-                   --text="$log"
+                   --text="$log" \
+                     2>/dev/null
         fi
     fi
 fi
@@ -631,7 +744,8 @@ zenity --text-info \
        --width=665 \
        --height=500 \
        --html \
-       --filename="$log_file"
+       --filename="$log_file" \
+         2>/dev/null
 }
 
 
@@ -648,7 +762,8 @@ $(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
 zenity --info \
        --title="$(gettext 'About') $title" \
        --text="$zenity_text" \
-         $zenity_settings
+         $zenity_settings \
+         2>/dev/null
 }
 
 
@@ -662,10 +777,11 @@ zenity --text-info \
        --window-icon=$icon \
        --width=520 \
        --height=330 \
-       --filename=$log_file
+       --filename=$log_file \
+         2>/dev/null
 
 check_release
-if [ $changelog_release = UNRELEASED ]
+if [ "$changelog_release" = "UNRELEASED" ]
 then
     zenity_text="$(gettext 'The dsc and changes files was not signed because a release in the changelog file is UNRELEASED. If you want signed dsc and changes please save the changelog file, which was automatically opened, before closing.')"
     zenity_warning
@@ -726,13 +842,14 @@ base_test_result="OK"
 get_project_details
 
 # Check whether the folder name or version was not changed
-if ! ls "$path_project_folder"
+if ! ls "$path_project_folder" \
+        >/dev/null
 then
     base_test_result="FALSE"
 fi
 
 # Check whether a project folder is set
-if ! [[ $project_name_version = *"-"[0-9]* ]]
+if ! [[ $project_name_version = *"-"[0-9a-z]* ]]
 then
     base_test_result="FALSE"
 fi
@@ -748,10 +865,12 @@ ctvn_test()
 {
 ctvn_test_result="FALSE"
     # Check whether changelog file exist
-    if ls "$path_project_folder/debian/changelog"
+    if ls "$path_project_folder/debian/changelog" \
+          >/dev/null
     then
         # Check whether orig tarball exist
-        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.*
+        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.* \
+              >/dev/null
         then
             # Check wheter the version of the project folder and the version
             # in the changelog file are the same
@@ -779,34 +898,39 @@ ctvn_test_result="FALSE"
 warning_set_project_folder()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please choose a project folder first.')"
+       --text="$(gettext 'Please choose a project folder first.')" \
+         2>/dev/null
 }
 
 
 warning_create_debian_folder()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please create a debian folder first.')"
+       --text="$(gettext 'Please create a debian folder first.')" \
+         2>/dev/null
 }
 
 
 warning_create_orig_tarball()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please create the orig tarball first.')"
+       --text="$(gettext 'Please create the orig tarball first.')" \
+         2>/dev/null
 }
 
 
 warning_name_version_mishmash()
 {
 zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please increase changelog first.')"
+       --text="$(gettext 'Please increase changelog first.')" \
+         2>/dev/null
 }
 
 
 zenity_warning()
 {
-zenity --warning --title="$title" --text="$zenity_text" $zenity_settings
+zenity --warning --title="$title" --text="$zenity_text" $zenity_settings \
+         2>/dev/null
 }
 
 
@@ -818,7 +942,7 @@ move_project_folder()
 {
 if mv -T "$path_project_folder" "$new_path_project_folder" 2>$log_file
 then
-    sed -i "1i$new_path_project_folder" "$path_config_file"
+    sed -i "1i$new_path_project_folder" "$path_recent_config_file"
     path_project_folder=$new_path_project_folder
     get_project_details
     notify-send "$notify_text" --icon=$icon --expire-time=3000
@@ -842,7 +966,8 @@ if answer=$(zenity --question \
                    --cancel-label="$(gettext 'Cancel')" \
                    --extra-button="$text_folder" \
                    --text="$zenity_text" \
-                     $zenity_settings )
+                     $zenity_settings \
+                     2>/dev/null)
 then
     cd "$path_project_folder/debian"
     dch --edit --check-dirname-regex $project_name_version
@@ -872,7 +997,8 @@ if answer=$(zenity --question \
                    --cancel-label="$(gettext 'Cancel')" \
                    --extra-button="$text_renumber" \
                    --text="$zenity_text" \
-                     $zenity_settings )
+                     $zenity_settings \
+                     2>/dev/null)
 
 then
     cd "$path_project_folder/debian"
@@ -886,42 +1012,6 @@ then
     # used by repair_name too
     move_project_folder
 fi
-}
-
-
-create_install_dummy()
-{
-dummy_version=$(date +%s)
-dummy_directory="$path_parent_folder/deb-cup-$project_name-dep-$dummy_version"
-(
-echo 0
-build_dependencies=$(echo $build_dependencies |
-                     sed 's/.*Unmet build dependencies: //g' |
-                     sed 's/\([a-z0-9)]\) \([a-z0-9]\)/\1, \2/g' )
-mkdir "$dummy_directory"
-cd "$dummy_directory"
-dh_make --yes --indep --createorig
-cd debian
-rm *ex *EX *docs README*
-sed -i "/^Depends/ c\Depends: deb-cup, $build_dependencies" control
-sed -i "/^Description/ c\Description: Deb Cup's dummy package with build dependencies for $project_name." control
-sed -i '/^ <insert long description/ c\' control
-yes | debuild -us -uc -tc
-echo 100
-) | zenity --progress \
-           --title="$title" \
-           --pulsate \
-           --auto-close \
-           --no-cancel \
-           --text="$(gettext 'Creating dummy package...')" \
-             $zenity_settings
-
-dummy_files="$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"
-mv "$dummy_files"*.deb "$dummy_directory"
-rm "$dummy_files"*
-mv "$dummy_directory/"*.deb "$path_parent_folder"
-rm -fr "$dummy_directory"
-gdebi-gtk "$path_parent_folder/deb-cup-$project_name-dep_$dummy_version"*.deb
 }
 
 
@@ -967,7 +1057,11 @@ do
 
 main_window
 
-if [ "$action" = "t" ]
+if [ "$action" = "i" ]
+then
+    import_patch
+
+elif [ "$action" = "t" ]
 then
     create_orig_tarball
 

@@ -33,6 +33,11 @@ If you have more ppas, change this setting before uploading.</p>
 <a href="https://www.debian.org/doc/manuals/maint-guide/dreq.en.html">https://www.debian.org/doc/manuals/maint-guide/dreq.en.html</a><br>
 If a debian folder exist, Deb Cup opens it only.</p>
 
+<h2>Import patch</h2>
+<hr>
+<p>Copy selected patch to debian/patches folder and add the name of the patch into the series file.<br>
+If the source format is not quilt change it to 3.0 (quilt).</p>
+
 <h2>Create orig tarball</h2>
 <hr>
 <p>Deb Cup packs your source code to the archive project_version.orig.tar.xz. This is needed for creating deb packages and creating signed dsc and changes.</p>
@@ -70,6 +75,7 @@ f = Set fingerprint...<br>
 p = Set user and ppa...<br>
 o = Choose project folder...<br>
 d = Create/Open debian folder<br>
+i = Import patch...<br>
 t = Create orig tarball<br>
 c = Increment changelog...<br>
 b = Create deb binary<br>
