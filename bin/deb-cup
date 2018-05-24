@@ -83,7 +83,6 @@ main_window()
 column_text="$(gettext Project)"
 action=$(yad --list \
                 --title="$title" \
-                --no-click \
                 --window-icon=$icon \
                 --width=270 \
                 --height=405 \
@@ -94,6 +93,7 @@ action=$(yad --list \
                 --search-column=1 \
                 --print-column=1 \
                 --separator="" \
+                e "$icon1" "$(gettext 'Settings...')" \
                 f "$icon1" "$(gettext 'Set fingerprint...')" \
                 p "$icon1" "$(gettext 'Set user and ppa...')" \
                 o "$icon2" "$(gettext 'Choose project folder...')" \
@@ -111,6 +111,14 @@ action=$(yad --list \
 
 #	SETTING
 ##############################################################################
+
+change_settings()
+{
+yad --form \
+    --field="user/PPA":CBE \
+    --field="Fingerpring":CE
+}
+
 
 set_fingerprint()
 {
@@ -1104,6 +1112,10 @@ then
 elif [ "$action" = "f" ]
 then
     set_fingerprint
+
+elif [ "$action" = "e" ]
+then
+    change_settings
 
 else
     run=0
