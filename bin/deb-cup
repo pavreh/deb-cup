@@ -188,12 +188,14 @@ then
     button_text=$(gettext "New project")
     if path_project_folder=$(zenity --list \
                                     --title="$title" \
+                                    --window-icon=$icon \
+                                    --width=500 \
+                                    --height=300 \
                                     --hide-header \
                                     --text="$(gettext 'Choose a project')" \
                                     --extra-button="$button_text" \
                                     --column "" \
                                     --print-column=1 \
-                                      $zenity_settings \
                                      `# Solution of the white space.` \
                                      "${array[0]}" "${array[1]}" \
                                      "${array[2]}" "${array[3]}" \
