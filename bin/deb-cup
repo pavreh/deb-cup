@@ -205,15 +205,20 @@ then
     done
 
     tmp="$path_project_folder"
-    button_text=$(gettext "New project")
-    if path_project_folder=$(zenity --list \
+    path_project_folder=$(yad --list \
                                     --title="$title" \
-                                    --hide-header \
+                                    --window-icon=$icon \
+                                    --width=540 \
+                                    --height=340 \
                                     --text="$(gettext 'Choose a project')" \
-                                    --extra-button="$button_text" \
-                                    --column "" \
+                                    --button="$(gettext Cancel)":0 \
+                                    --button="$(gettext 'New project')":2 \
+                                    --button="$(gettext OK)":1 \
+                                    --no-headers \
+                                    --column="" \
                                     --print-column=1 \
-                                      $zenity_settings \
+                                    --always-print-result \
+                                    --separator="" \
                                      `# Solution of the white space.` \
                                      "${array[0]}" "${array[1]}" \
                                      "${array[2]}" "${array[3]}" \
@@ -221,6 +226,8 @@ then
                                      "${array[6]}" "${array[7]}" \
                                      "${array[8]}" "${array[9]}" \
                                       2>/dev/null )
+    status=$?
+    if [ $status = 1 ]
     then
         if ls "$path_project_folder" \
               >/dev/null
@@ -236,7 +243,7 @@ then
             zenity_text="$(gettext 'Folder of the chosen project is missing.')"
             zenity_warning
         fi
-    elif [ "$path_project_folder" = "$button_text" ]
+    elif [ $status = 2 ]
     then
         set_project_folder
     else
