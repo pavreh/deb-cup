@@ -90,6 +90,7 @@ action=$(yad --list \
                 --column="":IMG \
                 --column="$project_name-$project_version" \
                 --hide-column=1 \
+                --no-click \
                 --search-column=1 \
                 --print-column=1 \
                 --separator="" \
