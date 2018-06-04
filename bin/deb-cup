@@ -389,7 +389,7 @@ then
         if [ "$format" = "quilt" ]
         then
             set_path_patches_folder
-            if path_patch=$(zenity --file-selection \
+            if path_patch=$(yad --file \
                                    --title="$(gettext 'Choose patch')" \
                                    --window-icon=$icon \
                                    --filename="$path_patches_folder/" \
@@ -574,7 +574,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
             # Install the created deb package
             if [ "$answer" = "$button_text" ]
             then
-                if answer=$(zenity --file-selection \
+                if answer=$(yad --file \
                                    --title="$(gettext 'Choose deb file')" \
                                    --window-icon=$icon \
                                    --filename="$path_parent_folder/" \
@@ -710,7 +710,7 @@ then
 else
     # Choose source.changes file
     set_path_parent_folder
-    if path_changes_file=$(zenity --file-selection \
+    if path_changes_file=$(yad --file \
                                   --title="$(gettext 'Choose source.changes file')" \
                                   --window-icon=$icon \
                                   --filename="$path_parent_folder/" \
