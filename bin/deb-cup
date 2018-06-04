@@ -342,12 +342,16 @@ then
         cd "$path_project_folder"
         dh_make --yes --indep --createorig
         touch debian/install
-        if zenity --info \
+        yad --form \
                   --title="$title" \
-                  --ok-label="$(gettext 'Open debian folder')" \
+                  --button="$(gettext Cancel)":1 \
+                  --button="$(gettext 'Open debian folder')":0 \
                   --text="$(gettext 'Please edit the files in the debian folder now.')" \
+                  --image=dialog-information \
                     $zenity_settings \
                     2>/dev/null
+        status=$?
+        if [ $status = 0 ]
         then
             xdg-open "$path_project_folder/debian/"
         fi
