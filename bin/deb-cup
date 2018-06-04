@@ -266,7 +266,7 @@ fi
 set_project_folder()
 {
 set_path_parent_folder
-if path_project_folder=$(zenity --file-selection \
+if path_project_folder=$(yad --file \
                                 --directory \
                                 --title="$(gettext 'Choose a folder with the source code')" \
                                 --filename="$path_parent_folder/" \
