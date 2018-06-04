@@ -29,6 +29,7 @@ patches_folder_config_file=$HOME/.config/deb-cup/patches
 log_file=/tmp/deb-cup-log
 title='Deb Cup'
 zenity_settings="--window-icon=$icon --width=330 --height=200"
+yad_settings="--window-icon=$icon --width=400 --height=200"
 
 # Icons
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
@@ -919,42 +920,50 @@ ctvn_test_result="FALSE"
 #	WARNINGS
 ##############################################################################
 
+yad_warning_dialog()
+{
+yad --form \
+    --title="$title" \
+    --borders=10 \
+    --button="$(gettext 'OK')" \
+    --text="$zenity_text" \
+    --text-align=center \
+    --image=dialog-warning \
+      $yad_settings \
+      2>/dev/null
+}
+
 warning_set_project_folder()
 {
-zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please choose a project folder first.')" \
-         2>/dev/null
+zenity_text="$(gettext 'Please choose a project folder first.')"
+yad_warning_dialog
 }
 
 
 warning_create_debian_folder()
 {
-zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please create a debian folder first.')" \
-         2>/dev/null
+zenity_text="$(gettext 'Please create a debian folder first.')"
+yad_warning_dialog
 }
 
 
 warning_create_orig_tarball()
 {
-zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please create the orig tarball first.')" \
-         2>/dev/null
+zenity_text="$(gettext 'Please create the orig tarball first.')"
+yad_warning_dialog
 }
 
 
 warning_name_version_mishmash()
 {
-zenity --warning --title="$title" $zenity_settings \
-       --text="$(gettext 'Please increase changelog first.')" \
-         2>/dev/null
+zenity_text="$(gettext 'Please increase changelog first.')"
+yad_warning_dialog
 }
 
 
 zenity_warning()
 {
-zenity --warning --title="$title" --text="$zenity_text" $zenity_settings \
-         2>/dev/null
+yad_warning_dialog
 }
 
 
