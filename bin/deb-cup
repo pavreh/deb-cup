@@ -376,10 +376,16 @@ then
         then
             format="quilt"
         else
-            if zenity --question \
-                      --title "$title" \
-                      --text "$(eval_gettext "Source format is \$source_format. For apply patches it needs to be 3.0 (quilt). Do you want to switch the source format now?")" \
-                        $zenity_settings
+            zenity_text="$(eval_gettext "Source format is \$source_format. For apply patches it needs to be 3.0 (quilt). Do you want to switch the source format now?")"
+            if yad --form \
+                   --title="$title" \
+                   --borders=10 \
+                   --text="$zenity_text" \
+                   --text-align=center \
+                   --image=dialog-question \
+                     $yad_settings \
+                     2>/dev/null
+
             then
                 echo "3.0 (quilt)" > "$path_debian/source/format"
                 format="quilt"
@@ -400,11 +406,15 @@ then
                 if ls "$path_debian/patches/$file_name" \
                        >/dev/null
                 then
-                    if zenity --question \
-                              --default-cancel \
-                              --title "$title" \
-                              --text "$(eval_gettext "File \$file_name exist. Overwrite?")" \
-                                $zenity_settings
+                    zenity_text="$(eval_gettext "File \$file_name exist. Overwrite?")"
+                    if yad --form \
+                           --title="$title" \
+                           --borders=10 \
+                           --text="$zenity_text" \
+                           --text-align=center \
+                           --image=dialog-question \
+                             $yad_settings \
+                             2>/dev/null
                     then
                         cp "$path_patch" "$path_debian/patches/"
                     fi
@@ -535,12 +545,17 @@ then
                              echo $?
         if [ $? -eq 0 ]
         then
-            if zenity --question \
-                      --text="$(gettext 'Some build dependencies are missing. Do you want to install them now?
+            zenity_text="$(gettext 'Some build dependencies are missing. Do you want to install them now?
 
-Dummy deb package will be created so the dependencies can be easily uninstalled.')" \
-                        $zenity_settings \
-                        2>/dev/null
+Dummy deb package will be created so the dependencies can be easily uninstalled.')"
+            if yad --form \
+                   --title="$title" \
+                   --borders=10 \
+                   --text="$zenity_text" \
+                   --text-align=center \
+                   --image=dialog-question \
+                     $yad_settings \
+                     2>/dev/null
             then
                 (
                 echo 0
@@ -723,12 +738,14 @@ else
 \$file_name
 to \$user_ppa?")"
 
-        if zenity --question \
-                  --title="$title" \
-                  --default-cancel \
-                  --text="$zenity_text" \
-                    $zenity_settings \
-                    2>/dev/null
+        if yad --form \
+               --title="$title" \
+               --borders=10 \
+               --text="$zenity_text" \
+               --text-align=center \
+               --image=dialog-question \
+                 $yad_settings \
+                 2>/dev/null
 
         then
             # Upload changes and the source code to the PPA
