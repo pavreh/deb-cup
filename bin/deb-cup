@@ -83,31 +83,31 @@ main_window()
 {
 column_text="$(gettext Project)"
 action=$(yad --list \
-                --title="$title" \
-                --window-icon=$icon \
-                --width=270 \
-                --height=405 \
-                --column="" \
-                --column="":IMG \
-                --column="$project_name-$project_version" \
-                --hide-column=1 \
-                --no-click \
-                --search-column=1 \
-                --print-column=1 \
-                --separator="" \
-                e "$icon1" "$(gettext 'Settings...')" \
-                f "$icon1" "$(gettext 'Set fingerprint...')" \
-                p "$icon1" "$(gettext 'Set user and ppa...')" \
-                o "$icon2" "$(gettext 'Choose project folder...')" \
-                d "$icon3" "$(gettext 'Create/Open debian folder')" \
-                i "$icon1" "$(gettext 'Import patch...')" \
-                t "$icon4" "$(gettext 'Create orig tarball')" \
-                c "$icon5" "$(gettext 'Increment changelog...')" \
-                b "$icon6" "$(gettext 'Create deb binary')" \
-                s "$icon7" "$(gettext 'Create signed dsc and changes')" \
-                u "$icon8" "$(gettext 'Upload to the PPA...')" \
-                h "$icon1" "$(gettext 'Help')" \
-                a "$icon1" "$(gettext 'About')" )
+             --title="$title" \
+             --window-icon=$icon \
+             --width=270 \
+             --height=405 \
+             --column="" \
+             --column="":IMG \
+             --column="$project_name-$project_version" \
+             --hide-column=1 \
+             --no-click \
+             --search-column=1 \
+             --print-column=1 \
+             --separator="" \
+               e "$icon1" "$(gettext 'Settings...')" \
+               f "$icon1" "$(gettext 'Set fingerprint...')" \
+               p "$icon1" "$(gettext 'Set user and ppa...')" \
+               o "$icon2" "$(gettext 'Choose project folder...')" \
+               d "$icon3" "$(gettext 'Create/Open debian folder')" \
+               i "$icon1" "$(gettext 'Import patch...')" \
+               t "$icon4" "$(gettext 'Create orig tarball')" \
+               c "$icon5" "$(gettext 'Increment changelog...')" \
+               b "$icon6" "$(gettext 'Create deb binary')" \
+               s "$icon7" "$(gettext 'Create signed dsc and changes')" \
+               u "$icon8" "$(gettext 'Upload to the PPA...')" \
+               h "$icon1" "$(gettext 'Help')" \
+               a "$icon1" "$(gettext 'About')" )
 }
 
 
@@ -208,26 +208,26 @@ then
 
     tmp="$path_project_folder"
     path_project_folder=$(yad --list \
-                                    --title="$title" \
-                                    --window-icon=$icon \
-                                    --width=540 \
-                                    --height=340 \
-                                    --text="$(gettext 'Choose a project')" \
-                                    --button="$(gettext Cancel)":1 \
-                                    --button="$(gettext 'New project')":2 \
-                                    --button="$(gettext OK)":0 \
-                                    --no-headers \
-                                    --column="" \
-                                    --print-column=1 \
-                                    --always-print-result \
-                                    --separator="" \
-                                     `# Solution of the white space.` \
-                                     "${array[0]}" "${array[1]}" \
-                                     "${array[2]}" "${array[3]}" \
-                                     "${array[4]}" "${array[5]}" \
-                                     "${array[6]}" "${array[7]}" \
-                                     "${array[8]}" "${array[9]}" \
-                                      2>/dev/null )
+                              --title="$title" \
+                              --window-icon=$icon \
+                              --width=540 \
+                              --height=340 \
+                              --text="$(gettext 'Choose a project')" \
+                              --button="$(gettext Cancel)":1 \
+                              --button="$(gettext 'New project')":2 \
+                              --button="$(gettext OK)":0 \
+                              --no-headers \
+                              --column="" \
+                              --print-column=1 \
+                              --always-print-result \
+                              --separator="" \
+                                `# Solution of the white space.` \
+                                "${array[0]}" "${array[1]}" \
+                                "${array[2]}" "${array[3]}" \
+                                "${array[4]}" "${array[5]}" \
+                                "${array[6]}" "${array[7]}" \
+                                "${array[8]}" "${array[9]}" \
+                                2>/dev/null )
     status=$?
     if [ $status = 0 ]
     then
@@ -268,10 +268,10 @@ set_project_folder()
 {
 set_path_parent_folder
 if path_project_folder=$(yad --file \
-                                --directory \
-                                --title="$(gettext 'Choose a folder with the source code')" \
-                                --filename="$path_parent_folder/" \
-                                --window-icon=$icon )
+                             --directory \
+                             --title="$(gettext 'Choose a folder with the source code')" \
+                             --filename="$path_parent_folder/" \
+                             --window-icon=$icon )
 then
     get_project_details
     # Needed for sorting [A-Za-z]
@@ -344,13 +344,13 @@ then
         dh_make --yes --indep --createorig
         touch debian/install
         yad --form \
-                  --title="$title" \
-                  --button="$(gettext Cancel)":1 \
-                  --button="$(gettext 'Open debian folder')":0 \
-                  --text="$(gettext 'Please edit the files in the debian folder now.')" \
-                  --image=dialog-information \
-                    $zenity_settings \
-                    2>/dev/null
+            --title="$title" \
+            --button="$(gettext Cancel)":1 \
+            --button="$(gettext 'Open debian folder')":0 \
+            --text="$(gettext 'Please edit the files in the debian folder now.')" \
+            --image=dialog-information \
+              $zenity_settings \
+              2>/dev/null
         status=$?
         if [ $status = 0 ]
         then
@@ -396,11 +396,11 @@ then
         then
             set_path_patches_folder
             if path_patch=$(yad --file \
-                                   --title="$(gettext 'Choose patch')" \
-                                   --window-icon=$icon \
-                                   --filename="$path_patches_folder/" \
-                                   --file-filter="patch | *.patch" \
-                                     2>/dev/null )
+                                --title="$(gettext 'Choose patch')" \
+                                --window-icon=$icon \
+                                --filename="$path_patches_folder/" \
+                                --file-filter="patch | *.patch" \
+                                  2>/dev/null )
             then
                 file_name=$(echo "${path_patch##*/}")
                 if ls "$path_debian/patches/$file_name" \
@@ -590,11 +590,11 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
             if [ "$answer" = "$button_text" ]
             then
                 if answer=$(yad --file \
-                                   --title="$(gettext 'Choose deb file')" \
-                                   --window-icon=$icon \
-                                   --filename="$path_parent_folder/" \
-                                   --file-filter="deb | *.deb" \
-                                     2>/dev/null )
+                                --title="$(gettext 'Choose deb file')" \
+                                --window-icon=$icon \
+                                --filename="$path_parent_folder/" \
+                                --file-filter="deb | *.deb" \
+                                  2>/dev/null )
                 then
                     gdebi-gtk "$answer"
                 fi
@@ -726,11 +726,11 @@ else
     # Choose source.changes file
     set_path_parent_folder
     if path_changes_file=$(yad --file \
-                                  --title="$(gettext 'Choose source.changes file')" \
-                                  --window-icon=$icon \
-                                  --filename="$path_parent_folder/" \
-                                  --file-filter="source.changes | *source.changes" \
-                                    2>/dev/null )
+                               --title="$(gettext 'Choose source.changes file')" \
+                               --window-icon=$icon \
+                               --filename="$path_parent_folder/" \
+                               --file-filter="source.changes | *source.changes" \
+                                 2>/dev/null )
     then
         # Print the part of the string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
