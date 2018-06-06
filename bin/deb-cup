@@ -454,13 +454,13 @@ then
     rm debian.tar
     echo "100"
     ) | yad --progress \
-               --title="$title" \
-               --auto-close \
-               --no-escape \
-               --no-buttons \
-               --text="$(gettext 'Creating orig tarball...')" \
-                 $yad_settings \
-                 2>/dev/null
+            --title="$title" \
+            --auto-close \
+            --no-escape \
+            --no-buttons \
+            --text="$(gettext 'Creating orig tarball...')" \
+              $yad_settings \
+              2>/dev/null
 
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
@@ -532,14 +532,14 @@ then
         yes | debuild -us -uc -tc > $log_file
         echo "100"
         ) | yad --progress \
-                   --title="$title" \
-                   --pulsate \
-                   --auto-close \
-                   --no-escape \
-                   --no-buttons \
-                   --text="$(gettext 'Creating deb binary package...')" \
-                     $yad_settings \
-                     2>/dev/null
+                --title="$title" \
+                --pulsate \
+                --auto-close \
+                --no-escape \
+                --no-buttons \
+                --text="$(gettext 'Creating deb binary package...')" \
+                  $yad_settings \
+                  2>/dev/null
 
         # Check missing build dependencies
         build_dependencies=$(cat "$log_file" |
@@ -565,14 +565,14 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 mk-build-deps $path_project_folder/debian/control
                 echo 100
                 ) | yad --progress \
-                           --title="$title" \
-                           --pulsate \
-                           --auto-close \
-                           --no-escape \
-                           --no-buttons \
-                           --text="$(gettext 'Creating dummy package...')" \
-                             $yad_settings \
-                             2>/dev/null
+                        --title="$title" \
+                        --pulsate \
+                        --auto-close \
+                        --no-escape \
+                        --no-buttons \
+                        --text="$(gettext 'Creating dummy package...')" \
+                          $yad_settings \
+                          2>/dev/null
 
                 gdebi-gtk "$path_parent_folder"/"$project_name"-build-deps_"$project_version"*.deb
             fi
@@ -697,14 +697,14 @@ then
                     yes | debuild -S $sasd -k$sec_key >  $log_file
                     echo "100"
                     ) | yad --progress \
-                               --title="$title" \
-                               --pulsate \
-                               --auto-close \
-                               --no-escape \
-                               --no-buttons \
-                               --text="$(gettext 'Creating signed dsc and changes...')" \
-                                 $yad_settings \
-                                 2>/dev/null
+                            --title="$title" \
+                            --pulsate \
+                            --auto-close \
+                            --no-escape \
+                            --no-buttons \
+                            --text="$(gettext 'Creating signed dsc and changes...')" \
+                              $yad_settings \
+                              2>/dev/null
 
                     sign_packages_info
                 fi
@@ -758,14 +758,14 @@ to \$user_ppa?")"
             dput ppa:$user_ppa $path_changes_file > $log_file
             echo "100"
             ) | yad --progress \
-                       --title="$title" \
-                       --pulsate \
-                       --auto-close \
-                       --no-escape \
-                       --no-buttons \
-                       --text="$(gettext 'Uploading files to the PPA...')" \
-                         $yad_settings \
-                         2>/dev/null
+                    --title="$title" \
+                    --pulsate \
+                    --auto-close \
+                    --no-escape \
+                    --no-buttons \
+                    --text="$(gettext 'Uploading files to the PPA...')" \
+                      $yad_settings \
+                      2>/dev/null
 
             log=$(cat $log_file)
             zenity --info \
