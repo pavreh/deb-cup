@@ -453,12 +453,13 @@ then
     echo "90"
     rm debian.tar
     echo "100"
-    ) | zenity --progress \
+    ) | yad --progress \
                --title="$title" \
                --auto-close \
-               --no-cancel \
+               --no-escape \
+               --no-buttons \
                --text="$(gettext 'Creating orig tarball...')" \
-                 $zenity_settings \
+                 $yad_settings \
                  2>/dev/null
 
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
@@ -530,13 +531,14 @@ then
         echo "0"
         yes | debuild -us -uc -tc > $log_file
         echo "100"
-        ) | zenity --progress \
+        ) | yad --progress \
                    --title="$title" \
                    --pulsate \
                    --auto-close \
-                   --no-cancel \
+                   --no-escape \
+                   --no-buttons \
                    --text="$(gettext 'Creating deb binary package...')" \
-                     $zenity_settings \
+                     $yad_settings \
                      2>/dev/null
 
         # Check missing build dependencies
@@ -562,13 +564,14 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 cd "$path_parent_folder"
                 mk-build-deps $path_project_folder/debian/control
                 echo 100
-                ) | zenity --progress \
+                ) | yad --progress \
                            --title="$title" \
                            --pulsate \
                            --auto-close \
-                           --no-cancel \
+                           --no-escape \
+                           --no-buttons \
                            --text="$(gettext 'Creating dummy package...')" \
-                             $zenity_settings \
+                             $yad_settings \
                              2>/dev/null
 
                 gdebi-gtk "$path_parent_folder"/"$project_name"-build-deps_"$project_version"*.deb
@@ -693,13 +696,14 @@ then
                     echo "0"
                     yes | debuild -S $sasd -k$sec_key >  $log_file
                     echo "100"
-                    ) | zenity --progress \
+                    ) | yad --progress \
                                --title="$title" \
                                --pulsate \
                                --auto-close \
-                               --no-cancel \
+                               --no-escape \
+                               --no-buttons \
                                --text="$(gettext 'Creating signed dsc and changes...')" \
-                                 $zenity_settings \
+                                 $yad_settings \
                                  2>/dev/null
 
                     sign_packages_info
@@ -753,13 +757,14 @@ to \$user_ppa?")"
             echo "0"
             dput ppa:$user_ppa $path_changes_file > $log_file
             echo "100"
-            ) | zenity --progress \
+            ) | yad --progress \
                        --title="$title" \
                        --pulsate \
                        --auto-close \
-                       --no-cancel \
+                       --no-escape \
+                       --no-buttons \
                        --text="$(gettext 'Uploading files to the PPA...')" \
-                         $zenity_settings \
+                         $yad_settings \
                          2>/dev/null
 
             log=$(cat $log_file)
