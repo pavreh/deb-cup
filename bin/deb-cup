@@ -665,20 +665,26 @@ then
         if [ "$error" = "0" ]
         then
             cd "$path_project_folder"
-            text_no="$(gettext 'No')"
             zenity_text="$(gettext 'Do you want to include orig tarball?')"
             sasd=""
-            answer=""
-            if answer=$(zenity --question \
+            yad --form \
                                --title="$title" \
-                               --extra-button=$text_no \
-                               --cancel-label="$(gettext 'Cancel')" \
+                               --borders=10 \
                                --text="$zenity_text" \
-                                 $zenity_settings \
-                                 2>/dev/null )
+                               --text-align=center \
+                               --image=dialog-question \
+                               --button="$(gettext Cancel)":1 \
+                               --button="$(gettext 'No')":2 \
+                               --button="$(gettext 'Yes')":0 \
+                                 $yad_settings \
+                                 2>/dev/null
+
+            status=$?
+
+            if [ $status = 0 ]
             then
                 sasd="-sa"
-            elif [ "$answer" = "$text_no" ]
+            elif [ $status = 2 ]
             then
                 sasd="-sd"
             fi
@@ -1009,26 +1015,31 @@ fi
 
 repair_name()
 {
-text_folder=$(gettext 'Rename')
 zenity_text="$(gettext 'The name of the project folder and the name in the changelog file are not the same. Please rename the project folder or update the changelog.')
 
 $(gettext 'Folder name'): $project_name
 $(gettext 'Changelog name'): $changelog_name"
 
-if answer=$(zenity --question \
+yad --form \
                    --title="$title" \
-                   --ok-label="$(gettext 'Open changelog')" \
-                   --cancel-label="$(gettext 'Cancel')" \
-                   --extra-button="$text_folder" \
+                   --borders=10 \
                    --text="$zenity_text" \
-                     $zenity_settings \
-                     2>/dev/null)
+                   --text-align=center \
+                   --image=dialog-question \
+                   --button="$(gettext Cancel)":1 \
+                   --button="$(gettext 'Rename')":2 \
+                   --button="$(gettext 'Open changelog')":0 \
+                     $yad_settings \
+                     2>/dev/null
+
+status=$?
+
+if [ $status = 0 ]
 then
     cd "$path_project_folder/debian"
     dch --edit --check-dirname-regex $project_name_version
-fi
 
-if [ $answer = $text_folder ]
+elif [ $status = 2 ]
 then
     new_path_project_folder="$path_parent_folder/$changelog_name-$project_version"
     notify_text="$(gettext 'The project folder was renamed to') $changelog_name-$project_version."
@@ -1040,27 +1051,31 @@ fi
 
 repair_version()
 {
-text_renumber=$(gettext 'Renumber')
 zenity_text="$(gettext 'The version of the project folder and the version in the changelog file are not the same. Please renumber the project folder or update the changelog.')
 
 $(gettext 'Folder version'): $project_version
 $(gettext 'Changelog version'): $changelog_version"
 
-if answer=$(zenity --question \
+yad --form \
                    --title="$title" \
-                   --ok-label="$(gettext 'Open changelog')" \
-                   --cancel-label="$(gettext 'Cancel')" \
-                   --extra-button="$text_renumber" \
+                   --borders=10 \
                    --text="$zenity_text" \
-                     $zenity_settings \
-                     2>/dev/null)
+                   --text-align=center \
+                   --image=dialog-question \
+                   --button="$(gettext Cancel)":1 \
+                   --button="$(gettext 'Renumber')":2 \
+                   --button="$(gettext 'Open changelog')":0 \
+                     $yad_settings \
+                     2>/dev/null
 
+status=$?
+
+if [ $status = 0 ]
 then
     cd "$path_project_folder/debian"
     dch --controlmaint
-fi
 
-if [ $answer = $text_renumber ]
+elif [ $status = 2 ]
 then
     new_path_project_folder="$path_parent_folder/$project_name-$changelog_version"
     notify_text="$(gettext 'The project folder was renumbered to') $project_name-$changelog_version."
