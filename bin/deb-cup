@@ -455,6 +455,7 @@ then
     echo "100"
     ) | yad --progress \
             --title="$title" \
+            --borders=10 \
             --auto-close \
             --no-escape \
             --no-buttons \
@@ -533,6 +534,7 @@ then
         echo "100"
         ) | yad --progress \
                 --title="$title" \
+                --borders=10 \
                 --pulsate \
                 --auto-close \
                 --no-escape \
@@ -566,6 +568,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 echo 100
                 ) | yad --progress \
                         --title="$title" \
+                        --borders=10 \
                         --pulsate \
                         --auto-close \
                         --no-escape \
@@ -704,6 +707,7 @@ then
                     echo "100"
                     ) | yad --progress \
                             --title="$title" \
+                            --borders=10 \
                             --pulsate \
                             --auto-close \
                             --no-escape \
@@ -765,6 +769,7 @@ to \$user_ppa?")"
             echo "100"
             ) | yad --progress \
                     --title="$title" \
+                    --borders=10 \
                     --pulsate \
                     --auto-close \
                     --no-escape \
