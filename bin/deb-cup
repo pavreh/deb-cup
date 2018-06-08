@@ -668,16 +668,16 @@ then
             zenity_text="$(gettext 'Do you want to include orig tarball?')"
             sasd=""
             yad --form \
-                               --title="$title" \
-                               --borders=10 \
-                               --text="$zenity_text" \
-                               --text-align=center \
-                               --image=dialog-question \
-                               --button="$(gettext Cancel)":1 \
-                               --button="$(gettext 'No')":2 \
-                               --button="$(gettext 'Yes')":0 \
-                                 $yad_settings \
-                                 2>/dev/null
+                --title="$title" \
+                --borders=10 \
+                --text="$zenity_text" \
+                --text-align=center \
+                --image=dialog-question \
+                --button="$(gettext Cancel)":1 \
+                --button="$(gettext 'No')":2 \
+                --button="$(gettext 'Yes')":0 \
+                  $yad_settings \
+                  2>/dev/null
 
             status=$?
 
@@ -1021,16 +1021,16 @@ $(gettext 'Folder name'): $project_name
 $(gettext 'Changelog name'): $changelog_name"
 
 yad --form \
-                   --title="$title" \
-                   --borders=10 \
-                   --text="$zenity_text" \
-                   --text-align=center \
-                   --image=dialog-question \
-                   --button="$(gettext Cancel)":1 \
-                   --button="$(gettext 'Rename')":2 \
-                   --button="$(gettext 'Open changelog')":0 \
-                     $yad_settings \
-                     2>/dev/null
+    --title="$title" \
+    --borders=10 \
+    --text="$zenity_text" \
+    --text-align=center \
+    --image=dialog-question \
+    --button="$(gettext Cancel)":1 \
+    --button="$(gettext 'Rename')":2 \
+    --button="$(gettext 'Open changelog')":0 \
+      $yad_settings \
+      2>/dev/null
 
 status=$?
 
@@ -1057,16 +1057,16 @@ $(gettext 'Folder version'): $project_version
 $(gettext 'Changelog version'): $changelog_version"
 
 yad --form \
-                   --title="$title" \
-                   --borders=10 \
-                   --text="$zenity_text" \
-                   --text-align=center \
-                   --image=dialog-question \
-                   --button="$(gettext Cancel)":1 \
-                   --button="$(gettext 'Renumber')":2 \
-                   --button="$(gettext 'Open changelog')":0 \
-                     $yad_settings \
-                     2>/dev/null
+    --title="$title" \
+    --borders=10 \
+    --text="$zenity_text" \
+    --text-align=center \
+    --image=dialog-question \
+    --button="$(gettext Cancel)":1 \
+    --button="$(gettext 'Renumber')":2 \
+    --button="$(gettext 'Open changelog')":0 \
+      $yad_settings \
+      2>/dev/null
 
 status=$?
 
