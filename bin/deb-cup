@@ -383,7 +383,6 @@ then
                    --title="$title" \
                    --borders=10 \
                    --text="$zenity_text" \
-                   --text-align=center \
                    --image=dialog-question \
                      $yad_settings \
                      2>/dev/null
@@ -559,7 +558,6 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                    --title="$title" \
                    --borders=10 \
                    --text="$zenity_text" \
-                   --text-align=center \
                    --image=dialog-question \
                      $yad_settings \
                      2>/dev/null
@@ -761,7 +759,6 @@ to \$user_ppa?")"
                --title="$title" \
                --borders=10 \
                --text="$zenity_text" \
-               --text-align=center \
                --image=dialog-question \
                  $yad_settings \
                  2>/dev/null
@@ -1038,7 +1035,6 @@ yad --form \
     --title="$title" \
     --borders=10 \
     --text="$zenity_text" \
-    --text-align=center \
     --image=dialog-question \
     --button="$(gettext Cancel)":1 \
     --button="$(gettext 'Rename')":2 \
@@ -1074,7 +1070,6 @@ yad --form \
     --title="$title" \
     --borders=10 \
     --text="$zenity_text" \
-    --text-align=center \
     --image=dialog-question \
     --button="$(gettext Cancel)":1 \
     --button="$(gettext 'Renumber')":2 \
