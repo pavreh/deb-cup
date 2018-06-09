@@ -345,6 +345,8 @@ then
         touch debian/install
         yad --form \
             --title="$title" \
+            --borders=10 \
+            --text-align=center \
             --button="$(gettext Cancel)":1 \
             --button="$(gettext 'Open debian folder')":0 \
             --text="$(gettext 'Please edit the files in the debian folder now.')" \
