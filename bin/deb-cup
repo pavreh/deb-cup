@@ -782,14 +782,14 @@ to \$user_ppa?")"
                       2>/dev/null
 
             yad --text-info \
-                   --title="$title" \
-                   --filename="$log_file" \
-                   --fontname="sans normal 11" \
-                   --button="$(gettext 'OK')":0 \
-                   --window-icon=$icon \
-                   --width=600 \
-                   --height=330 \
-                     2>/dev/null
+                --title="$title" \
+                --filename="$log_file" \
+                --fontname="sans normal 11" \
+                --button="$(gettext 'OK')":0 \
+                --window-icon=$icon \
+                --width=600 \
+                --height=330 \
+                  2>/dev/null
         fi
     fi
 fi
@@ -835,14 +835,14 @@ zenity --info \
 sign_packages_info()
 {
 yad --text-info \
-       --title="$title" \
-       --window-icon=$icon \
-       --width=600 \
-       --height=330 \
-       --filename="$log_file" \
-       --fontname="sans normal 11" \
-       --button="$(gettext 'OK')":0 \
-         2>/dev/null
+    --title="$title" \
+    --window-icon=$icon \
+    --width=600 \
+    --height=330 \
+    --filename="$log_file" \
+    --fontname="sans normal 11" \
+    --button="$(gettext 'OK')":0 \
+      2>/dev/null
 
 check_release
 if [ "$changelog_release" = "UNRELEASED" ]
