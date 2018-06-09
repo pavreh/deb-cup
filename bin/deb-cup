@@ -580,15 +580,15 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
         else
             # log window
             yad --text-info \
-                            --title="$title" \
-                            --window-icon=$icon \
-                            --width=600 \
-                            --height=330 \
-                            --button="$(gettext 'Install')":2 \
-                            --button="$(gettext 'OK')":0 \
-                            --filename="$log_file" \
-                            --fontname="sans normal 11" \
-                              2>/dev/null
+                --title="$title" \
+                --window-icon=$icon \
+                --width=600 \
+                --height=330 \
+                --button="$(gettext 'Install')":2 \
+                --button="$(gettext 'OK')":0 \
+                --filename="$log_file" \
+                --fontname="sans normal 11" \
+                  2>/dev/null
 
             status=$?
 
