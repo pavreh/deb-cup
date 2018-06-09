@@ -579,18 +579,21 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
 
         else
             # log window
-            button_text="$(gettext 'Install')"
-            answer=$(zenity --text-info \
+            yad --text-info \
                             --title="$title" \
                             --window-icon=$icon \
-                            --width=520 \
+                            --width=600 \
                             --height=330 \
-                            --extra-button="$button_text" \
-                            --filename=$log_file \
-                              2>/dev/null )
+                            --button="$(gettext 'Install')":2 \
+                            --button="$(gettext 'OK')":0 \
+                            --filename="$log_file" \
+                            --fontname="sans normal 11" \
+                              2>/dev/null
+
+            status=$?
 
             # Install the created deb package
-            if [ "$answer" = "$button_text" ]
+            if [ $status = 2 ]
             then
                 if answer=$(yad --file \
                                 --title="$(gettext 'Choose deb file')" \
