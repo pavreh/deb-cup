@@ -784,13 +784,14 @@ to \$user_ppa?")"
                       $yad_settings \
                       2>/dev/null
 
-            log=$(cat $log_file)
-            zenity --info \
+            yad --text-info \
                    --title="$title" \
+                   --filename="$log_file" \
+                   --fontname="sans normal 11" \
+                   --button="$(gettext 'OK')":0 \
                    --window-icon=$icon \
-                   --width=520 \
+                   --width=600 \
                    --height=330 \
-                   --text="$log" \
                      2>/dev/null
         fi
     fi
@@ -836,12 +837,14 @@ zenity --info \
 
 sign_packages_info()
 {
-zenity --text-info \
+yad --text-info \
        --title="$title" \
        --window-icon=$icon \
-       --width=520 \
+       --width=600 \
        --height=330 \
-       --filename=$log_file \
+       --filename="$log_file" \
+       --fontname="sans normal 11" \
+       --button="$(gettext 'OK')":0 \
          2>/dev/null
 
 check_release
