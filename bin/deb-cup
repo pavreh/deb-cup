@@ -535,6 +535,7 @@ then
         ) | yad --progress \
                 --title="$title" \
                 --borders=10 \
+                --progress-text='' \
                 --pulsate \
                 --auto-close \
                 --no-escape \
@@ -569,6 +570,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 ) | yad --progress \
                         --title="$title" \
                         --borders=10 \
+                        --progress-text='' \
                         --pulsate \
                         --auto-close \
                         --no-escape \
@@ -708,6 +710,7 @@ then
                     ) | yad --progress \
                             --title="$title" \
                             --borders=10 \
+                            --progress-text='' \
                             --pulsate \
                             --auto-close \
                             --no-escape \
@@ -770,6 +773,7 @@ to \$user_ppa?")"
             ) | yad --progress \
                     --title="$title" \
                     --borders=10 \
+                    --progress-text='' \
                     --pulsate \
                     --auto-close \
                     --no-escape \
