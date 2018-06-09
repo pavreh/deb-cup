@@ -192,7 +192,7 @@ then
                                     --width=500 \
                                     --height=300 \
                                     --hide-header \
-                                    --text="$(gettext 'Choose a project')" \
+                                    --text="$(gettext 'Recent projects')" \
                                     --extra-button="$button_text" \
                                     --column "" \
                                     --print-column=1 \
