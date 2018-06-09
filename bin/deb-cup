@@ -19,18 +19,6 @@
 version="1.0.0 UNRELEASED"
 
 
-# Config files
-#. $HOME/.config/deb-cup/deb-cup.cfg
-usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
-path_recent_config_file=$HOME/.config/deb-cup/recent
-fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
-parent_folder_config_file=$HOME/.config/deb-cup/parent
-patches_folder_config_file=$HOME/.config/deb-cup/patches
-log_file=/tmp/deb-cup-log
-title='Deb Cup'
-zenity_settings="--window-icon=$icon --width=330 --height=200"
-yad_settings="--window-icon=$icon --width=400 --height=200"
-
 # Icons
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 icons=$HOME/Git/deb-cup/share/icons/hicolor/16x16/apps
@@ -42,6 +30,18 @@ icon5="$icons/deb-cup-text-x-preview.png"
 icon6="$icons/deb-cup-package-x-generic.png"
 icon7="$icons/deb-cup-gcr-gnupg.png"
 icon8="$icons/deb-cup-upload.png"
+
+# Config files
+#. $HOME/.config/deb-cup/deb-cup.cfg
+usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
+path_recent_config_file=$HOME/.config/deb-cup/recent
+fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
+parent_folder_config_file=$HOME/.config/deb-cup/parent
+patches_folder_config_file=$HOME/.config/deb-cup/patches
+log_file=/tmp/deb-cup-log
+title='Deb Cup'
+zenity_settings="--window-icon=$icon --width=330 --height=200"
+yad_settings="--window-icon=$icon --width=400 --height=200"
 
 ####
 run=1
