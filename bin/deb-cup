@@ -212,7 +212,7 @@ then
                               --window-icon=$icon \
                               --width=540 \
                               --height=340 \
-                              --text="$(gettext 'Choose a project')" \
+                              --text="$(gettext 'Recent projects')" \
                               --button="$(gettext Cancel)":1 \
                               --button="$(gettext 'New project')":2 \
                               --button="$(gettext OK)":0 \
@@ -231,8 +231,7 @@ then
     status=$?
     if [ $status = 0 ]
     then
-        if ls "$path_project_folder" \
-              >/dev/null
+        if test -d "$path_project_folder"
         then
             get_project_details
             # add as the first line
@@ -335,8 +334,7 @@ create_debian_folder()
 base_test
 if [[ $base_test_result = "OK" ]]
 then
-    if ls "$path_project_folder/debian/" \
-          >/dev/null
+    if test -d "$path_project_folder/debian/"
     then
         xdg-open "$path_project_folder/debian/"
     else
@@ -369,8 +367,7 @@ base_test
 if [[ $base_test_result = "OK" ]]
 then
     path_debian="$path_project_folder/debian"
-    if ls "$path_debian/" \
-          >/dev/null
+    if test -d "$path_debian/"
     then
         source_format=$(cat "$path_debian/source/format")
         if echo $source_format |
@@ -404,8 +401,7 @@ then
                                   2>/dev/null )
             then
                 file_name=$(echo "${path_patch##*/}")
-                if ls "$path_debian/patches/$file_name" \
-                       >/dev/null
+                if test -e "$path_debian/patches/$file_name"
                 then
                     zenity_text="$(eval_gettext "File \$file_name exist. Overwrite?")"
                     if yad --form \
@@ -474,8 +470,7 @@ update_changelog()
 base_test
 if [[ $base_test_result = OK ]]
 then
-    if ls "$path_project_folder/debian/changelog" \
-          >/dev/null
+    if test -e "$path_project_folder/debian/changelog"
     then
         check_name
         if [[ $folder_changelog_name = same ]]
@@ -906,8 +901,7 @@ base_test_result="OK"
 get_project_details
 
 # Check whether the folder name or version was not changed
-if ! ls "$path_project_folder" \
-        >/dev/null
+if ! test -d "$path_project_folder"
 then
     base_test_result="FALSE"
 fi
@@ -929,11 +923,10 @@ ctvn_test()
 {
 ctvn_test_result="FALSE"
     # Check whether changelog file exist
-    if ls "$path_project_folder/debian/changelog" \
-          >/dev/null
+    if test -e "$path_project_folder/debian/changelog"
     then
         # Check whether orig tarball exist
-        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.* \
+        if test -e "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.* \
               >/dev/null
         then
             # Check wheter the version of the project folder and the version
