@@ -225,8 +225,7 @@ then
                                 "${array[2]}" "${array[3]}" \
                                 "${array[4]}" "${array[5]}" \
                                 "${array[6]}" "${array[7]}" \
-                                "${array[8]}" "${array[9]}" \
-                                2>/dev/null )
+                                "${array[8]}" "${array[9]}" )
     status=$?
     if [ $status = 0 ]
     then
@@ -348,8 +347,7 @@ then
             --button="$(gettext 'Open debian folder')":0 \
             --text="$(gettext 'Please edit the files in the debian folder now.')" \
             --image=dialog-information \
-              $yad_settings \
-              2>/dev/null
+              $yad_settings
         status=$?
         if [ $status = 0 ]
         then
@@ -380,8 +378,7 @@ then
                    --borders=10 \
                    --text="$zenity_text" \
                    --image=dialog-question \
-                     $yad_settings \
-                     2>/dev/null
+                     $yad_settings
 
             then
                 echo "3.0 (quilt)" > "$path_debian/source/format"
@@ -396,8 +393,7 @@ then
                                 --title="$(gettext 'Choose patch')" \
                                 --window-icon=$icon \
                                 --filename="$path_patches_folder/" \
-                                --file-filter="patch | *.patch" \
-                                  2>/dev/null )
+                                --file-filter="patch | *.patch" )
             then
                 file_name=$(echo "${path_patch##*/}")
                 if test -e "$path_debian/patches/$file_name"
@@ -409,8 +405,7 @@ then
                            --text="$zenity_text" \
                            --text-align=center \
                            --image=dialog-question \
-                             $yad_settings \
-                             2>/dev/null
+                             $yad_settings
                     then
                         cp "$path_patch" "$path_debian/patches/"
                     fi
@@ -456,8 +451,7 @@ then
             --no-escape \
             --no-buttons \
             --text="$(gettext 'Creating orig tarball...')" \
-              $yad_settings \
-              2>/dev/null
+              $yad_settings
 
     notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 fi
@@ -536,8 +530,7 @@ then
                 --no-escape \
                 --no-buttons \
                 --text="$(gettext 'Creating deb binary package...')" \
-                  $yad_settings \
-                  2>/dev/null
+                  $yad_settings
 
         # Check missing build dependencies
         build_dependencies=$(cat "$log_file" |
@@ -553,8 +546,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                    --borders=10 \
                    --text="$zenity_text" \
                    --image=dialog-question \
-                     $yad_settings \
-                     2>/dev/null
+                     $yad_settings
             then
                 (
                 echo 0
@@ -570,8 +562,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                         --no-escape \
                         --no-buttons \
                         --text="$(gettext 'Creating dummy package...')" \
-                          $yad_settings \
-                          2>/dev/null
+                          $yad_settings
 
                 gdebi-gtk "$path_parent_folder"/"$project_name"-build-deps_"$project_version"*.deb
             fi
@@ -586,8 +577,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                 --button="$(gettext 'Install')":2 \
                 --button="$(gettext 'OK')":0 \
                 --filename="$log_file" \
-                --fontname="sans normal 11" \
-                  2>/dev/null
+                --fontname="sans normal 11"
 
             status=$?
 
@@ -598,8 +588,7 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
                                 --title="$(gettext 'Choose deb file')" \
                                 --window-icon=$icon \
                                 --filename="$path_parent_folder/" \
-                                --file-filter="deb | *.deb" \
-                                  2>/dev/null )
+                                --file-filter="deb | *.deb" )
                 then
                     gdebi-gtk "$answer"
                 fi
@@ -678,8 +667,7 @@ then
                 --button="$(gettext Cancel)":1 \
                 --button="$(gettext 'No')":2 \
                 --button="$(gettext 'Yes')":0 \
-                  $yad_settings \
-                  2>/dev/null
+                  $yad_settings
 
             status=$?
 
@@ -713,8 +701,7 @@ then
                             --no-escape \
                             --no-buttons \
                             --text="$(gettext 'Creating signed dsc and changes...')" \
-                              $yad_settings \
-                              2>/dev/null
+                              $yad_settings
 
                     sign_packages_info
                 fi
@@ -743,8 +730,7 @@ else
                                --title="$(gettext 'Choose source.changes file')" \
                                --window-icon=$icon \
                                --filename="$path_parent_folder/" \
-                               --file-filter="source.changes | *source.changes" \
-                                 2>/dev/null )
+                               --file-filter="source.changes | *source.changes" )
     then
         # Print the part of the string after last "/"
         file_name=$(echo "${path_changes_file##*/}")
@@ -757,8 +743,7 @@ to \$user_ppa?")"
                --borders=10 \
                --text="$zenity_text" \
                --image=dialog-question \
-                 $yad_settings \
-                 2>/dev/null
+                 $yad_settings
 
         then
             # Upload changes and the source code to the PPA
@@ -775,8 +760,7 @@ to \$user_ppa?")"
                     --no-escape \
                     --no-buttons \
                     --text="$(gettext 'Uploading files to the PPA...')" \
-                      $yad_settings \
-                      2>/dev/null
+                      $yad_settings
 
             yad --text-info \
                 --title="$title" \
@@ -785,8 +769,7 @@ to \$user_ppa?")"
                 --button="$(gettext 'OK')":0 \
                 --window-icon=$icon \
                 --width=600 \
-                --height=330 \
-                  2>/dev/null
+                --height=330
         fi
     fi
 fi
@@ -819,8 +802,7 @@ yad --text-info \
     --height=330 \
     --filename="$log_file" \
     --fontname="sans normal 11" \
-    --button="$(gettext 'OK')":0 \
-      2>/dev/null
+    --button="$(gettext 'OK')":0
 
 check_release
 if [ "$changelog_release" = "UNRELEASED" ]
@@ -944,8 +926,7 @@ yad --form \
     --text="$zenity_text" \
     --text-align=center \
     --image=dialog-warning \
-      $yad_settings \
-      2>/dev/null
+      $yad_settings
 }
 
 warning_set_project_folder()
@@ -1015,8 +996,7 @@ yad --form \
     --button="$(gettext Cancel)":1 \
     --button="$(gettext 'Rename')":2 \
     --button="$(gettext 'Open changelog')":0 \
-      $yad_settings \
-      2>/dev/null
+      $yad_settings
 
 status=$?
 
@@ -1050,8 +1030,7 @@ yad --form \
     --button="$(gettext Cancel)":1 \
     --button="$(gettext 'Renumber')":2 \
     --button="$(gettext 'Open changelog')":0 \
-      $yad_settings \
-      2>/dev/null
+      $yad_settings
 
 status=$?
 
