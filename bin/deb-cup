@@ -32,7 +32,6 @@ icon7="$icons/deb-cup-gcr-gnupg.png"
 icon8="$icons/deb-cup-upload.png"
 
 # Config files
-#. $HOME/.config/deb-cup/deb-cup.cfg
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
 path_recent_config_file=$HOME/.config/deb-cup/recent
 fingerprint_config_file=$HOME/.config/deb-cup/fingerprint
@@ -95,7 +94,6 @@ action=$(yad --list \
              --search-column=1 \
              --print-column=1 \
              --separator="" \
-               e "$icon1" "$(gettext 'Settings...')" \
                f "$icon1" "$(gettext 'Set fingerprint...')" \
                p "$icon1" "$(gettext 'Set user and ppa...')" \
                o "$icon2" "$(gettext 'Choose project folder...')" \
@@ -112,14 +110,6 @@ action=$(yad --list \
 
 #	SETTING
 ##############################################################################
-
-change_settings()
-{
-yad --form \
-    --field="user/PPA":CBE \
-    --field="Fingerpring":CE
-}
-
 
 set_fingerprint()
 {
@@ -1134,10 +1124,6 @@ then
 elif [ "$action" = "f" ]
 then
     set_fingerprint
-
-elif [ "$action" = "e" ]
-then
-    change_settings
 
 else
     run=0
