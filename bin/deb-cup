@@ -106,8 +106,7 @@ action=$(yad --list \
                b "$icon6" "$(gettext 'Create deb binary')" \
                s "$icon7" "$(gettext 'Create signed dsc and changes')" \
                u "$icon8" "$(gettext 'Upload to the PPA...')" \
-               h "$icon1" "$(gettext 'Help')" \
-               a "$icon1" "$(gettext 'About')" )
+               h "$icon1" "$(gettext 'Help')" )
 }
 
 
@@ -808,24 +807,6 @@ yad --html \
 }
 
 
-open_about()
-{
-zenity_text="<b>$title</b>
-
-$version
-
-$(gettext 'GUI tool for creating deb packages and uploading them to a PPA.')
-
-$(gettext 'Homepage'): https://github.com/pavreh/deb-cup"
-
-zenity --info \
-       --title="$(gettext 'About') $title" \
-       --text="$zenity_text" \
-         $zenity_settings \
-         2>/dev/null
-}
-
-
 #	INFO
 ##############################################################################
 
@@ -1170,10 +1151,6 @@ then
 elif [ "$action" = "h" ]
 then
     open_help
-
-elif [ "$action" = "a" ]
-then
-    open_about
 
 elif [ "$action" = "f" ]
 then
