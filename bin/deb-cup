@@ -117,13 +117,13 @@ zenity_text="$(gettext 'Please open terminal (Ctrl+Alt+T) and type:
 gpg --fingerprint
 Copy the key fingerprint (long alphanumeric code)
 which you want to use and paste it here without spaces.')"
-
-if fingerprint=$(zenity --entry \
+if fingerprint=$(yad --form \
                         --title="$title" \
                         --text="$zenity_text" \
-                        --entry-text="$(cat $fingerprint_config_file)" \
-                          $zenity_settings \
-                          2>/dev/null )
+                        --separator="" \
+                        --field="$(gettext fingerpring)":CBE \
+                          $yad_settings \
+                          $(cat $fingerprint_config_file) )
 
 then
     echo $fingerprint > $fingerprint_config_file ||
@@ -144,12 +144,13 @@ set_usr_ppa()
 zenity_text="$(gettext 'Please set user name and name of your PPA in format:
  user/ppa')"
 
-if user_ppa=$(zenity --entry \
+if user_ppa=$(yad --form \
                      --title="$title" \
                      --text="$zenity_text" \
-                     --entry-text="$(cat $usr_ppa_config_file)" \
-                       $zenity_settings \
-                       2>/dev/null )
+                     --separator="" \
+                     --field="$(gettext user/ppa)":CBE \
+                       $yad_settings \
+                       $(cat $usr_ppa_config_file) )
 then
     echo $user_ppa > $usr_ppa_config_file ||
         create_usr_ppa_config_file
