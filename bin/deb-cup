@@ -39,7 +39,6 @@ parent_folder_config_file=$HOME/.config/deb-cup/parent
 patches_folder_config_file=$HOME/.config/deb-cup/patches
 log_file=/tmp/deb-cup-log
 title='Deb Cup'
-zenity_settings="--window-icon=$icon --width=330 --height=200"
 yad_settings="--window-icon=$icon --width=400 --height=200"
 
 ####
@@ -118,12 +117,12 @@ gpg --fingerprint
 Copy the key fingerprint (long alphanumeric code)
 which you want to use and paste it here without spaces.')"
 if fingerprint=$(yad --form \
-                        --title="$title" \
-                        --text="$zenity_text" \
-                        --separator="" \
-                        --field="$(gettext fingerpring)":CBE \
-                          $yad_settings \
-                          $(cat $fingerprint_config_file) )
+                     --title="$title" \
+                     --text="$zenity_text" \
+                     --separator="" \
+                     --field="$(gettext fingerpring)":CBE \
+                       $yad_settings \
+                       $(cat $fingerprint_config_file) )
 
 then
     echo $fingerprint > $fingerprint_config_file ||
@@ -145,12 +144,12 @@ zenity_text="$(gettext 'Please set user name and name of your PPA in format:
  user/ppa')"
 
 if user_ppa=$(yad --form \
-                     --title="$title" \
-                     --text="$zenity_text" \
-                     --separator="" \
-                     --field="$(gettext user/ppa)":CBE \
-                       $yad_settings \
-                       $(cat $usr_ppa_config_file) )
+                  --title="$title" \
+                  --text="$zenity_text" \
+                  --separator="" \
+                  --field="$(gettext user/ppa)":CBE \
+                    $yad_settings \
+                    $(cat $usr_ppa_config_file) )
 then
     echo $user_ppa > $usr_ppa_config_file ||
         create_usr_ppa_config_file
