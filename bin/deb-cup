@@ -140,8 +140,8 @@ echo $fingerprint > $fingerprint_config_file
 
 set_usr_ppa()
 {
-zenity_text="$(gettext 'Please set user name and name of your PPA in format:
- user/ppa')"
+zenity_text="$(gettext 'Please set user name and name of your PPA
+in format: user/ppa')"
 
 if user_ppa=$(yad --form \
                   --title="$title" \
