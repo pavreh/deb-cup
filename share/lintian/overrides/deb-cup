@@ -1,0 +1,2 @@
+# We use debhelper as dependency
+deb-cup binary: binary-package-depends-on-toolchain-package
