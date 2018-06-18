@@ -1,0 +1,308 @@
+deb-cup (1.0.0-0.1) bionic; urgency=medium
+
+  * Bug fix: do not delete recent when empty line was chosen.
+  * Switch from Zenity to Yad.
+  * Add icons to main window.
+  * Remove about window.
+  * Wider recent window.
+  * Update pot file.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Mon, 18 Jun 2018 20:37:59 +0200
+
+deb-cup (0.9.0-0) bionic; urgency=medium
+
+  * Bug fix: path is not added into recent after the first run.
+  * New function: Import patch.
+  * Dummy package take every build dependency from the control file
+    instead of the missing build dependencies only.
+  * Dummy: Switch to mk-build-deps (equivs).
+  * Add equivs dependency.
+  * Unwanted messages are not shown in terminal.
+  * Allow letters in version.
+  * Delete abandoned path from recent.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 20 May 2018 20:36:44 +0200
+
+deb-cup (0.8.0-1) bionic; urgency=medium
+
+  * Bug fix: White spaces in folder names.
+  * Bug fix: Double warning.
+  * Bug fix: Name and version check improvement.
+  * Bug fix: Check gpg key in bionic.
+  * Recent projects window.
+  * Create and install dummy package with build dependencies.
+  * Install created deb package.
+  * Automatic gpg check based on gnupg version instead of the release.
+  * Error when gpg key is not present.
+  * Change gnome-terminal to xterm.
+  * Update help.
+  * Cleanup control file.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 28 Apr 2018 10:06:56 +0200
+
+deb-cup (0.7.4-1) bionic; urgency=medium
+
+  * Bug fix: Incorrect new project number when renumber the folder.
+  * Add libnotify-bin dependency.
+  * Check xed/gedit and set the installed one.
+  * Remove duplicity.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Tue, 17 Apr 2018 21:29:55 +0200
+
+deb-cup (0.7.3-1) bionic; urgency=medium
+
+  * Add parameters --help and --version.
+  * Fix error when exit.
+  * Add man page.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Tue, 17 Apr 2018 19:54:19 +0200
+
+deb-cup (0.7.2-1) bionic; urgency=medium
+
+  * Bug fix: No error when the changelog version was changed just
+             before creating the deb package.
+  * Bug fix: Translation sensitive dch warnings.
+  * Update help.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 15 Apr 2018 22:00:39 +0200
+
+deb-cup (0.7.1-1) bionic; urgency=medium
+
+  * Bug fix: Rewrite existing folder when renumbering the project one.
+  * Bug fix: Error when a debian number missing (n.n.n-1).
+  * Add tara support.
+  * Renumber the project folder automatically when the changelog
+    version is changed.
+  * Update help.
+  * Add dch warnings.
+  * Add xed | gedit dependency.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 14 Apr 2018 16:44:54 +0200
+
+deb-cup (0.6.0-1) bionic; urgency=medium
+
+  * Add shortcuts.
+  * Increase debhelper to 10.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Thu, 12 Apr 2018 23:39:13 +0200
+
+deb-cup (0.5.4-1ppa1~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix: Accept tar.* tarballs
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Mon, 09 Apr 2018 00:05:54 +0200
+
+deb-cup (0.5.3-1ppa3~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix: Accept others tarball than tar.xz
+  * Bug fix: Epoch in a changelog version
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Fri, 10 Nov 2017 20:49:38 +0100
+
+deb-cup (0.5.3-1ppa2) artful; urgency=medium
+
+  * Updated dependencies for artful.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Fri, 10 Nov 2017 17:17:52 +0100
+
+deb-cup (0.5.3-1) xenial; urgency=medium
+
+  * Help was increased.
+  * Bug fix: Resolved issue when the name of the folder and the name
+             in the changelog file were not the same.
+  * Bug fix: When close was forced, path_config_file was not deleted.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Thu, 09 Nov 2017 21:49:04 +0100
+
+deb-cup (0.5.2-1) xenial; urgency=medium
+
+  * Bug fix. Unwanted characters
+    - Some unwanted characters was accepted in the name of the project.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Wed, 08 Nov 2017 23:44:33 +0100
+
+deb-cup (0.5.1-1) xenial; urgency=medium
+
+  * Remember the parent folder.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Wed, 08 Nov 2017 19:19:20 +0100
+
+deb-cup (0.5.0-1) xenial; urgency=medium
+
+  * New function: Touch debian/install.
+  * New function: Renumber project folder.
+  * Open debian folder directly when exist one.
+  * Dialogs improvements.
+  * Clean after creating a deb binary.
+  * Bug fix: Version number when create a new debian folder.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Tue, 07 Nov 2017 19:34:48 +0100
+
+deb-cup (0.4.0-1) xenial; urgency=medium
+
+  * New function: Set fingerprint.
+  * Deb Cup is now a beta version.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Mon, 06 Nov 2017 18:53:14 +0100
+
+deb-cup (0.3.15-1) xenial; urgency=medium
+
+  * About.
+  * Help in html.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 05 Nov 2017 23:09:44 +0100
+
+deb-cup (0.3.14-1) xenial; urgency=medium
+
+  * United edition for xenial and artful.
+  * Removed gedit dependency.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 05 Nov 2017 17:28:42 +0100
+
+deb-cup (0.3.13-1~ubuntu17.10) artful; urgency=medium
+
+  * Do nothing when esc or cancel.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 05 Nov 2017 01:21:25 +0100
+
+deb-cup (0.3.12-1~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 04 Nov 2017 22:51:12 +0100
+
+deb-cup (0.3.11-1~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 04 Nov 2017 22:30:10 +0100
+
+deb-cup (0.3.10-1~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix: Check version
+    - Error when a debian version number was missing.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 04 Nov 2017 22:00:59 +0100
+
+deb-cup (0.3.9-1~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix: Deb Cup waits for closing the changelog.
+  * Warning that the dsc and changes was not signed.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Fri, 03 Nov 2017 20:31:04 +0100
+
+deb-cup (0.3.8-1~ubuntu17.10) artful; urgency=medium
+
+  * Bug fix.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Thu, 02 Nov 2017 21:06:55 +0100
+
+deb-cup (0.3.7-1~ubuntu17.10) artful; urgency=medium
+
+  * Info and error windows has the same size.
+  * Help was increased.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Thu, 02 Nov 2017 20:47:23 +0100
+
+deb-cup (0.3.6-1ppa1~ubuntu17.10) artful; urgency=medium
+
+  * Added missing dependency: dh-make.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Wed, 01 Nov 2017 19:30:11 +0100
+
+deb-cup (0.3.6-1~ubuntu17.10) artful; urgency=medium
+
+  * Upload to a PPA: The info window is now smaller.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Tue, 31 Oct 2017 21:12:57 +0100
+
+deb-cup (0.3.5-1~ubuntu17.10) artful; urgency=medium
+
+  * Artful version (it is not compatible with xenial due to gnupg 2).
+  * Cancel button in progressbars was disabled.
+    - It was not functional jet.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Tue, 31 Oct 2017 19:58:17 +0100
+
+deb-cup (0.3.4-1) xenial; urgency=medium
+
+  * Main window was widened (narrow on Ubuntu).
+  * Added missing dependency: debhelper (>=9).
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Mon, 30 Oct 2017 19:51:31 +0100
+
+deb-cup (0.3.3-1) xenial; urgency=medium
+
+  * Upload to a PPA: Added progressbar.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Mon, 30 Oct 2017 18:02:26 +0100
+
+deb-cup (0.3.2-1) xenial; urgency=medium
+
+  * Create orig tarball: Added progressbar.
+  * Bug fix: The name or version of the project folder and the name
+    or version of the project in the changelog file are not the same.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 29 Oct 2017 23:59:51 +0100
+
+deb-cup (0.3.1-1) xenial; urgency=medium
+
+  * Increment changelog
+    - A new changelog entry is added with version taken from the
+      directory name.
+    - Maintainer name and email is taken from the debian/control
+      Maintainer field.
+  * Added torso of Help page.
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 29 Oct 2017 11:08:32 +0100
+
+deb-cup (0.3.0-1) xenial; urgency=medium
+
+  * New function: Create debian folder
+  * Added warnings, notify and progressbar
+  * New function: Open debian folder
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sun, 29 Oct 2017 02:59:24 +0100
+
+deb-cup (0.2.0-1) xenial; urgency=medium
+
+  * New function: Increment changelog
+  * New function: Sign packages
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 28 Oct 2017 18:24:57 +0200
+
+deb-cup (0.1.0-1ppa1) xenial; urgency=medium
+
+  * Added dependencies
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 28 Oct 2017 12:00:31 +0200
+
+deb-cup (0.1.0-1) xenial; urgency=medium
+
+  * The name of the software is now Deb Cup
+  * New function: Creating original tarball
+  * New function: Creating deb binary
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 28 Oct 2017 11:41:14 +0200
+
+ppa-uploader (0.3.0-1) xenial; urgency=medium
+
+  * Added Internationalisation
+  * Added Czech translation
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Thu, 26 Oct 2017 23:30:14 +0200
+
+ppa-uploader (0.2.0-1) xenial; urgency=medium
+
+  * Added hicolor icon
+  * Added License and copyright
+  * Changed description
+  * Changed homepage
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Thu, 26 Oct 2017 17:53:30 +0200
+
+ppa-uploader (0.1.0-0ppa1) xenial; urgency=medium
+
+  * Initial release
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Wed, 25 Oct 2017 20:21:26 +0200
