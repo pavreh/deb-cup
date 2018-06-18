@@ -23,12 +23,12 @@ version="1.0.0 UNRELEASED"
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
 icons=$HOME/Git/deb-cup/share/icons/hicolor/16x16/apps
 icon1="$icons/deb-cup-white.png"
-icon2="$icons/deb-cup-folder.png"
-icon3="$icons/deb-cup-folder-open.png"
-icon4="$icons/deb-cup-package-x-generic.png"
-icon5="$icons/deb-cup-text-x-preview.png"
-icon6="$icons/deb-cup-package-x-generic.png"
-icon7="$icons/deb-cup-gcr-gnupg.png"
+icon2="folder"
+icon3="folder-open"
+icon4="package-x-generic"
+icon5="text-x-preview"
+icon6="package-x-generic"
+icon7="gcr-gnupg"
 icon8="$icons/deb-cup-upload.png"
 
 # Config files
