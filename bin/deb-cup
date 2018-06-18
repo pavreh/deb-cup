@@ -30,6 +30,7 @@ icon5="text-x-preview"
 icon6="package-x-generic"
 icon7="gcr-gnupg"
 icon8="$icons/deb-cup-upload.png"
+icon9="$icons/deb-cup-patch.png"
 
 # Config files
 usr_ppa_config_file=$HOME/.config/deb-cup/usr_ppa
@@ -97,7 +98,7 @@ action=$(yad --list \
                p "$icon1" "$(gettext 'Set user and ppa...')" \
                o "$icon2" "$(gettext 'Choose project folder...')" \
                d "$icon3" "$(gettext 'Create/Open debian folder')" \
-               i "$icon1" "$(gettext 'Import patch...')" \
+               i "$icon9" "$(gettext 'Import patch...')" \
                t "$icon4" "$(gettext 'Create orig tarball')" \
                c "$icon5" "$(gettext 'Increment changelog...')" \
                b "$icon6" "$(gettext 'Create deb binary')" \
