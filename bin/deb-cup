@@ -21,7 +21,7 @@ version="1.0.0 UNRELEASED"
 
 # Icons
 icon=/usr/share/icons/hicolor/48x48/apps/deb-cup.png
-icons=$HOME/Git/deb-cup/share/icons/hicolor/16x16/apps
+icons=/usr/share/icons/hicolor/16x16/apps
 icon1="$icons/deb-cup-white.png"
 icon2="folder"
 icon3="folder-open"
