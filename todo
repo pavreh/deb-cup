@@ -11,7 +11,7 @@ Todo
   Accept native source code (source folder without version number).
   Import more patches at the same time.
   One config file.
-  Edit folders in the file chooser (unable in Zenity - switch to yad).
+  Send to ppa button on the log window.
 
 In consideration
   Uninstall dummy packages.
