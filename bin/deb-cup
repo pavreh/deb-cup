@@ -524,9 +524,10 @@ then
                   $yad_settings
 
         # Check missing build dependencies
-        build_dependencies=$(cat "$log_file" |
-                             grep "Unmet build dependencies" ) &&
-                             echo $?
+        log=$(cat "$log_file")
+        echo "$log" |
+            grep "Unmet build dependencies" &&
+            echo $?
         if [ $? -eq 0 ]
         then
             zenity_text="$(gettext 'Some build dependencies are missing. Do you want to install them now?
@@ -559,13 +560,23 @@ Dummy deb package will be created so the dependencies can be easily uninstalled.
             fi
 
         else
+            # check installation success
+            install_button=""
+            echo "$log" |
+                grep "lintian" &&
+                echo $?
+            if [ $? -eq 0 ]
+            then
+                install_button="--button="$(gettext 'Install')":2"
+            fi
+
             # log window
             yad --text-info \
                 --title="$title" \
                 --window-icon=$icon \
                 --width=600 \
                 --height=330 \
-                --button="$(gettext 'Install')":2 \
+                  $install_button \
                 --button="$(gettext 'OK')":0 \
                 --filename="$log_file" \
                 --fontname="sans normal 11"
