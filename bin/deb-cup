@@ -893,7 +893,7 @@ ctvn_test_result="FALSE"
     if test -e "$path_project_folder/debian/changelog"
     then
         # Check whether orig tarball exist
-        if test -e "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.* \
+        if ls "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.* \
               >/dev/null
         then
             # Check wheter the version of the project folder and the version

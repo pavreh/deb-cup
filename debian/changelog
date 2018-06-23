@@ -1,13 +1,21 @@
-deb-cup (1.0.0-0.1) bionic; urgency=medium
+deb-cup (1.0.0-0.1) UNRELEASED; urgency=medium
 
-  * Bug fix: do not delete recent when empty line was chosen.
   * Switch from Zenity to Yad.
   * Add icons to main window.
   * Remove about window.
-  * Wider recent window.
   * Update pot file.
 
  -- Pavel Rehak <pavel-rehak@email.cz>  Mon, 18 Jun 2018 20:37:59 +0200
+
+deb-cup (0.9.1-0.1) bionic; urgency=medium
+
+  * Bug fix: do not delete recent projects list when blank line
+    was chosen.
+  * Update cs.po header.
+  * Wider recent window.
+  * debian/control: sort dependencies
+
+ -- Pavel Rehak <pavel-rehak@email.cz>  Sat, 23 Jun 2018 13:21:30 +0200
 
 deb-cup (0.9.0-0) bionic; urgency=medium
 
