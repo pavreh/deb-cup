@@ -421,30 +421,22 @@ create_orig_tarball()
 base_test
 if [[ $base_test_result = "OK" ]]
 then
-    (
-    echo "0"
-    cd "$path_parent_folder"
-    echo "5"
-    tar -cf debian.tar $project_name_version/debian/
-    echo "25"
-    rm -fr $project_name_version/debian
-    echo "45"
-    tar -caf $project_name\_$project_version.orig.tar.xz $project_name_version
-    echo "75"
-    tar -xf debian.tar
-    echo "90"
-    rm debian.tar
-    echo "100"
-    ) | yad --progress \
-            --title="$title" \
-            --borders=10 \
-            --auto-close \
-            --no-escape \
-            --no-buttons \
-            --text="$(gettext 'Creating orig tarball...')" \
-              $yad_settings
-
-    notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
+    if test -e "$path_parent_folder"/"$project_name"\_"$project_version".orig.tar.xz
+    then
+        zenity_text="$(eval_gettext "File \$project_name\_$project_version.orig.tar.xz exist. Overwrite?")"
+        if yad --form \
+               --title="$title" \
+               --borders=10 \
+               --text="$zenity_text" \
+               --text-align=center \
+               --image=dialog-question \
+                 $yad_settings
+        then
+            pack_orig_tarball
+        fi
+    else
+        pack_orig_tarball
+    fi
 fi
 }
 
@@ -1048,6 +1040,35 @@ then
     # used by repair_name too
     move_project_folder
 fi
+}
+
+
+pack_orig_tarball()
+{
+(
+echo "0"
+cd "$path_parent_folder"
+echo "5"
+tar -cf debian.tar $project_name_version/debian/
+echo "25"
+rm -fr $project_name_version/debian
+echo "45"
+tar -caf $project_name\_$project_version.orig.tar.xz $project_name_version
+echo "75"
+tar -xf debian.tar
+echo "90"
+rm debian.tar
+echo "100"
+) | yad --progress \
+        --title="$title" \
+        --borders=10 \
+        --auto-close \
+        --no-escape \
+        --no-buttons \
+        --text="$(gettext 'Creating orig tarball...')" \
+          $yad_settings
+
+notify-send "$(gettext 'Orig tarball created.')" --icon=$icon --expire-time=3000
 }
 
 

@@ -6,7 +6,6 @@ Ubuntu 18.04 Gnome
 
 Bug:
   evals_gettext do not function.
-  Deb Cup do not ask when overwriting an orig tarball.
 
 Todo
   Accept native source code (source folder without version number).
