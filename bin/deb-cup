@@ -50,7 +50,7 @@ touch $log_file
 
 # check installed packages
 if dpkg --status xed \
-   >/dev/null
+   2>/dev/null
 then
     VISUAL="xed --wait"
 else
