@@ -775,12 +775,12 @@ open_help()
 # Read compressed text file.
 zmore /usr/share/doc/deb-cup/help >$log_file
 yad --html \
-       --title="$title - $(gettext Help)" \
-       --window-icon=$icon \
-       --width=700 \
-       --height=500 \
-       --uri="$log_file" \
-       --button="$(gettext 'OK')"
+    --title="$title - $(gettext Help)" \
+    --window-icon=$icon \
+    --width=700 \
+    --height=500 \
+    --uri="$log_file" \
+    --button="$(gettext 'OK')"
 }
 
 
